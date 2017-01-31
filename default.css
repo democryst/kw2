@@ -5,11 +5,11 @@ div#wrapper {
 	padding-top: 0.3em;
 	box-shadow: 0px 0px 4px 4px lightgray;
 	/*fallback for browser not supporting shadow*/
-	border-left:1px solid #AAAAAA; 
+	border-left:1px solid #AAAAAA;
 	border-right:1px solid #AAAAAA;
 }
 
-body {	
+body {
 	font-family:sans-serif;
 	margin:0px;
 }
@@ -29,7 +29,7 @@ div#myfont2{
 }
 
 div#div_main{
-	position:relative;	
+	position:relative;
 }
 
 div#div_header{
@@ -54,7 +54,7 @@ div#div_left{
 	border-right: 1px solid #F577A6;
 }
 
-div#div_content{	
+div#div_content{
 	background-color:white;
 	width:70%;
 	margin-left:20%;
@@ -99,9 +99,9 @@ ul#menu{
 }
 
 h2{
-	color: #D73289;	
+	color: #D73289;
 	margin-top:0.4em;
-	margin-bottom:0.4em;	
+	margin-bottom:0.4em;
 	padding-left: 1em;
 	border-bottom:2px dotted #F5C8DA;
 }
@@ -121,20 +121,23 @@ h2{
 }
 
 .form input[type="text"], .form input[type="password"]{
-	display:block;
-	width:200px;	
+	//display:block;
+	display:inline-block;
+	width:200px;
 }
 .form input[type="submit"]{
 	width:150px;
 }
 
 .form input[type="checkbox"]{
-	display:block;
+	//display:block;
+	display:inline-block;
 }
 
 .form select{
 	padding: 4px 2px;
-	display:block;
+	//display:block;
+	display:inline-block;
 	margin: 2px 2px 10px 10px;
 }
 
@@ -152,7 +155,7 @@ h2{
 }
 .usergroup td{
 	border: 1px solid black;
-	
+
 }
 .usergroup table{
 	border-collapse: collapse;
@@ -187,5 +190,10 @@ p.AppoveReadForm{
 
 p.AdminFormList{
 	padding-left:0.6em;
-	cursor :pointer;	
+	cursor :pointer;
+}
+
+.makeinline {
+	display: inline;
+
 }
