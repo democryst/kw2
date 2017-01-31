@@ -15,16 +15,49 @@
 	var localhost = "http://localhost:8080/kw2/";
 
 		$(document).ready(function() {
-			$("#add_state_btn").click(function(){
-				var str='<tr> <td>State Name: </td><td><input type="text" name="state_array[]"></td>'+
-				'<td><input type="file" name="file_array[]"></td></tr>' ;
-				$(str).appendTo("#state_table");
+			
+			$("#CreateFormType_wfdoc").hide();
+			$("#CreateFormType_wfdetail").hide();
+			
+			$("#add_more_doc_btn").click(function(){
+				var str='<tr> <td><input type="file" name="file_array[]"></td></tr>' ;
+				$(str).appendTo("#upload_doc_table");
 			});
-			$("#Create_Form_submit").click(function(evt){	 
+			$("#add_more_state_btn").click(function(){
+				var str='<tr> <td><text> Step: </text></td> <td><input type="text" name="state_array[]"></td></tr>' ;
+				$(str).appendTo("#upload_state_table");
+			});
+			
+			$("#Create_Form_submit_wfgeninfo").click(function(evt){	 
+					$("#CreateFormType_wfgeninfo").hide();
+					$("#CreateFormType_wfdetail").hide();
+					$("#CreateFormType_wfdoc").show();
+					  // //evt.preventDefault();
+					  // var formData = new FormData($('#CreateFormType_wfgeninfo')[0]);
+					  // $.ajax({
+						   // url: 'createformType_geninfo_handle.php',
+						   // type: 'POST',
+						   // data: formData,
+						   // async: false,
+						   // cache: false,
+						   // contentType: false,
+						   // enctype: 'multipart/form-data',
+						   // processData: false,
+						   // success: function (response) {
+							 // alert(response);
+						   // }
+					  // });
+					  // return false;
+			});
+			
+			$("#Create_Form_submit_wfdoc").click(function(evt){	 
+					$("#CreateFormType_wfgeninfo").hide();
+					$("#CreateFormType_wfdoc").hide();
+					$("#CreateFormType_wfdetail").show();
 					  //evt.preventDefault();
-					  var formData = new FormData($('#CreateFormType')[0]);
+					  var formData = new FormData($('#CreateFormType_wfdoc')[0]);
 					  $.ajax({
-						   url: 'createformType_handle.php',
+						   url: 'createformType_doc_handle.php',
 						   type: 'POST',
 						   data: formData,
 						   async: false,
@@ -65,23 +98,55 @@
 			
 			
 			<div id="CreateFormScreen">
-			<h2>Create Form</h2>
-				<form action="createformType_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType" >					
-					<div >
+			
+				<form action="createformType_wfgeninfo_handler.php" method="post" enctype="multipart/form-data" id="CreateFormType_wfgeninfo" >					
+					<div id="wfgeninfo">
+					<h2>Create Form</h2>
 						<Text>Form Name:</Text>
 						<input type="text" id="form_name" name="form_name">
+						<Text>Description:</Text>
+						<input type="text" id="form_description" name="form_description">
+						<Text>Admin:</Text>
+						<select name="form_admin" form="form_admin">
+						  <option value="1">admin name...</option>  <!-- will make it query admin that exist in system -->
+						</select>
 					</div>
-					<div class="right" id="state_box">
-						
-						
-						<table id="state_table"></table>
-						<input type="button" value="add state" id="add_state_btn">
+
+					<div class="right">
+						<input type="button" value="Next" id="Create_Form_submit_wfgeninfo" style="width: 90px;">
+						<input type="reset" value="Reset" style="width: 90px;">							
+					</div>
+				</form>
+				
+				<form action="createformType_doc_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType_wfdoc" >					
+					
+					<div id="wfdoc">
+					<h2>Document</h2>
+						<table id="upload_doc_table"></table>
+						<div class="right" id="doc_box">
+							<input type="button" value="attach file" id="add_more_doc_btn">
+						</div>
+					</div>
+
+					<div class="right">
+						<input type="button" value="Next" id="Create_Form_submit_wfdoc" style="width: 90px;">
+						<input type="reset" value="Reset"  style="width: 90px;">							
+					</div>
+				</form>
+				
+				<form action="createformType_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType_wfdetail" >					
+					
+					<div id="wfdetail">
+					<h2>State</h2>
+						<table id="upload_state_table"></table>
+						<div class="right" id="state_box">
+							<input type="button" value="add state" id="add_more_state_btn">
+						</div>
 					</div>
 
 					<div class="center">
-						<input type="button" value="CreateForm" id="Create_Form_submit" style="width: 90px;">
-						<!--input type="submit" value="Upload all files" id="Create_Form_submit"-->
-						<input type="reset" style="width: 90px;">							
+						<input type="button" value="Next" id="Create_Form_submit_wfdetail" style="width: 90px;">
+						<input type="reset" value="Reset"  style="width: 90px;">							
 					</div>
 				</form>
 			</div>
