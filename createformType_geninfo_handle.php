@@ -2,13 +2,13 @@
 require_once('connect.php');
 
 
-if(isset($_POST['form_name'])){
+/*if(isset($_POST['form_name'])){*/
 $form_name = $_POST['form_name'];
-$form_description = "description";
+$form_description = $_POST['form_description'];
 
 $adminid = 2;
 $sys_adminid = 3;
-
+// time()  return unix timestamp
 $date_hrs = date("h-i-s");
 $date_day = date("Y-m-d");
 $all_date = $date_hrs . '***' . $date_day;
@@ -27,9 +27,9 @@ $all_date = $date_hrs . '***' . $date_day;
 */
 
 
-
+/*
 
 }else{
 	echo "form name is not set";
-}
+}*/
 ?>
