@@ -15,10 +15,9 @@
 	var localhost = "http://localhost:8080/kw2/";
 
 		$(document).ready(function() {
-			$("#add_state_btn").click(function(){
-				var str='<tr> <td>State Name: </td><td><input type="text" name="state_array[]"></td>'+
-				'<td><input type="file" name="file_array[]"></td></tr>' ;
-				$(str).appendTo("#state_table");
+			$("#add_more_doc_btn").click(function(){
+				var str='<tr> <td><input type="file" name="file_array[]"></td></tr>' ;
+				$(str).appendTo("#upload_doc_table");
 			});
 			$("#Create_Form_submit").click(function(evt){	 
 					  //evt.preventDefault();
@@ -66,16 +65,45 @@
 			
 			<div id="CreateFormScreen">
 			<h2>Create Form</h2>
-				<form action="createformType_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType" >					
-					<div >
+				<form action="createformType_wfgeninfo_handler.php" method="post" enctype="multipart/form-data" id="CreateFormType_wfgeninfo" >					
+					<div id="wfgeninfo">
 						<Text>Form Name:</Text>
 						<input type="text" id="form_name" name="form_name">
+						<Text>Description:</Text>
+						<input type="text" id="form_description" name="form_description">
+						<Text>Admin:</Text>
+						<select name="form_admin" form="form_admin">
+						  <option value="1">admin name...</option>
+						</select>
 					</div>
+
+					<div class="center">
+						<input type="button" value="Next" id="Create_Form_submit_wfgeninfo" style="width: 90px;">
+						<input type="reset" style="width: 90px;">							
+					</div>
+				</form>
+				
+				<form action="createformType_doc_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType" >					
+					
+					<div class="right" id="doc_box">
+						<Text>Document:</Text>
+						<table id="upload_doc_table"></table>
+						<input type="button" value="add doc" id="add_more_doc_btn">
+					</div>
+
+					<div class="center">
+						<input type="button" value="CreateForm" id="Create_Form_submit" style="width: 90px;">
+						<!--input type="submit" value="Upload all files" id="Create_Form_submit"-->
+						<input type="reset" style="width: 90px;">							
+					</div>
+				</form>
+				
+				<form action="createformType_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType" >					
+					
 					<div class="right" id="state_box">
-						
-						
-						<table id="state_table"></table>
-						<input type="button" value="add state" id="add_state_btn">
+						<Text>Wf State:</Text>
+						<table id="upload_state_table"></table>
+						<input type="button" value="add doc" id="add_more_state_btn">
 					</div>
 
 					<div class="center">

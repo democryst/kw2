@@ -5,9 +5,10 @@ require_once('connect.php');
 if(isset($_POST['form_name'])){
 $form_name = $_POST['form_name'];
 $form_description = "description";
-$adminid = 3;
+$sys_adminid = 3;
+$adminid = 2;
 
-$state_array = $_POST['state_array'];
+//$state_array = $_POST['state_array'];
 
 
 
@@ -19,7 +20,7 @@ $pathname;
 $date_hrs = date("h-i-s");
 $date_day = date("Y-m-d");
 $all_date = $date_hrs . '***' . $date_day;
-
+/*
 //upload to wfgeninfo
 			// require user and user group to exist in DB
 				$q_INSERT_wfgeninfo="INSERT INTO `wfgeninfo`(`CreateTime`, `FormName`, `Description`, `AdminID`) VALUES ('$all_date', '$form_name', '$form_description', '$adminid') ";
@@ -32,7 +33,7 @@ $all_date = $date_hrs . '***' . $date_day;
 					$wfgeninfoID = $row_SELECT_wfgeninfo['WFGenInfoID'];
 				} 
 
-
+*/
 
 if(isset($_FILES['file_array'])){
 
@@ -53,7 +54,7 @@ if(isset($_FILES['file_array'])){
 			$ext = strtolower(end($ext));
 			//$file = md5_file($tmp_name_array[$i]) . '_' . time() . '.' .$ext;
 			$file = $fname . '_' . $date_hrs . '.' .$ext;
-			$dirname = $adminid. '_' . $date_day;
+			$dirname = $sys_adminid. '_' . $date_day;
 			
 			
 			mkdir( $upload_destination . $dirname ,0777);
@@ -64,22 +65,32 @@ if(isset($_FILES['file_array'])){
 				
 				// to add destination fro storing it later in database
 				$destination = $upload_destination . $file;
-				
+/* comment out until wfgeninfo handler finish		
 				$DocName = $fname . $ext;
 				//upload into database
 				// upload to wfdoc
 				// require wfgeninfo to exist
 				$q_INSERT_wfdoc="INSERT INTO `wfdoc`(`WFGenInfoID`, `DocName`, `DocURL`, `TimeStamp`) values('$wfgeninfoID', '$DocName', '$destination', CURRENT_TIMESTAMP) " ;
 				$mysqli->query($q_INSERT_wfdoc);
-				
+*/				
 				//upload to wfdetail
 				// require wfdoc to exist
 				//$q_in_wfdetail="INSERT INTO wfdetail(ParentID,StateName,CreateTime,ModifyTime,Deadline,WFDocID) values('$wfgeninfoID') " ;
 				
 				/*
+				$ParentStateID = null;
 				for($i = 0; $i < count($state_array); $i++){
 					if($state_array[$i]){
-						"INSERT INTO wfdetail(ParentID,StateName,CreateTime,ModifyTime,Deadline,WFDocID) values('null' , '$state_array[$i]' , '$all_date' , 'null' , 'null' , ' ') " ;
+						$q_INSERT_wfdetail="INSERT INTO wfdetail(ParentID,StateName,CreateTime,ModifyTime,Deadline,WFDocID) values('$ParentStateID' , '$state_array[$i]' , '$all_date' , 'null' , 'null' , ' ') " ;
+						$mysqli->query($q_INSERT_wfdetail);
+						
+						$q_SELECT_wfdetail="SELECT * FROM wfdetail where StateName = '$state_array[$i]' AND CreateTime = '$all_date' ";
+						// get ParentID
+						$result_SELECT_wfdetail=$mysqli->query($q_SELECT_wfdetail);
+						while($row_SELECT_wfdetail=$result_SELECT_wfdetail->fetch_array()){ 
+							$ParentStateID = $row_SELECT_wfdetail['ParentID'];
+						} 
+						
 					}
 				}
 				*/
