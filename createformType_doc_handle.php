@@ -1,16 +1,16 @@
 <?php
 require_once('connect.php');
 
-
+/*
 if(isset($_POST['form_name'])){
 $form_name = $_POST['form_name'];
 $form_description = "description";
-$sys_adminid = 3;
-$adminid = 2;
 
+$adminid = 2;
+*/
 //$state_array = $_POST['state_array'];
 
-
+$sys_adminid = 3;
 
 $upload_destination = "uploads/";
 
@@ -127,9 +127,9 @@ if(isset($_FILES['file_array'])){
 	echo "file_array not set";
 }
 
-
+/*
 
 }else{
 	echo "form name is not set";
-}
+}*/
 ?>
