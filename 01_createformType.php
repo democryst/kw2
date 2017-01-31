@@ -77,7 +77,7 @@
 						</select>
 					</div>
 
-					<div class="center">
+					<div class="right">
 						<input type="button" value="Next" id="Create_Form_submit_wfgeninfo" style="width: 90px;">
 						<input type="reset" style="width: 90px;">							
 					</div>
@@ -85,30 +85,32 @@
 				
 				<form action="createformType_doc_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType" >					
 					
-					<div class="right" id="doc_box">
+					<div id="wfdoc">
 						<Text>Document:</Text>
 						<table id="upload_doc_table"></table>
-						<input type="button" value="add doc" id="add_more_doc_btn">
+						<div class="right" id="doc_box">
+							<input type="button" value="add doc" id="add_more_doc_btn">
+						</div>
 					</div>
 
-					<div class="center">
-						<input type="button" value="CreateForm" id="Create_Form_submit" style="width: 90px;">
-						<!--input type="submit" value="Upload all files" id="Create_Form_submit"-->
+					<div class="right">
+						<input type="button" value="Next" id="Create_Form_submit_wfdoc" style="width: 90px;">
 						<input type="reset" style="width: 90px;">							
 					</div>
 				</form>
 				
 				<form action="createformType_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType" >					
 					
-					<div class="right" id="state_box">
-						<Text>Wf State:</Text>
+					<div id="wfdetail">
+						<Text>Document:</Text>
 						<table id="upload_state_table"></table>
-						<input type="button" value="add doc" id="add_more_state_btn">
+						<div class="right" id="state_box">
+							<input type="button" value="add doc" id="add_more_state_btn">
+						</div>
 					</div>
 
 					<div class="center">
-						<input type="button" value="CreateForm" id="Create_Form_submit" style="width: 90px;">
-						<!--input type="submit" value="Upload all files" id="Create_Form_submit"-->
+						<input type="button" value="Next" id="Create_Form_submit_wfdetail" style="width: 90px;">
 						<input type="reset" style="width: 90px;">							
 					</div>
 				</form>
