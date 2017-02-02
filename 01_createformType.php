@@ -35,21 +35,34 @@
 					$("#CreateFormType_wfaccess").hide();
 					$("#CreateFormType_wfdoc").show();
 					  // //evt.preventDefault();
-					  // var formData = new FormData($('#CreateFormType_wfgeninfo')[0]);
-					  // $.ajax({
-						   // url: 'createformType_geninfo_handle.php',
-						   // type: 'POST',
-						   // data: formData,
-						   // async: false,
-						   // cache: false,
-						   // contentType: false,
-						   // enctype: 'multipart/form-data',
-						   // processData: false,
-						   // success: function (response) {
-							 // alert(response);
-						   // }
-					  // });
-					  // return false;
+					  var formData = new FormData($('#CreateFormType_wfgeninfo')[0]);
+						var json_return_wfgeninfo;
+					  $.ajax({
+						   url: 'createformType_geninfo_handle.php',
+						   type: 'POST',
+						   data: formData,
+						   async: false,
+						   cache: false,
+						   contentType: false,
+						   enctype: 'multipart/form-data',
+						   processData: false,
+						   success: function (response) {
+							 console.log(response);
+							 json_return_wfgeninfo = JSON.parse(response);
+
+						   }
+					  });
+					  return false;
+
+						//need to return WfgenInfoID
+						// and return date_hrs, date_day, all_date to make data in wfdoc to be same as wfgeninfo
+						// from ajax
+						// Maybe return json object    <input type="hidden" value="foo" name="response" />
+						var WFGenInfoID = json_return_wfgeninfo.WFGenInfoID;
+						var CreateTime = json_return_wfgeninfo.CreateTime;
+						var str_wfgeninfo = '<tr> <td><input type="hidden" value="'+WFGenInfoID+'" name="wfgeninfo" /></td>'+
+						'<td><input type="hidden" value="'+CreateTime+'" name="all_date" /></td></tr>';
+						$(str_wfgeninfo).appendTo("#upload_doc_table");
 			});
 
 			$("#Create_Form_submit_wfdoc").click(function(evt){
@@ -69,10 +82,12 @@
 						   enctype: 'multipart/form-data',
 						   processData: false,
 						   success: function (response) {
-							 alert(response);
+							 console.log(response);
 						   }
 					  });
 					  return false;
+
+						//need to return WfgenInfoID from ajax
 			});
 
 			$("#Create_Form_submit_wfdetail").click(function(evt){
@@ -96,6 +111,11 @@
 						//    }
 					  // });
 					  // return false;
+
+						// when it click ajax and insert state to db and query how state work and append it in to table
+						// to let user set who can access in next step
+						var str_2 = '';
+						$(str_2).appendTo("#state_table_for_access");
 			});
 
 			$("#Create_Form_submit_wfaccess").click(function(evt){
