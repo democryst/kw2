@@ -20,6 +20,7 @@ $pathname;
 $date_hrs = date("h-i-s");
 $date_day = date("Y-m-d");
 // $all_date = $date_hrs . '***' . $date_day;
+if(!isset($_POST['all_date'])){die("all_date lost");}
 $all_date = $_POST['all_date'];
 $wfgeninfoID = $_POST['wfgeninfo'];
 /*

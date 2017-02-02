@@ -52,7 +52,7 @@
 
 						   }
 					  });
-					  return false;
+					  // return false;
 
 						//need to return WfgenInfoID
 						// and return date_hrs, date_day, all_date to make data in wfdoc to be same as wfgeninfo
@@ -63,6 +63,8 @@
 						var str_wfgeninfo = '<tr> <td><input type="hidden" value="'+WFGenInfoID+'" name="wfgeninfo" /></td>'+
 						'<td><input type="hidden" value="'+CreateTime+'" name="all_date" /></td></tr>';
 						$(str_wfgeninfo).appendTo("#upload_doc_table");
+
+						return false; //need it here 
 			});
 
 			$("#Create_Form_submit_wfdoc").click(function(evt){
