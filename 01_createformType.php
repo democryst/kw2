@@ -13,7 +13,10 @@
 
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
-
+var json_return_wfgeninfo;
+var json_return_wfdoc;
+var json_return_wfdetail;
+var json_return_wfdetail_access;
 		$(document).ready(function() {
 
 			$("#CreateFormType_wfdoc").hide();
@@ -25,7 +28,16 @@
 				$(str).appendTo("#upload_doc_table");
 			});
 			$("#add_more_state_btn").click(function(){
-				var str='<tr> <td><text> Step: </text></td> <td><input type="text" name="state_array[]"></td></tr>' ;
+				var str='<tr> <td><text> Step: </text></td> <td><input type="text" name="state_array[]"></td>'
+				+'<td><text> Deadline: </text></td> <td><input type="text" name="deadline[]"></td>'
+				+'<td><text> file: </text></td> <td>'
+				+'<select name="doc_id[]" class="makeinline">';
+				for(i = 0; i < json_return_wfdoc.length; i++){
+					let docid = json_return_wfdoc[i].WFDocID;
+					let docname = json_return_wfdoc[i].DocName;
+					str = str+'<option value="'+docid+'">'+docname+'</option>'
+				}
+				str = str+'</select></td></tr>' ;
 				$(str).appendTo("#upload_state_table");
 			});
 
@@ -36,7 +48,6 @@
 					$("#CreateFormType_wfdoc").show();
 					  // //evt.preventDefault();
 					  var formData = new FormData($('#CreateFormType_wfgeninfo')[0]);
-						var json_return_wfgeninfo;
 					  $.ajax({
 						   url: 'createformType_geninfo_handle.php',
 						   type: 'POST',
@@ -63,8 +74,9 @@
 						var str_wfgeninfo = '<tr> <td><input type="hidden" value="'+WFGenInfoID+'" name="wfgeninfo" /></td>'+
 						'<td><input type="hidden" value="'+CreateTime+'" name="all_date" /></td></tr>';
 						$(str_wfgeninfo).appendTo("#upload_doc_table");
+						$(str_wfgeninfo).appendTo("#wfdetail");
 
-						return false; //need it here 
+						return false; //need it here
 			});
 
 			$("#Create_Form_submit_wfdoc").click(function(evt){
@@ -84,12 +96,20 @@
 						   enctype: 'multipart/form-data',
 						   processData: false,
 						   success: function (response) {
+							// 	 console.log("----------");
+							// 	 console.log("----------");
+							// 	 console.log("----------");
 							 console.log(response);
+							//  console.log("----------");
+							//  console.log("----------");
+							//  console.log("----------");
+							 json_return_wfdoc = JSON.parse(response);
+
 						   }
 					  });
 					  return false;
 
-						//need to return WfgenInfoID from ajax
+						//need to return WfdocID from ajax and give it to selector
 			});
 
 			$("#Create_Form_submit_wfdetail").click(function(evt){
@@ -98,26 +118,86 @@
 					$("#CreateFormType_wfdetail").hide();
 					$("#CreateFormType_wfaccess").show();
 					  //evt.preventDefault();
-					  // var formData = new FormData($('#CreateFormType_wfdetail')[0]);
-					  // $.ajax({
-						//    url: 'createFormType_wfdetail_handle.php',
+					  var formData = new FormData($('#CreateFormType_wfdetail')[0]);
+					  $.ajax({
+						   url: 'createFormType_wfdetail_handle.php',
+						   type: 'POST',
+						   data: formData,
+						   async: false,
+						   cache: false,
+						   contentType: false,
+						   enctype: 'multipart/form-data',
+						   processData: false,
+						   success: function (response) {
+							 console.log(response);
+							 json_return_wfdetail = JSON.parse(response);
+						   }
+					  }).then(function() {
+							$.ajax({
+							   url: 'createformType_wfdetail_accessSELECTOR.php',
+							   type: 'POST',
+							   data: {data:'data'},
+							   async: false,
+							   cache: false,
+							   contentType: false,
+							   enctype: 'multipart/form-data',
+							   processData: false,
+							   success: function (response) {
+								 console.log(response);
+								 json_return_wfdetail_access = JSON.parse(response);
+							   }
+						  });
+							return false;
+					  });
+
+						// $.ajax({
+						//    url: 'createformType_wfdetail_accessSELECTOR.php',
 						//    type: 'POST',
-						//    data: formData,
+						//    data: {},
 						//    async: false,
 						//    cache: false,
 						//    contentType: false,
 						//    enctype: 'multipart/form-data',
 						//    processData: false,
 						//    success: function (response) {
-						// 	 alert(response);
+						// 	 console.log(response);
+						// 	 json_return_wfdetail_access = JSON.parse(response);
 						//    }
 					  // });
-					  // return false;
+						var str_access_select;
+						var	StateName
+						for(i = 0; i < json_return_wfdetail.length; i++){
+							StateName = json_return_wfdetail[i].StateName;
+							console.log("StateName : "+StateName);
+							str_access_select = '<tr> <td><Text>StateName : '+StateName+'</Text></td>'
+							+'<td><text>   By: </text></td> <td>'
+							+'<select name="doc_id[]" class="makeinline">';
+							for(j = 0; j < json_return_wfdetail_access.length; j++){
+								let userid = json_return_wfdetail_access[j].UserID;
+								let name_surname = json_return_wfdetail_access[j].Name + "  "+json_return_wfdetail_access[j].Surname;
+								str_access_select = str_access_select + '<option value="'+userid+'">'+name_surname+'</option>';
+							}
+							str_access_select = str_access_select+'</select></td></tr>';
+							$(str_access_select).appendTo("#state_table_for_access");
+						}
+
+
+
+						// var str_access_select = '<tr> <td><Text>StateName'+StateName+'" </Text></td>'
+						// +'<td><text> By: </text></td> <td>'
+						// +'<select name="doc_id[]" class="makeinline">';
+						// for(i = 0; i < json_return_wfdetail_access.length; i++){
+						// 	let userid = json_return_wfdetail_access[i].UserID;
+						// 	let name_surname = json_return_wfdetail_access[i].Name + "  "+json_return_wfdetail_access[i].Surname;
+						// 	str_access_select = str_access_select + '<option value="'+userid+'">'+name_surname+'</option>';
+						// }
+						// str_access_select = str_access_select+'</select></td></tr>';
+						// $(str_access_select).appendTo("#state_table_for_access");
 
 						// when it click ajax and insert state to db and query how state work and append it in to table
 						// to let user set who can access in next step
-						var str_2 = '';
-						$(str_2).appendTo("#state_table_for_access");
+
+						return false;
 			});
 
 			$("#Create_Form_submit_wfaccess").click(function(evt){
@@ -232,11 +312,6 @@
 					<div id="wfaccess">
 					<h2>State</h2>
 						<table id="state_table_for_access"></table>
-						<!-- need to query when show -->
-						<div>
-							<text> some state</text>
-							<input type="text">
-						</div>
 					</div>
 
 					<div class="center">

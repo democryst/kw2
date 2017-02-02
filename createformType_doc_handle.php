@@ -60,8 +60,9 @@ if(isset($_FILES['file_array'])){
 				$file = $fname . '_' . time() . '.' .$ext;
 			$dirname = $sys_adminid. '_' . $date_day;
 
-
-			mkdir( $upload_destination . $dirname ,0777);
+			if(!is_dir($upload_destination . $dirname)){
+				mkdir( $upload_destination . $dirname ,0777);
+			}
 			$pathname = $upload_destination . $dirname .'/';
 
 			if(move_uploaded_file($tmp_name_array[$i], $pathname.$file)){
@@ -100,6 +101,7 @@ if(isset($_FILES['file_array'])){
 				*/
 
 
+
 				//upload to wfaccess
 				// require wfdetail to exist
 				//$q_in_wfaccess
@@ -116,20 +118,35 @@ if(isset($_FILES['file_array'])){
 
 	}
 
-	if($success_upload == 1){
-		echo "upload successfully";
+	// if($success_upload == 1){
+	// 	echo "upload successfully";
+	//
+	//
+	//
+	// }else if($success_upload == 2){
+	// 	echo "upload failed";
+	// }else{
+	// 	echo "upload source is missing";
+	// }
 
-
-
-	}else if($success_upload == 2){
-		echo "upload failed";
-	}else{
-		echo "upload source is missing";
+	$q_SELECT_wfdoc = "SELECT * FROM `wfdoc` WHERE  `WFGenInfoID` = '$wfgeninfoID' ";
+	// get WfgenInfoID
+	$result_SELECT_wfdoc=$mysqli->query($q_SELECT_wfdoc);
+	$data = array();
+	$i = 0;
+	while($row_SELECT_wfdoc=$result_SELECT_wfdoc->fetch_array()){
+		// $wfgeninfoID = $row_SELECT_wfgeninfo['WFGenInfoID'];
+		$data[$i] = $row_SELECT_wfdoc;
+		$i++;
 	}
 
-}else{
-	echo "file_array not set";
+	// $data=$result_SELECT_wfdoc->fetch_array();
+	die(json_encode($data));
+
 }
+// else{
+// 	echo "file_array not set";
+// }
 
 /*
 
