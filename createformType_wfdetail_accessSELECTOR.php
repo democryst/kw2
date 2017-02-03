@@ -1,7 +1,7 @@
 <?php
 // need to check group or individual
 require_once('connect.php');
-$q_SELECT_usergroup = "SELECT UserID FROM `usergroup` WHERE  `GroupID` = '1' "; //approver group
+$q_SELECT_usergroup = "SELECT UserID FROM `usergroup` WHERE  `GroupID` = '1' "; //approver groupID = 1
 
 $result_SELECT_usergroup=$mysqli->query($q_SELECT_usergroup);
 
