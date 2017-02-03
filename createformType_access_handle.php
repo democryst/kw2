@@ -9,8 +9,10 @@ require_once('connect.php');
 $wfdetailID_array = $_POST['wfdetailID'];
 $wfgeninfoID = $_POST['wfgeninfo'];
 $user_id_array = $_POST['user_id'];
+// $group_id_array = $_POST['group_id'];
+
 $groupid = array();
-//********* only test this time b/c interface forget to let user to decide to depend on group or individual
+********* only test this time b/c interface forget to let user to decide to depend on group or individual
 for($i = 0; $i < count($user_id_array); $i++){
   if($user_id_array[$i]){
       echo($user_id_array[$i]);
@@ -28,6 +30,7 @@ for($i = 0; $i < count($wfdetailID_array); $i++){
   if($wfdetailID_array[$i]){
 
       $q_INSERT_wfaccess="INSERT INTO wfaccess(WFGenInfoID,WFDetailID,UserID,GroupID) values('$wfgeninfoID','$wfdetailID_array[$i]','$user_id_array[$i]','$groupid[$i]') " ;
+      // $q_INSERT_wfaccess="INSERT INTO wfaccess(WFGenInfoID,WFDetailID,UserID,GroupID) values('$wfgeninfoID','$wfdetailID_array[$i]','$user_id_array[$i]','$group_id_array[$i]') " ;
       $result_INSERT_wfaccess=$mysqli->query($q_INSERT_wfaccess);
   }
 }

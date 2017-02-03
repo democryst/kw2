@@ -17,6 +17,7 @@ var json_return_wfgeninfo;
 var json_return_wfdoc;
 var json_return_wfdetail;
 var json_return_wfdetail_access;
+var json_return_wfdetail_access_group;
 		$(document).ready(function() {
 
 			$("#CreateFormType_wfdoc").hide();
@@ -151,7 +152,25 @@ var json_return_wfdetail_access;
 								 console.log(response);
 								 json_return_wfdetail_access = JSON.parse(response);
 							   }
-						  });
+						  })
+							// .then(function() {
+							// 	$.ajax({
+							// 	   url: 'createformType_wfdetail_accessSELECTOR_group.php',
+							// 	   type: 'POST',
+							// 	   data: {data:'data'},
+							// 	   async: false,
+							// 	   cache: false,
+							// 	   contentType: false,
+							// 	   enctype: 'multipart/form-data',
+							// 	   processData: false,
+							// 	   success: function (response) {
+							// 		 console.log(response);
+							// 		 json_return_wfdetail_access_group = JSON.parse(response);
+							// 	   }
+							//   });
+							// 	return false;
+						  // })
+							;
 							return false;
 					  });
 
@@ -177,8 +196,18 @@ var json_return_wfdetail_access;
 							console.log("StateName : "+StateName);
 							wf_detailID = json_return_wfdetail[i].WFDetailID; //need to pass wfdetailID to wfaccess
 							str_access_select = '<tr> <td><Text>StateName : '+StateName+'</Text></td>'
-							+'<td><input type="hidden" value="'+wf_detailID+'" name="wfdetailID[]" /></td>' /*need to pass wfdetailID to wfaccess*/
-							+'<td><text>   By: </text></td> <td>'
+							+'<td><input type="hidden" value="'+wf_detailID+'" name="wfdetailID[]" /></td>'; /*need to pass wfdetailID to wfaccess*/
+
+							// str_access_select = str_access_select +'<td><text>   By Group: </text></td> <td>'
+							// +'<select name="group_id[]" class="makeinline">';
+							// for(j = 0; j < json_return_wfdetail_access_group.length; j++){
+							// 	let groupid = json_return_wfdetail_access_group[j].GroupID;
+							// 	let groupname = json_return_wfdetail_access_group[j].GroupName;
+							// 	str_access_select = str_access_select + '<option value="'+groupid+'">'+groupname+'</option>';
+							// }
+							// str_access_select = str_access_select+'</select></td>'
+    str_access_select = str_access_select
+							+'<td><text>   By Person : </text></td> <td>'
 							+'<select name="user_id[]" class="makeinline">';
 							for(j = 0; j < json_return_wfdetail_access.length; j++){
 								let userid = json_return_wfdetail_access[j].UserID;
