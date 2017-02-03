@@ -22,6 +22,7 @@ var json_return_wfdetail_access;
 			$("#CreateFormType_wfdoc").hide();
 			$("#CreateFormType_wfdetail").hide();
 			$("#CreateFormType_wfaccess").hide();
+			$("#form_success").hide();
 
 			$("#add_more_doc_btn").click(function(){
 				var str='<tr> <td><input type="file" name="file_array[]"></td></tr>' ;
@@ -45,6 +46,7 @@ var json_return_wfdetail_access;
 					$("#CreateFormType_wfgeninfo").hide();
 					$("#CreateFormType_wfdetail").hide();
 					$("#CreateFormType_wfaccess").hide();
+					$("#form_success").hide();
 					$("#CreateFormType_wfdoc").show();
 					  // //evt.preventDefault();
 					  var formData = new FormData($('#CreateFormType_wfgeninfo')[0]);
@@ -75,6 +77,7 @@ var json_return_wfdetail_access;
 						'<td><input type="hidden" value="'+CreateTime+'" name="all_date" /></td></tr>';
 						$(str_wfgeninfo).appendTo("#upload_doc_table");
 						$(str_wfgeninfo).appendTo("#wfdetail");
+						$(str_wfgeninfo).appendTo("#wfaccess");
 
 						return false; //need it here
 			});
@@ -83,6 +86,7 @@ var json_return_wfdetail_access;
 					$("#CreateFormType_wfgeninfo").hide();
 					$("#CreateFormType_wfdoc").hide();
 					$("#CreateFormType_wfaccess").hide();
+					$("#form_success").hide();
 					$("#CreateFormType_wfdetail").show();
 					  //evt.preventDefault();
 					  var formData = new FormData($('#CreateFormType_wfdoc')[0]);
@@ -116,6 +120,7 @@ var json_return_wfdetail_access;
 					$("#CreateFormType_wfgeninfo").hide();
 					$("#CreateFormType_wfdoc").hide();
 					$("#CreateFormType_wfdetail").hide();
+					$("#form_success").hide();
 					$("#CreateFormType_wfaccess").show();
 					  //evt.preventDefault();
 					  var formData = new FormData($('#CreateFormType_wfdetail')[0]);
@@ -165,13 +170,16 @@ var json_return_wfdetail_access;
 						//    }
 					  // });
 						var str_access_select;
-						var	StateName
+						var	StateName;
+						var wf_detailID; //need to pass wfdetailID to wfaccess
 						for(i = 0; i < json_return_wfdetail.length; i++){
 							StateName = json_return_wfdetail[i].StateName;
 							console.log("StateName : "+StateName);
+							wf_detailID = json_return_wfdetail[i].WFDetailID; //need to pass wfdetailID to wfaccess
 							str_access_select = '<tr> <td><Text>StateName : '+StateName+'</Text></td>'
+							+'<td><input type="hidden" value="'+wf_detailID+'" name="wfdetailID[]" /></td>' /*need to pass wfdetailID to wfaccess*/
 							+'<td><text>   By: </text></td> <td>'
-							+'<select name="doc_id[]" class="makeinline">';
+							+'<select name="user_id[]" class="makeinline">';
 							for(j = 0; j < json_return_wfdetail_access.length; j++){
 								let userid = json_return_wfdetail_access[j].UserID;
 								let name_surname = json_return_wfdetail_access[j].Name + "  "+json_return_wfdetail_access[j].Surname;
@@ -205,22 +213,24 @@ var json_return_wfdetail_access;
 					$("#CreateFormType_wfdoc").hide();
 					$("#CreateFormType_wfdetail").hide();
 					$("#CreateFormType_wfaccess").hide();
+					$("#form_success").show();
 					  //evt.preventDefault();
-					  // var formData = new FormData($('#CreateFormType_wfaccess')[0]);
-					  // $.ajax({
-						//    url: 'CreateFormType_access_handle.php',
-						//    type: 'POST',
-						//    data: formData,
-						//    async: false,
-						//    cache: false,
-						//    contentType: false,
-						//    enctype: 'multipart/form-data',
-						//    processData: false,
-						//    success: function (response) {
-						// 	 alert(response);
-						//    }
-					  // });
-					  // return false;
+					  var formData = new FormData($('#CreateFormType_wfaccess')[0]);
+					  $.ajax({
+						   url: 'CreateFormType_access_handle.php',
+						   type: 'POST',
+						   data: formData,
+						   async: false,
+						   cache: false,
+						   contentType: false,
+						   enctype: 'multipart/form-data',
+						   processData: false,
+						   success: function (response) {
+							 console.log(response);
+						   }
+					  });
+					  return false;
+
 			});
 
 		});
@@ -319,6 +329,10 @@ var json_return_wfdetail_access;
 						<input type="reset" value="Reset"  style="width: 90px;">
 					</div>
 				</form>
+
+				<div class="center" id="form_success">
+					<h2>Create Form successfully !</h2>
+				</div>
 
 			</div>
 		</div>

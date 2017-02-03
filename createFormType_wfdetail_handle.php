@@ -31,13 +31,13 @@ $ParentStateID = null;
 for($i = 0; $i < count($state_array); $i++){
   if($state_array[$i]){
     $q_INSERT_wfdetail="INSERT INTO wfdetail(ParentID,StateName,CreateTime,ModifyTime,Deadline,WFDocID,WFGenInfoID) values('$ParentStateID' , '$state_array[$i]' , '$all_date' , 'null' , '$deadline_arr[$i]' , '$doc_id_array[$i]', '$wfgeninfoID') " ;
-    $mysqli->query($q_INSERT_wfdetail);
+    $result_INSERT_wfdetail=$mysqli->query($q_INSERT_wfdetail);
 
-    $q_SELECT_wfdetail="SELECT * FROM wfdetail where StateName = '$state_array[$i]' AND CreateTime = '$all_date' ";
     // get ParentID
+    $q_SELECT_wfdetail="SELECT * FROM wfdetail where StateName = '$state_array[$i]' AND CreateTime = '$all_date' ";
     $result_SELECT_wfdetail=$mysqli->query($q_SELECT_wfdetail);
     while($row_SELECT_wfdetail=$result_SELECT_wfdetail->fetch_array()){
-      $ParentStateID = $row_SELECT_wfdetail['ParentID'];
+      $ParentStateID = $row_SELECT_wfdetail['WFDetailID'];
     }
 
   }

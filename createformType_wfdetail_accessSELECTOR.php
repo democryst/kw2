@@ -1,13 +1,13 @@
 <?php
+// need to check group or individual
 require_once('connect.php');
-$q_SELECT_usergroup = "SELECT UserID FROM `usergroup` WHERE  `GroupID` = '1' ";
-// get WfgenInfoID
+$q_SELECT_usergroup = "SELECT UserID FROM `usergroup` WHERE  `GroupID` = '1' "; //approver group
+
 $result_SELECT_usergroup=$mysqli->query($q_SELECT_usergroup);
 
 $userid = array();
 $i = 0;
 while($row_SELECT_usergroup=$result_SELECT_usergroup->fetch_array()){
-  // $wfgeninfoID = $row_SELECT_wfgeninfo['WFGenInfoID'];
   $userid[$i] = $row_SELECT_usergroup['UserID'];
   $i++;
 }
