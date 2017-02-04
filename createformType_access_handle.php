@@ -12,7 +12,7 @@ $user_id_array = $_POST['user_id'];
 // $group_id_array = $_POST['group_id'];
 
 $groupid = array();
-********* only test this time b/c interface forget to let user to decide to depend on group or individual
+//********* only test this time b/c interface forget to let user to decide to depend on group or individual
 for($i = 0; $i < count($user_id_array); $i++){
   if($user_id_array[$i]){
       echo($user_id_array[$i]);
