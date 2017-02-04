@@ -179,7 +179,10 @@ var json_return_wfdetail;
 																}
 																str_access_select_person = str_access_select_person+'</select></td>';
 																$('#person_tab_'+person_tab_index+'').empty();
-																$(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
+																if(json_return_wfdetail_access.length != 0 ){
+																	$(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
+																}
+																// $(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
 													});
 												}
 								    });
