@@ -151,7 +151,7 @@ var json_return_wfdetail;
 										let groupname = json_wf_det_access_group[j].GroupName;
 										str_accessgroup_select = str_accessgroup_select + '<option value="'+groupid+'">'+groupname+'</option>';
 									}
-									str_accessgroup_select = str_accessgroup_select+'</select></td><td><table id="person_tab_'+i+'"></table></td></tr>';
+									str_accessgroup_select = str_accessgroup_select+'</select></td><td><input id="chb_'+i+'" type="checkbox" name="chb_'+i+'" value=1 ></td><td><table id="person_tab_'+i+'"></table></td></tr>';
 									// $(str_accessgroup_select).appendTo("#state_table_for_accessgroup");
 										$(str_accessgroup_select).appendTo('#gtab_'+i+'');
 										$('#gselect_'+i+'').change(function(person_tab_index){
@@ -171,7 +171,8 @@ var json_return_wfdetail;
 														console.log(json_return_wfdetail_access);
 																console.log(person_tab_index);
 
-																str_access_select_person = '<td><text>   By Person : </text></td> <td> <select name="user_id[]" class="makeinline">';
+																// str_access_select_person = '<td><text>   By Person : </text></td> <td> <select name="user_id[]" class="makeinline">';
+																str_access_select_person = '<td> <select name="user_id[]" class="makeinline">';
 																for(j = 0; j < json_return_wfdetail_access.length; j++){
 																		let userid = json_return_wfdetail_access[j].UserID;
 																		let name_surname = json_return_wfdetail_access[j].Name + "  "+json_return_wfdetail_access[j].Surname;
@@ -179,7 +180,11 @@ var json_return_wfdetail;
 																}
 																str_access_select_person = str_access_select_person+'</select></td>';
 																$('#person_tab_'+person_tab_index+'').empty();
-																if(json_return_wfdetail_access.length != 0 ){
+
+																	// console.log(person_tab_index);
+																	// 	console.log( $('#chb_'+person_tab_index+'').is(":checked") );
+
+																if( (json_return_wfdetail_access.length != 0)&&($('#chb_'+person_tab_index+'').is(":checked") ) ){
 																	$(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
 																}
 																// $(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
