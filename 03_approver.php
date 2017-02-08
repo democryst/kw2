@@ -22,7 +22,7 @@
 		for(i=0; i<json_return_approve_currentworklist.length; i++){
 			let wfrequestdetailID = json_return_approve_currentworklist[i].WFRequestDetailID;
 			let StateName = json_return_approve_currentworklist[i].StateName;
-			$.post("approver_worklist_wfrequest.php", {data: wfrequestdetailID}, function(data){
+			$.post("approver_handle/approver_worklist_wfrequest.php", {data: wfrequestdetailID}, function(data){
 				 var json_return_approve_currentworklist_wfrequest = JSON.parse(data);
 				 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
 			}).then({
@@ -37,7 +37,7 @@
 					$("#comment_page").hide();
 					var formData = new FormData($('#currentwork_wfrequestdoc')[0]);
 					$.ajax({
-						 url: 'currentwork_wfrequestdoc.php',
+						 url: 'approver_handle/apporver_currentwork_wfrequestdoc.php',
 						 type: 'POST',
 						 data: formData,
 						 async: false,
@@ -102,7 +102,7 @@
 		<div id="div_content" class="form">
       <div id="current_work_list_page">
         <h2>Approve list</h2>
-				<form action="currentwork_wfrequestdoc.php" method="post" id="currentwork_wfrequestdoc">
+				<form action="apporver_currentwork_wfrequestdoc.php" method="post" id="currentwork_wfrequestdoc">
         	<table id="current-work-table"></table>
 				</form>
       </div>
