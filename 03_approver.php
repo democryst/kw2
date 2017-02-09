@@ -13,69 +13,82 @@
 
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
-	$("#currentwork_select_page").hide();
-	$("#file_upload_page").hide();
-	$("#comment_page").hide();
-	$.post("approver_worklist_handle.php", {data: userid}, function(data){
-		 var json_return_approve_currentworklist = JSON.parse(data);
-	}).then({
-		for(i=0; i<json_return_approve_currentworklist.length; i++){
-			let wfrequestdetailID = json_return_approve_currentworklist[i].WFRequestDetailID;
-			let StateName = json_return_approve_currentworklist[i].StateName;
-			$.post("approver_handle/approver_worklist_wfrequest.php", {data: wfrequestdetailID}, function(data){
-				 var json_return_approve_currentworklist_wfrequest = JSON.parse(data);
-				 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
-			}).then({
-				let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
-				var str_aprove_currentworklist = "<tr><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID'><text>"+StateName+"</text></td> <td><text>requestor : "+requesterName+"</text></td><td><input type='button' value='Select' id='select_work_btn'></td></tr>";
-				$(str_aprove_currentworklist).appendTo("#current-work-table");
 
-				$("#select_work_btn").click(function(){
-					$("#current_work_list_page").hide();
-					$("#currentwork_select_page").show();
-					$("#file_upload_page").hide();
-					$("#comment_page").hide();
-					var formData = new FormData($('#currentwork_wfrequestdoc')[0]);
-					$.ajax({
-						 url: 'approver_handle/apporver_currentwork_wfrequestdoc.php',
-						 type: 'POST',
-						 data: formData,
-						 async: false,
-						 cache: false,
-						 contentType: false,
-						 enctype: 'multipart/form-data',
-						 processData: false,
-						 success: function (response) {
-						//  console.log(response);
-						 json_return_wfrequestdoc = JSON.parse(response);
+	let userid = 1;//test approver id
 
-						 }
-					}).then(function(json_return_wfrequestdoc){
-						var str_file_download_table+'<tr>';
-						for(j=0; j<json_return_wfrequestdoc.length; j++){
+	$(document).ready(function() {
+		$("#current_work_list_page").show();
+		$("#currentwork_select_page").hide();
+		$("#file_upload_page").hide();
+		$("#comment_page").hide();
 
-							var filename = json_return_wfrequestdoc[j].DocName;
-							str_file_download_table = str_file_download_table+'<td> <tr><td><text>'+filename+'<text><td></tr> <tr><td> <input type="button" value="Download" id="file_download_'+j+'"></td></tr> </td>';
-						}
-						str_file_download_table = str_file_download_table+'</tr>';
-						$(str_file_download_table).appendTo("#file-download-table");
+		$("#Next_file_upload_page").click(function(){
+			$("#current_work_list_page").hide();
+			$("#currentwork_select_page").hide();
+			$("#file_upload_page").show();
+			$("#comment_page").hide();
 
-						for(j=0; j<json_return_wfrequestdoc.length; j++){
-							// var filepath = json_return_wfrequestdoc[j].DocURL;
-							$('file_download_'+j+'').click({
-								$.post("approver_work_filedownload.php", {data: json_return_wfrequestdoc[j].DocURL}, function(data){
-									 //file download
- // http://php.net/manual/en/function.readfile.php
+		});
 
+		//test
+	  $.post("approver_handle/approver_show_worklist_handle.php", {cur_userid: userid}, function(data){
+	 		var json_return_approve_currentworklist = JSON.parse(data);
+	 		var approve_cur_arr_l = json_return_approve_currentworklist.length;
+	 		showcurrentworklist(json_return_approve_currentworklist, approve_cur_arr_l);
+	  });
+
+	 function showcurrentworklist(json_return_approve_currentworklist, approve_cur_arr_l){
+	 	for(i=0; i<approve_cur_arr_l; i++){
+	 		var wfrequestdetailID = json_return_approve_currentworklist[i].WFDetailID;
+	 		var StateName = json_return_approve_currentworklist[i].StateName;
+	 		showcurrentworklist_2(wfrequestdetailID, StateName, i);
+	 	}
+	 }
+
+	 function showcurrentworklist_2(wfrequestdetailID, StateName, index){
+	 	$.post("approver_handle/approver_worklist_wfrequest.php", {cur_wfrequestdetailID: wfrequestdetailID} ,function(data){
+	 		 var json_return_approve_currentworklist_wfrequest = JSON.parse(data);
+	 		 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
+	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
+	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
+	 			 var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td><td><input type='button' value='Select' id='select_work_btn_"+index+"'></td></tr>";
+	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
+
+				 	$("#select_work_btn_"+index+"").click(function(){
+				 				$("#current_work_list_page").hide();
+				 				$("#currentwork_select_page").show();
+				 				$("#file_upload_page").hide();
+				 				$("#comment_page").hide();
+
+								let wfrequestdetailID = $("#wfrequestdetailID_"+index+"").attr('value');
+								console.log(wfrequestdetailID);
+								$.post("approver_handle/apporver_currentwork_wfrequestdoc.php", {data: wfrequestdetailID}, function(data){
+									 var json_return_wfrequestdoc = JSON.parse(data);
+									 console.log(json_return_wfrequestdoc);
+									 var filepath = json_return_wfrequestdoc.DocURL;
+ 									 var filename = json_return_wfrequestdoc.DocName;
+									 var str_file_download_table = '<tr><td><Text>'+filename+'</Text></td></tr><tr><td><a href="'+localhost+filepath+'">Download</a><td></tr>';
+									 $(str_file_download_table).appendTo("#file-download-table");
+									//  var str_file_download_table = str_file_download_table+'<tr>';
+									// 	for(j=0; j<json_return_wfrequestdoc.length; j++){
+									// 		var filepath = json_return_wfrequestdoc[j].DocURL;
+									// 		var filename = json_return_wfrequestdoc[j].DocName;
+									// 		str_file_download_table = str_file_download_table+'<td> <tr><td><text>'+filename+'<text><td></tr> <tr><td> <a href="'+localhost+filepath+'">Download</a></td></tr> </td>';
+									// 	}
+									// str_file_download_table = str_file_download_table+'</tr>';
+									// $(str_file_download_table).appendTo("#file-download-table");
 								});
-							});
-						}
+
 					});
 
-				});
-			});
-		}
+	 	});
+	 }
+
+
+
 	});
+
+
 
 
 
@@ -110,6 +123,9 @@
       <div id="currentwork_select_page">
         <h2>Student graduation form</h2><!--need to change name according to one that select-->
         <table id="file-download-table"></table>
+				<div class="right">
+          <input type="button" value="Next" id="Next_file_upload_page" style="width: 90px;">
+        </div>
       </div>
 
       <div id="file_upload_page">
