@@ -15,6 +15,7 @@ $result_SELECT_doc = $mysqli->query($q_SELECT_doc);
 while($row_SELECT_doc = $result_SELECT_doc->fetch_array()){
   $DocName = $row_SELECT_doc['DocName'];
   $DocURL= $row_SELECT_doc['DocURL'];
+  $DocID= $row_SELECT_doc['WFDocID'];
 }
 
 $response = array();
@@ -22,6 +23,7 @@ $response = array();
 
   $response['DocName'] = $DocName;
   $response['DocURL'] = $DocURL;
+  $response['WFDocID'] = $DocID;
 
 
 echo json_encode($response);

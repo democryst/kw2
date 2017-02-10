@@ -77,6 +77,11 @@
 									// 	}
 									// str_file_download_table = str_file_download_table+'</tr>';
 									// $(str_file_download_table).appendTo("#file-download-table");
+
+									var DocID = json_return_wfrequestdoc.WFDocID;
+									var str_file_upload_table = '<tr><td><input type="hidden" value='+DocID+' name="fileupload[]"><Text>File:'+filename+'</Text></td><td><input type="file" value="upload" id="file_array[]"></td></tr>';
+									str_file_upload_table = str_file_upload_table+'<tr><td><input type="button" value="Upload" id="upload_btn"></td></tr>';
+									$(str_file_upload_table).appendTo("#file-upload-table");
 								});
 
 					});
