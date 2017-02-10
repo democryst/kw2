@@ -29,6 +29,7 @@ var json_return_wfdetail;
 				var str='<tr> <td><input type="file" name="file_array[]"></td></tr>' ;
 				$(str).appendTo("#upload_doc_table");
 			});
+
 			$("#add_more_state_btn").click(function(){
 				var str='<tr> <td><text> Step: </text></td> <td><input type="text" name="state_array[]"></td>'
 				+'<td><text> Deadline: </text></td> <td><input type="text" name="deadline[]"></td>'

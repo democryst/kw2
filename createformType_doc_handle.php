@@ -69,7 +69,7 @@ if(isset($_FILES['file_array'])){
 				$success_upload = 1;
 
 				// to add destination fro storing it later in database
-				$destination = $upload_destination . $file;
+				$destination = $pathname . $file;
 
 				$DocName = $fname . $ext;
 				//upload into database
