@@ -67,7 +67,7 @@
 									 console.log(json_return_wfrequestdoc);
 									 var filepath = json_return_wfrequestdoc.DocURL;
  									 var filename = json_return_wfrequestdoc.DocName;
-									 var str_file_download_table = '<tr><td><Text>'+filename+'</Text></td></tr><tr><td><a href="'+localhost+filepath+'">Download</a><td></tr>';
+									 var str_file_download_table = '<tr><td><Text>'+filename+'</Text></td></tr><tr><td><a target="_tab" href="'+localhost+filepath+'">Download</a><td></tr>';
 									 $(str_file_download_table).appendTo("#file-download-table");
 									//  var str_file_download_table = str_file_download_table+'<tr>';
 									// 	for(j=0; j<json_return_wfrequestdoc.length; j++){
