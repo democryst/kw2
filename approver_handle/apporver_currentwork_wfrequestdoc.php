@@ -4,18 +4,18 @@ require_once('../connect.php');
 if (isset($_POST['data']) ) {
   $wfrequestdetailid = $_POST['data'];
 }
-$q_SELECT_WFDocID = "SELECT WFDocID FROM `wfdetail` WHERE WFDetailID = '$wfrequestdetailid'";
+$q_SELECT_WFDocID = "SELECT WFRequestDocID FROM `wfrequestdetail` WHERE WFRequestDetailID = '$wfrequestdetailid'";
 $result_SELECT_WFDocID = $mysqli->query($q_SELECT_WFDocID);
 $row_SELECT_WFDocID = $result_SELECT_WFDocID->fetch_array();
-$WFdocID = $row_SELECT_WFDocID['WFDocID'];
+$WFRequestdocID = $row_SELECT_WFDocID['WFRequestDocID'];
 
 
-$q_SELECT_doc = "SELECT * FROM `wfdoc` WHERE WFDocID = '$WFdocID'";
+$q_SELECT_doc = "SELECT * FROM `wfrequestdoc` WHERE WFRequestDocID = '$WFRequestdocID'";
 $result_SELECT_doc = $mysqli->query($q_SELECT_doc);
 while($row_SELECT_doc = $result_SELECT_doc->fetch_array()){
   $DocName = $row_SELECT_doc['DocName'];
   $DocURL= $row_SELECT_doc['DocURL'];
-  $DocID= $row_SELECT_doc['WFDocID'];
+  $DocID= $row_SELECT_doc['WFRequestDocID'];
 }
 
 $response = array();
@@ -23,7 +23,7 @@ $response = array();
 
   $response['DocName'] = $DocName;
   $response['DocURL'] = $DocURL;
-  $response['WFDocID'] = $DocID;
+  $response['WFRequestDocID'] = $DocID;
 
 
 echo json_encode($response);

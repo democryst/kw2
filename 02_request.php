@@ -23,6 +23,24 @@
 			fn1_loopform(all_form);
 		});
 
+		$("#file_upload").click(function(){
+			var formData = new FormData($('#upload_form')[0]);
+			$.ajax({
+				 url: 'request_handle/request_doc_handle.php',
+				 type: 'POST',
+				 data: formData,
+				 async: false,
+				 cache: false,
+				 contentType: false,
+				 enctype: 'multipart/form-data',
+				 processData: false,
+				 success: function (response) {
+				 console.log(response);
+				 }
+			});
+			return false;
+		});
+
 		function fn1_loopform(all_f){
 			for (i = 0; i < all_f.length; i++) {
 				var c_form = all_f[i];
@@ -58,23 +76,7 @@
 				console.log(str_f_upload);
 				$(str_f_upload).appendTo("#file-upload-table");
 			}
-			$("#file_upload").click(function(){
-				var formData = new FormData($('#upload_form')[0]);
-				// $.ajax({
-				// 	 url: 'request_handle/request_doc_handle.php',
-				// 	 type: 'POST',
-				// 	 data: formData,
-				// 	 async: false,
-				// 	 cache: false,
-				// 	 contentType: false,
-				// 	 enctype: 'multipart/form-data',
-				// 	 processData: false,
-				// 	 success: function (response) {
-				// 	 console.log(response);
-				// 	 }
-				// });
-				// return false;
-			});
+
 
 		}
 

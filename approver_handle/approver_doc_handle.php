@@ -9,9 +9,8 @@ $form_description = "description";
 $adminid = 2;
 */
 //$state_array = $_POST['state_array'];
-$user_id = $_POST['user_id'];
+// $user_id = $_POST['user_id'];
 
-$filename_arr= $_POST['filename_arr'];
 $WFRequestDocID_arr = $_POST['WFRequestDocID_arr'];
 
 // $sys_adminid = 3;
@@ -48,7 +47,7 @@ if(isset($_FILES['file_array'])){
 			//$file = md5_file($tmp_name_array[$i]) . '_' . time() . '.' .$ext;
 			//$file = $fname . '_' . $date_hrs . '.' .$ext;
 				$file = $fname . '_' . time() . '.' .$ext;
-			$dirname = 'u_'.$user_id. '_' . $date_day;
+			$dirname = "approver_" . $date_day;
 
 			if(!is_dir($upload_destination . $dirname)){
 				mkdir( $upload_destination . $dirname ,0777);

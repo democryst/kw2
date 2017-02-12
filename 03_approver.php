@@ -39,7 +39,7 @@
 
 	 function showcurrentworklist(json_return_approve_currentworklist, approve_cur_arr_l){
 	 	for(i=0; i<approve_cur_arr_l; i++){
-	 		var wfrequestdetailID = json_return_approve_currentworklist[i].WFDetailID;
+	 		var wfrequestdetailID = json_return_approve_currentworklist[i].WFRequestDetailID;
 	 		var StateName = json_return_approve_currentworklist[i].StateName;
 	 		showcurrentworklist_2(wfrequestdetailID, StateName, i);
 	 	}
@@ -78,9 +78,8 @@
 									// str_file_download_table = str_file_download_table+'</tr>';
 									// $(str_file_download_table).appendTo("#file-download-table");
 
-									var DocID = json_return_wfrequestdoc.WFDocID;
-									var str_file_upload_table = '<tr><td><input type="hidden" value='+DocID+' name="fileupload[]"><Text>File:'+filename+'</Text></td><td><input type="file" value="upload" id="file_array[]"></td></tr>';
-									str_file_upload_table = str_file_upload_table+'<tr><td><input type="button" value="Upload" id="upload_btn"></td></tr>';
+									var DocID = json_return_wfrequestdoc.WFRequestDocID;
+									var str_file_upload_table = '<tr><td><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
 									$(str_file_upload_table).appendTo("#file-upload-table");
 								});
 
@@ -88,6 +87,24 @@
 
 	 	});
 	 }
+	 $("#upload_btn").click(function(){
+		 var formData = new FormData($('#upload_form')[0]);
+		 $.ajax({
+				url: 'approver_handle/approver_doc_handle.php',
+				type: 'POST',
+				data: formData,
+				async: false,
+				cache: false,
+				contentType: false,
+				enctype: 'multipart/form-data',
+				processData: false,
+				success: function (response) {
+				console.log(response);
+				}
+		 });
+		 return false;
+	 });
+
 
 
 
@@ -135,9 +152,12 @@
 
       <div id="file_upload_page">
         <h2>File upload</h2>
-        <table id="file-upload-table"></table>
+				<form id="upload_form">
+        	<table id="file-upload-table"></table>
+				</form>
         <div class="right">
-          <input type="button" value="Approve" id="approve_form" style="width: 90px;">
+					<input type="button" value="Approve" id="upload_btn" style="width: 90px;">
+          <!--input type="button" value="Approve" id="approve_form" style="width: 90px;"-->
           <input type="button" value="Reject" id="reject_form" style="width: 90px;">
         </div>
       </div>
