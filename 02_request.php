@@ -23,23 +23,7 @@
 			fn1_loopform(all_form);
 		});
 
-		$("#file_upload").click(function(){
-			var formData = new FormData($('#upload_form')[0]);
-			$.ajax({
-				 url: 'request_handle/request_doc_handle.php',
-				 type: 'POST',
-				 data: formData,
-				 async: false,
-				 cache: false,
-				 contentType: false,
-				 enctype: 'multipart/form-data',
-				 processData: false,
-				 success: function (response) {
-				 console.log(response);
-				 }
-			});
-			return false;
-		});
+
 
 		function fn1_loopform(all_f){
 			for (i = 0; i < all_f.length; i++) {
@@ -55,7 +39,11 @@
 			var showformlist = "<tr><td><Text>FormName : "+formname+"</Text></td><td><input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'><text>Description : "+description+"</text></td> <td><input type='button' value='Select' id='chose_form_btn_"+index+"'></td></tr>";
 			$(showformlist).appendTo("#all-form-table");
 			$("#chose_form_btn_"+index+"").click(function(){
-				$.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
+				// $.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
+				// 	doc_ret=JSON.parse(response);
+				// 	fn3_fileshow(doc_ret);
+				// });
+				$.post("request_handle/showwfdoc.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
 					doc_ret=JSON.parse(response);
 					fn3_fileshow(doc_ret);
 				});
@@ -64,18 +52,60 @@
 		}
 
 		function fn3_fileshow(doc){
+			// for (var j = 0; j < doc.length; j++) {
+			// 	doc_obj = doc[j];
+			// 	WFRequestDocID = doc_obj['WFRequestDocID'];
+			// 	filename = doc_obj['DocName'];
+			// 	filepath = doc_obj['DocURL'];
+			// 	str_f_download = "<tr> <tr><td><Text>filename : "+filename+"</Text></td></tr> <tr><td><a href='"+localhost+filepath+"'>Download</a></td></tr> </tr>";
+			// 	$(str_f_download).appendTo("#file-download-table");
+			//
+			// 	let str_f_upload = "<tr> <td><Text>filename : "+filename+"</Text><input type='hidden' value='"+user_id+"' name='user_id' ><input type='hidden' value='"+filename+"' name='filename_arr[]' ><input type='hidden' value='"+WFRequestDocID+"' name='WFRequestDocID_arr[]' ></td> <td><input type='file' name='file_array[]'></td> </tr>";
+			// 	console.log(str_f_upload);
+			// 	$(str_f_upload).appendTo("#file-upload-table");
+			// }
 			for (var j = 0; j < doc.length; j++) {
 				doc_obj = doc[j];
-				WFRequestDocID = doc_obj['WFRequestDocID'];
+				WFDocID = doc_obj['WFDocID'];
 				filename = doc_obj['DocName'];
 				filepath = doc_obj['DocURL'];
+				var requestor_id = doc_obj['requestor_id'];
+				var wfgeninfo = doc_obj['wfgeninfo'];
 				str_f_download = "<tr> <tr><td><Text>filename : "+filename+"</Text></td></tr> <tr><td><a href='"+localhost+filepath+"'>Download</a></td></tr> </tr>";
 				$(str_f_download).appendTo("#file-download-table");
 
-				let str_f_upload = "<tr> <td><Text>filename : "+filename+"</Text><input type='hidden' value='"+user_id+"' name='user_id' ><input type='hidden' value='"+filename+"' name='filename_arr[]' ><input type='hidden' value='"+WFRequestDocID+"' name='WFRequestDocID_arr[]' ></td> <td><input type='file' name='file_array[]'></td> </tr>";
+				let str_f_upload = "<tr> <td><Text>filename : "+filename+"</Text><input type='hidden' value='"+requestor_id+"' name='requestor_id' ><input type='hidden' value='"+filename+"' name='filename_arr[]' ><input type='hidden' value='"+WFDocID+"' name='WFDocID_arr[]' ></td> <td><input type='file' name='file_array[]'></td> </tr>";
 				console.log(str_f_upload);
 				$(str_f_upload).appendTo("#file-upload-table");
 			}
+
+			$("#file_upload").click(function(){
+
+				$.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: requestor_id}}, function(response){
+					wfrequestid=JSON.parse(response);
+					str_f2_upload = "<tr><td><input type='hidden' value='"+wfrequestid+"' name='wf_requestid'></td></tr>";
+					$(str_f2_upload).appendTo("#file-upload-table");
+					// fn3_fileshow(doc_ret);
+				}).then(function(){
+					var formData = new FormData($('#upload_form')[0]);
+					$.ajax({
+						 url: 'request_handle/request_doc_handle.php',
+						 type: 'POST',
+						 data: formData,
+						 async: false,
+						 cache: false,
+						 contentType: false,
+						 enctype: 'multipart/form-data',
+						 processData: false,
+						 success: function (response) {
+						 console.log(response);
+						 }
+					});
+					return false;
+				});
+
+
+			});
 
 
 		}

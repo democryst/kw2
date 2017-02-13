@@ -132,18 +132,18 @@ $mapping_wfdetail_access = array();
     }
 
 //return filename, url
-$data_return = array();
-$q_get_file = "SELECT * FROM wfrequestdoc WHERE WFRequestID='$WFRequestID' ";
-$result_get_file=$mysqli->query($q_get_file) or trigger_error($mysqli->error."[$q_get_file]");
-while($row_get_file=$result_get_file->fetch_array()){
-  $ret_arr = array();
-  $ret_arr['WFRequestDocID'] = $row_get_file['WFRequestDocID'];
-  $ret_arr['DocName'] = $row_get_file['DocName'];
-  $ret_arr['DocURL'] = $row_get_file['DocURL'];
-  array_push($data_return, $ret_arr);
-}
+// $data_return = array();
+// $q_get_file = "SELECT * FROM wfrequestdoc WHERE WFRequestID='$WFRequestID' ";
+// $result_get_file=$mysqli->query($q_get_file) or trigger_error($mysqli->error."[$q_get_file]");
+// while($row_get_file=$result_get_file->fetch_array()){
+//   $ret_arr = array();
+//   $ret_arr['WFRequestDocID'] = $row_get_file['WFRequestDocID'];
+//   $ret_arr['DocName'] = $row_get_file['DocName'];
+//   $ret_arr['DocURL'] = $row_get_file['DocURL'];
+//   array_push($data_return, $ret_arr);
+// }
 
-      echo json_encode($data_return);
+      echo json_encode($WFRequestID);
 
   }else{
     echo "missing wfgeninfo";
