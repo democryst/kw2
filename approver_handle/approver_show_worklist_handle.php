@@ -45,7 +45,7 @@ while ($row_SELECT_usergroup=$result_SELECT_usergroup->fetch_array() ) {
 
 //-------------------------------------------------------
 $currentworklist_WFDetailID_arr = array();
-$q_SELECT_currentworklist = "SELECT WFRequestDetailID FROM wfrequestdetail";
+$q_SELECT_currentworklist = "SELECT WFRequestDetailID FROM currentworklist";
 $result_SELECT_currentworklist = $mysqli->query($q_SELECT_currentworklist);
 $index_2 = 0;
 while($row_SELECT_currentworklist = $result_SELECT_currentworklist->fetch_array() ){

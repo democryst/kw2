@@ -4,6 +4,8 @@ require_once('../connect.php');
 if (isset($_POST['data']) ) {
   $wfrequestdetailid = $_POST['data'];
 }
+
+
 $q_SELECT_WFDocID = "SELECT WFRequestDocID FROM `wfrequestdetail` WHERE WFRequestDetailID = '$wfrequestdetailid'";
 $result_SELECT_WFDocID = $mysqli->query($q_SELECT_WFDocID);
 $row_SELECT_WFDocID = $result_SELECT_WFDocID->fetch_array();
@@ -20,6 +22,12 @@ while($row_SELECT_doc = $result_SELECT_doc->fetch_array()){
 
 $response = array();
 
+$q_SELECT_currentworklist = "SELECT * FROM currentworklist WHERE WFRequestDetailID='$wfrequestdetailid' ";
+$result_SELECT_currentworklist = $mysqli->query($q_SELECT_currentworklist);
+while($row_SELECT_currentworklist = $result_SELECT_currentworklist->fetch_array() ){
+  $response['TimeStamp'] = $row_SELECT_currentworklist['TimeStamp'];
+  $response['CurrentWorkListID'] =$row_SELECT_currentworklist['CurrentWorkListID'];
+}
 
   $response['DocName'] = $DocName;
   $response['DocURL'] = $DocURL;

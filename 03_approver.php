@@ -77,9 +77,10 @@
 									// 	}
 									// str_file_download_table = str_file_download_table+'</tr>';
 									// $(str_file_download_table).appendTo("#file-download-table");
-
+									var TimeStamp = json_return_wfrequestdoc.TimeStamp;
+									var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
 									var DocID = json_return_wfrequestdoc.WFRequestDocID;
-									var str_file_upload_table = '<tr><td><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
+									var str_file_upload_table = '<tr><td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp+' name="TimeStamp"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
 									$(str_file_upload_table).appendTo("#file-upload-table");
 								});
 
