@@ -78,9 +78,14 @@
 									// str_file_download_table = str_file_download_table+'</tr>';
 									// $(str_file_download_table).appendTo("#file-download-table");
 									var TimeStamp = json_return_wfrequestdoc.TimeStamp;
+									console.log(TimeStamp);
+									var datestring = Date.parse(TimeStamp);
+ 									var TimeStamp_unix =  datestring/1000; //for use in php need to divide by 1000
+									console.log(TimeStamp_unix);
+
 									var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
 									var DocID = json_return_wfrequestdoc.WFRequestDocID;
-									var str_file_upload_table = '<tr><td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp+' name="TimeStamp"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
+									var str_file_upload_table = '<tr><td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
 									$(str_file_upload_table).appendTo("#file-upload-table");
 								});
 
@@ -90,6 +95,7 @@
 	 }
 	 $("#upload_btn").click(function(){
 		 var formData = new FormData($('#upload_form')[0]);
+		 console.log(formData);  //json formdata
 		 $.ajax({
 				url: 'approver_handle/approver_doc_handle.php',
 				type: 'POST',
