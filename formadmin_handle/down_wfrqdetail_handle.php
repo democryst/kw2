@@ -54,10 +54,11 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
       $child['WFRequestID'] = $row_select_child['WFRequestID'];
     }
     // (3)replace(update) current position with (3)
-    // $q_update_ctocur = "UPDATE `wfrequestdetail` SET `WFRequestDetailID`='$child['WFRequestDetailID']',`ParentID`='$destination',`TimeStamp`=CURRENT_TIMESTAMP WHERE `WFRequestDetailID`='$Parent_ID' ";
+    // $q_update_ctocur = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby', `Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$Parent_ID' ";
     // $result_update_ctop  = $mysqli->query($q_update_ctocur);
+    
     // (4)replace(update) child postion with (1)
-    // $q_update_curtoc = "UPDATE `wfrequestdetail` SET `WFRequestDetailID`='$child['WFRequestDetailID']',`ParentID`='$destination',`TimeStamp`=CURRENT_TIMESTAMP WHERE `WFRequestDetailID`='$WFrqDetail_ID' ";
+    // $q_update_curtoc = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby', `Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$Parent_ID' ";
     // $result_update_ptoc  = $mysqli->query($q_update_curtoc);
 
 
