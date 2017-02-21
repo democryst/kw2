@@ -47,10 +47,34 @@ if ($Parent_ID != 0) {
     $parent['WFRequestID'] = $row_select_parent['WFRequestID'];
   }
   // (3)replace(update) parent position with (1)
-  // $q_update_ctop = "UPDATE `wfrequestdetail` SET `WFRequestDetailID`='$child['WFRequestDetailID']',`ParentID`='$destination',`TimeStamp`=CURRENT_TIMESTAMP WHERE `WFRequestDetailID`='$Parent_ID' ";
+  $s_3_parent = $parent['ParentID'];
+  $s_3_statename = $child['StateName'];
+  $s_3_createtime = $child['CreateTime'];
+  $s_3_modifytime = $child['ModifyTime'];
+  $s_3_deadline = $child['Deadline'];
+  $s_3_wfrequestdocid = $child['WFRequestDocID'];
+  $s_3_state = $child['State'];
+  $s_3_priority = $child['Priority'];
+  $s_3_doneby = $child['DoneBy'];
+  $s_3_status = $child['Status'];
+  $s_3_starttime = $child['StartTime'];
+  $s_3_endtime = $child['EndTime'];
+  // $q_update_ctop = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby', `Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$Parent_ID' ";
   // $result_update_ctop  = $mysqli->query($q_update_ctop);
   // (4)replace(update) child postion with (2)
-  // $q_update_ptoc = "UPDATE `wfrequestdetail` SET `WFRequestDetailID`='$child['WFRequestDetailID']',`ParentID`='$destination',`TimeStamp`=CURRENT_TIMESTAMP WHERE `WFRequestDetailID`='$WFrqDetail_ID' ";
+  $s_4_parent = $child['WFRequestDetailID'];
+  $s_4_statename = $parent['StateName'];
+  $s_4_createtime = $parent['CreateTime'];
+  $s_4_modifytime = $parent['ModifyTime'];
+  $s_4_deadline = $parent['Deadline'];
+  $s_4_wfrequestdocid = $parent['WFRequestDocID'];
+  $s_4_state = $parent['State'];
+  $s_4_priority = $parent['Priority'];
+  $s_4_doneby = $parent['DoneBy'];
+  $s_4_status = $parent['Status'];
+  $s_4_starttime = $parent['StartTime'];
+  $s_4_endtime = $parent['EndTime'];
+  // $q_update_ptoc = "UPDATE `wfrequestdetail` SET `ParentID`='$child['WFRequestDetailID']', WHERE `WFRequestDetailID`='$WFrqDetail_ID' ";
   // $result_update_ptoc  = $mysqli->query($q_update_ptoc);
 
 

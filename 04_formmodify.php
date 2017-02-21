@@ -49,19 +49,19 @@
   }
 
   function fn2(obj, index){
-    WFRequestDetailID = obj.WFRequestDetailID;
-    ParentID = obj.ParentID;
-    StateName = obj.StateName;
-    CreateTime = obj.CreateTime;
-    ModifyTime = obj.ModifyTime;
-    Deadline = obj.Deadline;
-    WFRequestDocID = obj.WFRequestDocID;
-    State = obj.State;
-    Priority = obj.Priority;
-    DoneBy = obj.DoneBy;
-    Status = obj.Status;
-    StartTime = obj.StartTime;
-    EndTime = obj.EndTime;
+    // WFRequestDetailID = obj.WFRequestDetailID;
+    // ParentID = obj.ParentID;
+    // StateName = obj.StateName;
+    // CreateTime = obj.CreateTime;
+    // ModifyTime = obj.ModifyTime;
+    // Deadline = obj.Deadline;
+    // WFRequestDocID = obj.WFRequestDocID;
+    // State = obj.State;
+    // Priority = obj.Priority;
+    // DoneBy = obj.DoneBy;
+    // Status = obj.Status;
+    // StartTime = obj.StartTime;
+    // EndTime = obj.EndTime;
     var str = "<tr> <td><Text>State Name: "+obj.StateName+"</Text></td>  <td><table> <tr><td><Text id='up_"+index+"'>up</Text></td></tr> <tr><td><Text id='down_"+index+"'>down</Text></td></tr> </table></td> <td><Text id='moda_"+index+"'>ModifyAccess</Text></td> </tr>";
     $(str).appendTo("#wfrqdetail-table");
 // it pull last data that was store in variable
@@ -72,15 +72,21 @@
 			console.log(obj.WFRequestDocID);
 			$.post("formadmin_handle/up_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
 				console.log(response);
-				j_retup = JSON.parse(response);
-				console.log(j_retup);
+				if (response) {
+					j_retup = JSON.parse(response);
+					console.log(j_retup);
+				}
+
 			});
     });
     $("#down_"+index+"").click(function(){
       console.log("down");
 			$.post("formadmin_handle/down_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
 				console.log(response);
-
+				if (response) {
+					j_retup = JSON.parse(response);
+					console.log(j_retup);
+				}
 			});
     });
     $("#moda_"+index+"").click(function(){
