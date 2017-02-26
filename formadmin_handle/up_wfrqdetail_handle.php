@@ -72,8 +72,9 @@ if ($Parent_ID != 0) {
     array_push($t1,$s_3_status);
     array_push($t1,$s_3_starttime);
     array_push($t1,$s_3_endtime);
-  // $q_update_ctop = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby', `Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$Parent_ID' ";
-  // $result_update_ctop  = $mysqli->query($q_update_ctop);
+  $q_update_ctop = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby',`Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$Parent_ID' ";
+// echo json_encode($q_update_ctop);
+  $result_update_ctop  = $mysqli->query($q_update_ctop);
   // (4)replace(update) child postion with (2)
   $s_4_parent = $child['ParentID'];
   $s_4_statename = $parent['StateName'];
@@ -100,8 +101,8 @@ if ($Parent_ID != 0) {
     array_push($t2,$s_4_status);
     array_push($t2,$s_4_starttime);
     array_push($t2,$s_4_endtime);
-  // $q_update_ptoc = "UPDATE `wfrequestdetail` SET `ParentID`='$s_4_parent', `StateName`='$s_4_statename', `CreateTime`='$s_4_createtime', `ModifyTime`='$s_4_modifytime', `Deadline`='$s_4_deadline', `WFRequestDocID`='$s_4_wfrequestdocid', `State`='$s_4_state', `Priority`='$s_4_priority', `DoneBy`='$s_4_doneby', `Status`='$s_4_status', `StartTime`='$s_4_starttime', `EndTime`='$s_4_endtime' WHERE `WFRequestDetailID`='$WFrqDetail_ID' ";
-  // $result_update_ptoc  = $mysqli->query($q_update_ptoc);
+  $q_update_ptoc = "UPDATE `wfrequestdetail` SET `ParentID`='$s_4_parent', `StateName`='$s_4_statename', `CreateTime`='$s_4_createtime', `ModifyTime`='$s_4_modifytime', `Deadline`='$s_4_deadline', `WFRequestDocID`='$s_4_wfrequestdocid', `State`='$s_4_state', `Priority`='$s_4_priority', `DoneBy`='$s_4_doneby', `Status`='$s_4_status', `StartTime`='$s_4_starttime', `EndTime`='$s_4_endtime' WHERE `WFRequestDetailID`='$WFrqDetail_ID' ";
+  $result_update_ptoc  = $mysqli->query($q_update_ptoc);
 
 
   $retobj = array();
@@ -111,7 +112,7 @@ if ($Parent_ID != 0) {
     array_push($retobj, $t1);
     array_push($retobj, $t2);
   //test
-  echo json_encode($retobj);
+  // echo json_encode($retobj);
 }
 
 

@@ -79,8 +79,8 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
       array_push($t1,$s_3_status);
       array_push($t1,$s_3_starttime);
       array_push($t1,$s_3_endtime);
-    // $q_update_ctocur = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby', `Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$Parent_ID' ";
-    // $result_update_ctop  = $mysqli->query($q_update_ctocur);
+    $q_update_ctocur = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby', `Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$WFrqDetail_ID' ";
+    $result_update_ctop  = $mysqli->query($q_update_ctocur);
 
     // (4)replace(update) child postion with (1)
     $s_4_parent = $child['ParentID'];
@@ -108,8 +108,8 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
       array_push($t2,$s_4_status);
       array_push($t2,$s_4_starttime);
       array_push($t2,$s_4_endtime);
-    // $q_update_curtoc = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby', `Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$Parent_ID' ";
-    // $result_update_ptoc  = $mysqli->query($q_update_curtoc);
+    $q_update_curtoc = "UPDATE `wfrequestdetail` SET `ParentID`='$s_4_parent', `StateName`='$s_4_statename', `CreateTime`='$s_4_createtime', `ModifyTime`='$s_4_modifytime', `Deadline`='$s_4_deadline', `WFRequestDocID`='$s_4_wfrequestdocid', `State`='$s_4_state', `Priority`='$s_4_priority', `DoneBy`='$s_4_doneby', `Status`='$s_4_status', `StartTime`='$s_4_starttime', `EndTime`='$s_4_endtime' WHERE `WFRequestDetailID`='$child_wfrqdetailID' ";
+    $result_update_ptoc  = $mysqli->query($q_update_curtoc);
 
 
 
