@@ -15,7 +15,7 @@
 	var localhost = "http://localhost:8080/kw2/";
   //var user_id = $_SESSION['user_id'];
   var user_id = 2;
-  var WFRequestID;
+  // var WFRequestID;
 
 	$(document).ready(function() {
     $.post("formadmin_handle/formadmin_show_worklist_handle.php", {cur_userid: user_id}, function(data){
@@ -32,13 +32,15 @@
     FormName = obj.FormName;
     Description = obj.Description;
     WFRequestID = obj.WFRequestID;
+		CreateTime = obj.CreateTime;
 		requestorName = obj.Name + " " +obj.Surname;
-    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
+    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><Text>Create time: "+CreateTime+"</Text><td> <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
     $(str).appendTo("#all-form-table");
 
     $("#wfrq_"+index+"").click(function(){
+			$("#wfrqdetail-table").empty();
       console.log(WFRequestID);
-      $.post("formadmin_handle/formadmin_show_wfrqdetail_handle.php", {wfrequest_id: WFRequestID}, function(data){
+      $.post("formadmin_handle/formadmin_show_wfrqdetail_handle.php", {wfrequest_id: obj.WFRequestID}, function(data){
         console.log(data);
         json_return_wfrqdetail = JSON.parse(data);
         console.log(json_return_wfrqdetail);
@@ -104,8 +106,8 @@
   }
 
 	function fn_refresh(obj){ //obj is object that contain wfrequestid
-		WFRequestID = obj.WFRequestID;
-		$.post("formadmin_handle/formadmin_show_wfrqdetail_handle.php", {wfrequest_id: WFRequestID}, function(data){
+
+		$.post("formadmin_handle/formadmin_show_wfrqdetail_handle.php", {wfrequest_id: obj.WFRequestID}, function(data){
 			console.log(data);
 			json_return_wfrqdetail = JSON.parse(data);
 			console.log(json_return_wfrqdetail);
