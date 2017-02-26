@@ -32,7 +32,8 @@
     FormName = obj.FormName;
     Description = obj.Description;
     WFRequestID = obj.WFRequestID;
-    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
+		requestorName = obj.Name + " " +obj.Surname;
+    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
     $(str).appendTo("#all-form-table");
 
     $("#wfrq_"+index+"").click(function(){
@@ -62,6 +63,9 @@
     // Status = obj.Status;
     // StartTime = obj.StartTime;
     // EndTime = obj.EndTime;
+
+
+
     var str = "<tr> <td><Text>State Name: "+obj.StateName+"</Text></td>  <td><table> <tr><td><Text id='up_"+index+"'>up</Text></td></tr> <tr><td><Text id='down_"+index+"'>down</Text></td></tr> </table></td> <td><Text id='moda_"+index+"'>ModifyAccess</Text></td> </tr>";
     $(str).appendTo("#wfrqdetail-table");
 // it pull last data that was store in variable
@@ -75,6 +79,7 @@
 				if (response) {
 					j_retup = JSON.parse(response);
 					console.log(j_retup);
+					fn_refresh(j_retup);
 				}
 
 			});
@@ -86,6 +91,7 @@
 				if (response) {
 					j_retup = JSON.parse(response);
 					console.log(j_retup);
+					fn_refresh(j_retup);
 				}
 			});
     });
@@ -96,6 +102,20 @@
 			});
     });
   }
+
+	function fn_refresh(obj){ //obj is object that contain wfrequestid
+		WFRequestID = obj.WFRequestID;
+		$.post("formadmin_handle/formadmin_show_wfrqdetail_handle.php", {wfrequest_id: WFRequestID}, function(data){
+			console.log(data);
+			json_return_wfrqdetail = JSON.parse(data);
+			console.log(json_return_wfrqdetail);
+			// empty table
+			$("#wfrqdetail-table").empty();
+			for (var j = 0; j < json_return_wfrqdetail.length; j++) {
+				fn2(json_return_wfrqdetail[j], j);
+			}
+		});
+	}
 
 
 
