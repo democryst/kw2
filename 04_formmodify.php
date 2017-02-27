@@ -105,9 +105,9 @@
     });
   }
 
-	function fn_refresh(obj){ //obj is object that contain wfrequestid
+	function fn_refresh(obj_r){ //obj is object that contain wfrequestid
 
-		$.post("formadmin_handle/formadmin_show_wfrqdetail_handle.php", {wfrequest_id: obj.WFRequestID}, function(data){
+		$.post("formadmin_handle/formadmin_show_wfrqdetail_handle.php", {wfrequest_id: obj_r.WFRequestID}, function(data){
 			console.log(data);
 			json_return_wfrqdetail = JSON.parse(data);
 			console.log(json_return_wfrqdetail);

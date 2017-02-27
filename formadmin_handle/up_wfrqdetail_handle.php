@@ -65,7 +65,6 @@ if ($Parent_ID != 0) {
     die( json_encode($row_select_wfrequestid) );
   }
 
-
   // (3)replace(update) parent position with (1)
   $s_3_parent = $parent['ParentID'];
   $s_3_statename = $child['StateName'];
@@ -80,7 +79,7 @@ if ($Parent_ID != 0) {
   $s_3_starttime = $child['StartTime'];
   $s_3_endtime = $child['EndTime'];
 
-  $q_update_ctop = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby',`Status`='$s_3_status', `StartTime`='$s_3_starttime', `EndTime`='$s_3_endtime' WHERE `WFRequestDetailID`='$Parent_ID' ";
+  $q_update_ctop = "UPDATE `wfrequestdetail` SET `ParentID`='$s_3_parent', `StateName`='$s_3_statename', `CreateTime`='$s_3_createtime', `ModifyTime`='$s_3_modifytime', `Deadline`='$s_3_deadline', `WFRequestDocID`='$s_3_wfrequestdocid', `State`='$s_3_state', `Priority`='$s_3_priority', `DoneBy`='$s_3_doneby',`Status`='$s_3_status' WHERE `WFRequestDetailID`='$Parent_ID' ";
 // echo json_encode($q_update_ctop);
   $result_update_ctop  = $mysqli->query($q_update_ctop);
   // (4)replace(update) child postion with (2)
@@ -97,9 +96,26 @@ if ($Parent_ID != 0) {
   $s_4_starttime = $parent['StartTime'];
   $s_4_endtime = $parent['EndTime'];
 
-  $q_update_ptoc = "UPDATE `wfrequestdetail` SET `ParentID`='$s_4_parent', `StateName`='$s_4_statename', `CreateTime`='$s_4_createtime', `ModifyTime`='$s_4_modifytime', `Deadline`='$s_4_deadline', `WFRequestDocID`='$s_4_wfrequestdocid', `State`='$s_4_state', `Priority`='$s_4_priority', `DoneBy`='$s_4_doneby', `Status`='$s_4_status', `StartTime`='$s_4_starttime', `EndTime`='$s_4_endtime' WHERE `WFRequestDetailID`='$WFrqDetail_ID' ";
+  $q_update_ptoc = "UPDATE `wfrequestdetail` SET `ParentID`='$s_4_parent', `StateName`='$s_4_statename', `CreateTime`='$s_4_createtime', `ModifyTime`='$s_4_modifytime', `Deadline`='$s_4_deadline', `WFRequestDocID`='$s_4_wfrequestdocid', `State`='$s_4_state', `Priority`='$s_4_priority', `DoneBy`='$s_4_doneby', `Status`='$s_4_status' WHERE `WFRequestDetailID`='$WFrqDetail_ID' ";
   $result_update_ptoc  = $mysqli->query($q_update_ptoc);
 
+  // (5) Is parent currentworklist check
+  $q_select_curwl_1 = "SELECT * FROM currentworklist WHERE WFRequestDetailID='$Parent_ID' ";
+  $result_select_curwl_1 = $mysqli->query($q_select_curwl_1);
+  if($result_select_curwl_1 && $result_select_curwl_1->num_rows >= 1){
+    while ($row_select_curwl_1 = $result_select_curwl_1->fetch_array() ) {
+      $cur1_CurrentWorkListID = $row_select_curwl_1['CurrentWorkListID'];
+    }
+    //need to delete old currentworklist
+    $q_delete_1 = "DELETE FROM currentworklist WHERE CurrentWorkListID='$cur1_CurrentWorkListID'";
+    // $mysqli->query($q_delete_1);
+  	$result_delet_1 = $mysqli->query($q_delete_1) or trigger_error($mysqli->error."[$q_delete_1]");
+    //insert new currentworklist
+    $newwfrqdetailid = $child['WFRequestDetailID'];
+    $q_INSERT_currentworklist="INSERT INTO `currentworklist`(`WFRequestDetailID`, `StateName`, `State`, `Priority`, `DoneBy`, `Status`, `StartTime`, `EndTime`, `ApproveStatus`, `TimeStamp`) values('$Parent_ID', '$s_3_statename', '$s_3_state', '$s_3_priority', '$s_3_doneby', '$s_3_status', '$s_4_starttime', '$s_4_endtime', '0', CURRENT_TIMESTAMP) " ;
+  	// $mysqli->query($q_INSERT_currentworklist);
+    $result_INSERT_currentworklist = $mysqli->query($q_INSERT_currentworklist) or trigger_error($mysqli->error."[$q_INSERT_currentworklist]");
+  }
 
   echo json_encode($row_select_wfrequestid);
 
