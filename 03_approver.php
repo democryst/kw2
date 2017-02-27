@@ -41,17 +41,18 @@
 	 	for(i=0; i<approve_cur_arr_l; i++){
 	 		var wfrequestdetailID = json_return_approve_currentworklist[i].WFRequestDetailID;
 	 		var StateName = json_return_approve_currentworklist[i].StateName;
-	 		showcurrentworklist_2(wfrequestdetailID, StateName, i);
+			var CreateTime = json_return_approve_currentworklist[i].CreateTime;
+	 		showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, i);
 	 	}
 	 }
 
-	 function showcurrentworklist_2(wfrequestdetailID, StateName, index){
+	 function showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, index){
 	 	$.post("approver_handle/approver_worklist_wfrequest.php", {cur_wfrequestdetailID: wfrequestdetailID} ,function(data){
 	 		 var json_return_approve_currentworklist_wfrequest = JSON.parse(data);
 	 		 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
 	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
 	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
-	 			 var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td><td><input type='button' value='Select' id='select_work_btn_"+index+"'></td></tr>";
+	 			 var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"'></td></tr>";
 	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
 
 				 	$("#select_work_btn_"+index+"").click(function(){
