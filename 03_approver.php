@@ -14,7 +14,7 @@
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
 
-	let userid = 1;//test approver id
+	var userid = 1;//test approver id
 
 	$(document).ready(function() {
 		$("#current_work_list_page").show();
@@ -85,7 +85,8 @@
 
 									var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
 									var DocID = json_return_wfrequestdoc.WFRequestDocID;
-									var str_file_upload_table = '<tr><td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
+									console.log("User id : "+userid);
+									var str_file_upload_table = '<tr><td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
 									$(str_file_upload_table).appendTo("#file-upload-table");
 								});
 
