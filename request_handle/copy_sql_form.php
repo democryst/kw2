@@ -1,5 +1,6 @@
 <?php
 require_once('../connect.php');
+date_default_timezone_set("Asia/Bangkok");
 if (isset($_POST['data']) ) {
    $postdata= $_POST['data'];
    $requestor_id = $postdata['requestor_id'];
@@ -15,8 +16,8 @@ if (isset($_POST['data']) ) {
     while ($row_select_wfgeninfo=$result_select_wfgeninfo->fetch_array() ) {
       array_push($data_select_wfgeninfo, $row_select_wfgeninfo);
     }
-    $date_hrs = date("h-i-s");
-    $date_day = date("Y-m-d");
+    $date_hrs = date("H-i-s" ,time() );
+    $date_day = date("Y-m-d" ,time() );
     $all_date = $date_hrs . '***' . $date_day;
 
     for ($i=0; $i < count($data_select_wfgeninfo); $i++) {

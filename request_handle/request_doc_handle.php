@@ -1,6 +1,6 @@
 <?php
 require_once('../connect.php');
-
+date_default_timezone_set("Asia/Bangkok");
 /*
 if(isset($_POST['form_name'])){
 $form_name = $_POST['form_name'];
@@ -88,6 +88,10 @@ if(isset($_FILES['file_array'])){
 
 
 	}
+	$curtime_1 = date("Y-m-d H:i:s", time() );
+	$q_update_wfrequestdetail = "UPDATE `wfrequestdetail` SET `StartTime`='$curtime_1' WHERE WFRequestID='$wfrequestid' AND ParentID='0' ";
+	$result_update_wfrequestdetail  = $mysqli->query($q_update_wfrequestdetail) or trigger_error($mysqli->error."[$q_update_wfrequestdetail]");
+
 	$q_SELECT_wfrequestdetail = "SELECT * FROM wfrequestdetail WHERE WFRequestID='$wfrequestid' AND ParentID='0' ";
 	$result_SELECT_wfrequestdetail = $mysqli->query($q_SELECT_wfrequestdetail) or trigger_error($mysqli->error."[$q_SELECT_wfrequestdetail]");
 	while ($row_SELECT_wfrequestdetail=$result_SELECT_wfrequestdetail->fetch_array() ) {
@@ -101,6 +105,7 @@ if(isset($_FILES['file_array'])){
 		$c1_EndTime = $row_SELECT_wfrequestdetail['EndTime'];
 
 	}
+
 	//ApproveStatus 0 work 1 approve 2 reject
 	$q_INSERT_currentworklist="INSERT INTO `currentworklist`(`WFRequestDetailID`, `StateName`, `State`, `Priority`, `DoneBy`, `Status`, `StartTime`, `EndTime`, `ApproveStatus`, `TimeStamp`) values('$c1_WFRequestDetailID', '$c1_StateName', '$c1_State', '$c1_Priority', '$c1_DoneBy', '$c1_Status', '$c1_StartTime', '$c1_EndTime', '0', CURRENT_TIMESTAMP) " ;
 	$mysqli->query($q_INSERT_currentworklist);

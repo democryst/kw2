@@ -19,7 +19,7 @@ echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 		echo "\nTimeStamp match allow to upload\n";
 		$upload_destination = "../uploads/";
 		$pathname;
-		$date_hrs = date("h-i-s");
+		$date_hrs = date("H-i-s");
 		$date_day = date("Y-m-d");
 
 		if(isset($_FILES['file_array'])){
