@@ -151,6 +151,10 @@
 							};
 						}
 						console.log(data);
+						$.post("formadmin_handle/updatemodaccess.php", {data: data}, function(response){
+							console.log(response);
+
+						});
 						$("#table_moda_"+index+"").empty();
 					});
 
