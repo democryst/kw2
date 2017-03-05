@@ -16,7 +16,8 @@
   //var user_id = $_SESSION['user_id'];
   var user_id = 2;
   // var WFRequestID;
-
+	var approverid ;
+	var groupid;
 	$(document).ready(function() {
     $.post("formadmin_handle/formadmin_show_worklist_handle.php", {cur_userid: user_id}, function(data){
       console.log(data);
@@ -34,7 +35,7 @@
     WFRequestID = obj.WFRequestID;
 		CreateTime = obj.CreateTime;
 		requestorName = obj.Name + " " +obj.Surname;
-    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><Text>Create time: "+CreateTime+"</Text><td> <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
+    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><Text>Create time: "+CreateTime+"</Text></td> <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
     $(str).appendTo("#all-form-table");
 
     $("#wfrq_"+index+"").click(function(){
@@ -66,9 +67,7 @@
     // StartTime = obj.StartTime;
     // EndTime = obj.EndTime;
 
-
-
-    var str = "<tr> <td><Text>State Name: "+obj.StateName+"</Text></td>  <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td></tr>";
+    var str = "<tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td>  <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td></tr>";
     $(str).appendTo("#wfrqdetail-table");
 // it pull last data that was store in variable
     $("#up_"+index+"").click(function(){
@@ -100,11 +99,13 @@
     $("#moda_"+index+"").click(function(){
 
 			$("#table_moda_"+index+"").empty();
-			var str_moda = "<tr><td><select id='selector_"+index+"'>";
+			var str_moda;
       console.log("modifyaccess");
 			$.post("formadmin_handle/moda_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
 				console.log(response);
 				json_ret_modaccess = JSON.parse(response);
+				str_moda = "<tr><td><select id='selector_"+index+"'>";
+				str_moda = str_moda+"<option value=''>--select group--</option>";
 				for (var k = 0; k < json_ret_modaccess.length; k++) {
 					G_Name = json_ret_modaccess[k].GroupName;
 					G_id = json_ret_modaccess[k].GroupID;
@@ -114,13 +115,45 @@
 				console.log(str_moda);
 				$(str_moda).appendTo("#table_moda_"+index+"");
 
-				$("#selector_"+index+"").change(function(){
+				$("#selector_"+index+"").on('change',function(){
 					$("#table_gtop_"+index+"").empty();
 
-					var groupid = $(this).find("option:selected").attr('value');
+					groupid = ""; // clear
+					approverid = ""; // clear
+					groupid = $(this).find("option:selected").attr('value');
+
 					console.log(groupid);
-					str_moda_ii = "<tr><td> <input type='checkbox' id='chk_"+index+"' name='chose person' value='1'></td> <td><table id='table_person_"+index+"'></table></td></tr>";
+					str_moda_ii = "<tr><td> <input type='checkbox' id='chk_"+index+"' name='chose person' value='1'></td> <td><table id='table_person_"+index+"'></table></td> <td><input type='button' value='confirm' id='confirm_mod_btn_"+index+"'></td> </tr>";
 					$(str_moda_ii).appendTo("#table_gtop_"+index+"");
+
+					if (groupid == "") {
+						$("#table_gtop_"+index+"").empty();
+					}
+
+					$("#confirm_mod_btn_"+index+"").click(function(){
+						console.log("confirm_mod_btn_"+index+" was clicked");
+						console.log(groupid);
+						console.log(approverid);
+						wfrq_formod_val = $("#wfrq_formod"+index+"").val();
+						console.log(wfrq_formod_val);
+						if(groupid != "" && (approverid != "" && approverid != null)){
+
+							data = {
+								wfreqdetailID: wfrq_formod_val,
+								gid: groupid,
+								uid: approverid
+							};
+
+						}else if(groupid != "" && (approverid == "" || approverid == null)){
+							data = {
+								wfreqdetailID: wfrq_formod_val,
+								gid: groupid
+							};
+						}
+						console.log(data);
+						$("#table_moda_"+index+"").empty();
+					});
+
 					$("#chk_"+index+"").change(function(){
 						$("#table_person_"+index+"").empty();
 						let chkval1 = $("#chk_"+index+"").is(":checked") ;
@@ -133,6 +166,7 @@
 								json_ret_modaccess_p = JSON.parse(response);
 								if(json_ret_modaccess_p.length != 0){
 									str_moda_iii = "<tr><td><select id='selector2_"+index+"'>";
+									str_moda_iii = str_moda_iii + "<option value=''>--select individual--</option>";
 									for (var i = 0; i < json_ret_modaccess_p.length; i++) {
 										UserID = json_ret_modaccess_p[i].UserID;
 										fullname = json_ret_modaccess_p[i].Name +" "+ json_ret_modaccess_p[i].Surname;
@@ -140,22 +174,20 @@
 										console.log(fullname);
 										str_moda_iii = str_moda_iii + "<option value='"+UserID+"'>"+fullname+"</option>";
 									}
-									str_moda_iii = str_moda_iii + "</select></td> <td><table id='confirm_mod_table_"+index+"'></table></td></tr>";
+									str_moda_iii = str_moda_iii + "</select></td> </tr>";
 									console.log(str_moda_iii);
 									console.log(index);
 									$(str_moda_iii).appendTo("#table_person_"+index+"");
-									var approverid = $(this).find("option:selected").attr('value');
-									// $("#selector2_"+index+"").change(function(){
-									// 	$("#confirm_mod_table").empty();
-									// 	var approverid = $(this).find("option:selected").attr('value');
-									// 	str_confirm_mod = "<tr><td> <input type='button' value='confirm' id='confirm_mod_btn'> </td></tr>";
-									// 	$(str_confirm_mod).appendTo("#confirm_mod_table");
-									// });
-									str_confirm_mod = "<tr><td> <input type='button' value='confirm' id='confirm_mod_btn_"+index+"'> </td></tr>";
-									$(str_confirm_mod).appendTo("#confirm_mod_table_"+index+"");
-									$("#confirm_mod_btn_"+index+"").click(function(){
-										console.log("confirm_mod_btn_"+index+" was clicked");
+
+									// var approverid = $(this).find("option:selected").attr('value');
+									$("#selector2_"+index+"").change(function(){
+										// $("#confirm_mod_table").empty();
+
+										approverid = $(this).find("option:selected").attr('value');
+										// str_confirm_mod = "<tr><td> <input type='button' value='confirm' id='confirm_mod_btn'> </td></tr>";
+										// $(str_confirm_mod).appendTo("#confirm_mod_table");
 									});
+
 								}
 
 							});
