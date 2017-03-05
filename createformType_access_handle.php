@@ -1,9 +1,3 @@
-//WFGenInfoID   ok
-//WFDetailID    need to pass from wfdetail
-//UserID        ajax
-//GroupID       q form userID ajax
-
-
 <?php
 require_once('connect.php');
 $wfdetailID_array = $_POST['wfdetailID'];
