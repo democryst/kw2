@@ -11,6 +11,17 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
   $row_s_wfa = $result_s_wfa->fetch_array();
   $cur_wfa = $row_s_wfa['WFRequestAccessID'];
 
+  //get comment of currentstate --> Later we will to change WFRequestDetailID of this comment
+  $cur_comment_arr = array();
+  $q_s_comment = "SELECT * FROM comment WHERE WFRequestDetailID='$WFrqDetail_ID' ";
+  $result_s_comment = $mysqli->query($q_s_comment);
+  if ($result_s_comment && $result_s_comment->num_rows >= 1) {
+    while ($row_s_comment = $result_s_comment->fetch_array()) {
+      array_push($cur_comment_arr, $row_s_comment);
+    }
+  }
+
+
   // (1)query wfrequestdetail where WFRequestDetailID = $WFrqDetail_ID (+ trade parentid of it with child id)
   $q_select_current = "SELECT * FROM wfrequestdetail WHERE WFRequestDetailID='$WFrqDetail_ID'";
   $result_select_current = $mysqli->query($q_select_current);
@@ -44,6 +55,15 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
     $row_s_wfa_c = $result_s_wfa_c->fetch_array();
     $cur_wfa_child = $row_s_wfa_c['WFRequestAccessID'];
 
+    //get comment of child --> Later we will to change WFRequestDetailID of this comment
+    $cur_comment_arr_child = array();
+    $q_s_comment_C = "SELECT * FROM comment WHERE WFRequestDetailID='$child_wfrqdetailID' ";
+    $result_s_comment_c = $mysqli->query($q_s_comment_C);
+    if ($result_s_comment_c && $result_s_comment_c->num_rows >= 1) {
+      while ($row_s_comment_c = $result_s_comment_c->fetch_array()) {
+        array_push($cur_comment_arr_child, $row_s_comment_c);
+      }
+    }
 
     // (2)query wfrequestdetail where WFRequestDetailID =  (get parentid of (1) and replace it parentid)
     $q_select_child = "SELECT * FROM wfrequestdetail WHERE WFRequestDetailID='$child_wfrqdetailID'";
@@ -124,6 +144,42 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
 
     $q_update_c_access = "UPDATE `wfrequestaccess` SET `WFRequestDetailID`='$WFrqDetail_ID' WHERE `WFRequestAccessID`='$cur_wfa_child' ";
     $result_c_access  = $mysqli->query($q_update_c_access);
+
+    //update comment
+    if ($result_s_comment && $result_s_comment->num_rows >= 1) {
+      //exist currentstate comment update to child position
+      for ($i=0; $i < count($cur_comment_arr); $i++) {
+        $cur_comment = $cur_comment_arr[$i];
+        $cur_comment_CommentID = $cur_comment['CommentID'];
+        $cur_comment_Comment = $cur_comment['Comment'];
+        $cur_comment_CommentTime = $cur_comment['CommentTime'];
+        // $cur_comment_WFRequestDetailID = $cur_comment['WFRequestDetailID'];   //replace with child_wfrqdetailID
+        $cur_comment_CommentBy = $cur_comment['CommentBy'];
+
+        $q_del_cur_comment = "DELETE FROM `comment` WHERE CommentID='$cur_comment_CommentID'";
+        $mysqli->query($q_del_cur_comment);
+
+        $q_insert_cur_comment_tochild = "INSERT INTO `comment`(`Comment`, `CommentTime`, `WFRequestDetailID`, `CommentBy`) VALUES ('$cur_comment_Comment', '$cur_comment_CommentTime', '$child_wfrqdetailID', '$cur_comment_CommentBy')";
+        $mysqli->query($q_insert_cur_comment_tochild);
+      }
+    }
+    if ($result_s_comment_c && $result_s_comment_c->num_rows >= 1) {
+      //exist childstate comment update to current position
+      for ($i=0; $i < count($cur_comment_arr_child); $i++) {
+        $cur_comment_child = $cur_comment_arr_child[$i];
+        $cur_comment_CommentID_child = $cur_comment_child['CommentID'];
+        $cur_comment_Comment_child = $cur_comment_child['Comment'];
+        $cur_comment_CommentTime_child = $cur_comment_child['CommentTime'];
+        // $cur_comment_WFRequestDetailID_child = $cur_comment_child['WFRequestDetailID'];   //replace with $WFrqDetail_ID
+        $cur_comment_CommentBy_child = $cur_comment_child['CommentBy'];
+
+        $q_del_child_comment = "DELETE FROM `comment` WHERE CommentID='$cur_comment_CommentID_child'";
+        $mysqli->query($q_del_child_comment);
+
+        $q_insert_child_comment_tocur = "INSERT INTO `comment`(`Comment`, `CommentTime`, `WFRequestDetailID`, `CommentBy`) VALUES ('$cur_comment_Comment_child', '$cur_comment_CommentTime_child', '$WFrqDetail_ID', '$cur_comment_CommentBy_child')";
+        $mysqli->query($q_insert_child_comment_tocur);
+      }
+    }
 
     // (5) Is current currentworklist check
     $q_select_curwl_1 = "SELECT * FROM currentworklist WHERE WFRequestDetailID='$WFrqDetail_ID' ";
