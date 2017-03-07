@@ -5,6 +5,12 @@ $WFrqDetail_ID = $data_parse['WFrqDetail_ID'];
 $Parent_ID = $data_parse['Parent_ID'];
 $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
 
+  //get wfrequestaccess of currentstate --> Later we will to change WFRequestDetailID of this access
+  $q_s_wfa = "SELECT * FROM wfrequestaccess WHERE WFRequestDetailID='$WFrqDetail_ID' ";
+  $result_s_wfa = $mysqli->query($q_s_wfa);
+  $row_s_wfa = $result_s_wfa->fetch_array();
+  $cur_wfa = $row_s_wfa['WFRequestAccessID'];
+
   // (1)query wfrequestdetail where WFRequestDetailID = $WFrqDetail_ID (+ trade parentid of it with child id)
   $q_select_current = "SELECT * FROM wfrequestdetail WHERE WFRequestDetailID='$WFrqDetail_ID'";
   $result_select_current = $mysqli->query($q_select_current);
@@ -31,6 +37,12 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
   if($result_1_2 && $result_1_2->num_rows >= 1){
     $row_1_2 = $result_1_2->fetch_array();
     $child_wfrqdetailID=$row_1_2['WFRequestDetailID'];
+
+    //get wfrequestaccess of child --> Later we will to change WFRequestDetailID of this access
+    $q_s_wfa_c = "SELECT * FROM wfrequestaccess WHERE WFRequestDetailID='$child_wfrqdetailID' ";
+    $result_s_wfa_c = $mysqli->query($q_s_wfa_c);
+    $row_s_wfa_c = $result_s_wfa_c->fetch_array();
+    $cur_wfa_child = $row_s_wfa_c['WFRequestAccessID'];
 
 
     // (2)query wfrequestdetail where WFRequestDetailID =  (get parentid of (1) and replace it parentid)
@@ -105,6 +117,13 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
 
     $q_update_curtoc = "UPDATE `wfrequestdetail` SET `ParentID`='$s_4_parent', `StateName`='$s_4_statename', `CreateTime`='$s_4_createtime', `ModifyTime`='$s_4_modifytime', `Deadline`='$s_4_deadline', `WFRequestDocID`='$s_4_wfrequestdocid', `State`='$s_4_state', `Priority`='$s_4_priority', `DoneBy`='$s_4_doneby', `Status`='$s_4_status' WHERE `WFRequestDetailID`='$child_wfrqdetailID' ";
     $result_update_ptoc  = $mysqli->query($q_update_curtoc);
+
+    //update access
+    $q_update_cur_access = "UPDATE `wfrequestaccess` SET `WFRequestDetailID`='$child_wfrqdetailID' WHERE `WFRequestAccessID`='$cur_wfa' ";
+    $result_cur_access  = $mysqli->query($q_update_cur_access);
+
+    $q_update_c_access = "UPDATE `wfrequestaccess` SET `WFRequestDetailID`='$WFrqDetail_ID' WHERE `WFRequestAccessID`='$cur_wfa_child' ";
+    $result_c_access  = $mysqli->query($q_update_c_access);
 
     // (5) Is current currentworklist check
     $q_select_curwl_1 = "SELECT * FROM currentworklist WHERE WFRequestDetailID='$WFrqDetail_ID' ";
