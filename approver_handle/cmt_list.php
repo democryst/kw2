@@ -2,7 +2,7 @@
 require_once('../connect.php');
 if (isset($_POST['data']) ) {
   $data_parse = $_POST['data'];
-  $wfrequestdetail_id = $data_parse['WFRequestDetailID'];
+  $wfrequestdetail_id = $data_parse['wfrequestdetail_ID'];
   $userid = $data_parse['userid'];
   $data=array();
   $q = "SELECT * FROM comment WHERE WFRequestDetailID='$wfrequestdetail_id' AND (CommentTo='$userid' OR CommentBy='$userid')";

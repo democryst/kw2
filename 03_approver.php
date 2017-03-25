@@ -15,6 +15,7 @@
 	var localhost = "http://localhost:8080/kw2/";
 
 	var userid = 1;//test approver id
+	var cur_wfrqstate_id;
 
 	$(document).ready(function() {
 		$("#current_work_list_page").show();
@@ -29,6 +30,30 @@
 			$("#comment_page").hide();
 
 		});
+
+		$("#backtolistpage_btn").click(function(){
+			$("#current_work_list_page").show();
+			$("#currentwork_select_page").hide();
+			$("#file_upload_page").hide();
+			$("#comment_page").hide();
+
+		});
+
+		$("#comment_btn").click(function(){
+			console.log(cur_wfrqstate_id);
+			cmttxt = $("#comment_text").val();
+			console.log(cmttxt);
+			$.post("approver_handle/cmt_save.php",{data: {comment: cmttxt, wfrequestdetailid: cur_wfrqstate_id, userid: userid}},function(response){
+				console.log(response);
+				json_ret_cmtsave = JSON.parse(response);
+				console.log(json_ret_cmtsave);
+				if (json_ret_cmtsave.length != 0) {
+					cmtlist(json_ret_cmtsave.wfrequestdetailid);
+				}
+
+			});
+		});
+
 
 		//test
 	  $.post("approver_handle/approver_show_worklist_handle.php", {cur_userid: userid}, function(data){
@@ -52,8 +77,17 @@
 	 		 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
 	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
 	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
-	 			 var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"'></td></tr>";
+	 			 var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"'></td></tr>";
 	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
+
+				 	//show comment of that state
+				  $("#comment_btn_"+index+"").click(function(){
+						$("#comment_page").show();
+						console.log("wfrequestdetailID :");
+						console.log(wfrequestdetailID);
+						cmtlist(wfrequestdetailID);
+						cur_wfrqstate_id = wfrequestdetailID;
+					});
 
 				 	$("#select_work_btn_"+index+"").click(function(){
 				 				$("#current_work_list_page").hide();
@@ -114,7 +148,22 @@
 		 return false;
 	 });
 
-
+	 function cmtlist(wfrequestdetailID){
+		 	$.post("approver_handle/cmt_list.php",{data: {wfrequestdetail_ID: wfrequestdetailID, userid: userid}},function(response){
+				console.log(response);
+				json_ret_cmtlist = JSON.parse(response);
+				console.log(json_ret_cmtlist);
+				console.log(json_ret_cmtlist.length);
+				$("#approver_comment-table").empty();
+				if (json_ret_cmtlist.length != 0) {
+					// show cmt list
+					for (var i = 0; i < json_ret_cmtlist.length; i++) {
+						str_cmtlist = "<tr><td><Text>Comment: "+json_ret_cmtlist[i].Comment+"</Text></td> <td><Text>CommentTime: "+json_ret_cmtlist[i].CommentTime+"</Text></td> <td><Text>CommentBy: "+json_ret_cmtlist[i].CommentBy+"</Text></td></tr>";
+						$(str_cmtlist).appendTo("#approver_comment-table");
+					}
+				}
+			});
+	 }
 
 
 	});
@@ -172,8 +221,19 @@
       </div>
 
       <div id=comment_page>
-        <h2>Comment</h2>
-        <table id="approver_comment-table"></table>
+
+					<h2>Comment</h2>
+	        <table id="approver_comment-table"></table>
+					<table id="comment_submit">
+						<tr>
+							<td><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style="width: 90px;"></td>
+						</tr>
+					</table>
+
+					<div class="right">
+						<input type="button" value="back" id="backtolistpage_btn" style="width: 90px;">
+					</div>
+
       </div>
 
 		</div>

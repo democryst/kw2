@@ -35,7 +35,7 @@
             fn3_add_cmt(State_id, text_current_comment);
 
             $("#request_comment_table").empty();
-            $.post("request_list_handle/requestlist_commentlist.php", {WFRequestDetailID: State_id}, function(response){
+            $.post("request_list_handle/requestlist_commentlist.php", {data: {WFRequestDetailID: State_id, userid: userid}}, function(response){
               console.log(response);
               json_ret_cmt = JSON.parse(response);
               if (json_ret_cmt.length >=1) {
@@ -102,7 +102,7 @@
         // });
 
         $("#request_comment_table").empty();
-        $.post("request_list_handle/requestlist_commentlist.php", {WFRequestDetailID: obj.WFRequestDetailID}, function(response){
+        $.post("request_list_handle/requestlist_commentlist.php", {data: {WFRequestDetailID: obj.WFRequestDetailID, userid: userid}}, function(response){
           console.log(response);
           json_ret_cmt = JSON.parse(response);
           if (json_ret_cmt.length >=1) {

@@ -1,0 +1,125 @@
+<?php
+require_once('connect.php');
+session_start();
+
+if(isset($_POST['login']) && isset($_POST['pass'])){
+	$q = 'SELECT * FROM user, usergroup, ugroup WHERE UserName = "'.$_POST['login'].'" AND Password = "'.$_POST['pass'].'" AND user.UserID = usergroup.UserID AND usergroup.GroupID = ugroup.GroupID;';
+	$res = $mysqli -> query($q);
+	if ($res && $res->num_rows == 1 ){
+		while($row = $res -> fetch_array()){
+				$_SESSION['user_name'] = $row['UserName'];
+				$_SESSION['password'] = $row['Password'];
+				$_SESSION['gName'] = $row['GroupName'];
+		}
+	}else{
+?>
+		<script type='text/javascript'>
+			alert('Login Failed, Your username or password is invalid!');
+		</script>
+		<script type='text/javascript'>
+			window.location = '05_log_in.php';
+		</script>
+<?php
+	}
+	if($_SESSION['gName'] == 'Requester'){
+		echo "<script type='text/javascript'>
+						alert('Login Seccess!');
+					</script>";
+		echo "<script type='text/javascript'>
+						window.location = '02_request.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Approver'){
+		echo "<script type='text/javascript'>
+						alert('Login Seccess!');
+					</script>";
+		echo "<script type='text/javascript'>
+						window.location = '03_approver.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'ICT Teacher'){
+		echo "<script type='text/javascript'>
+						alert('Login Seccess!');
+					</script>";
+		echo "<script type='text/javascript'>
+						window.location = '03_approver.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Flow_Admin'){
+		echo "<script type='text/javascript'>
+						alert('Login Seccess!');
+					</script>";
+		echo "<script type='text/javascript'>
+						window.location = '04_formmodify.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Sys_Admin'){
+		echo "<script type='text/javascript'>
+						alert('Login Seccess!');
+					</script>";
+		echo "<script type='text/javascript'>
+						window.location = '01_createformType-2.php';
+					</script>";
+	}
+}
+?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!--style type="text/css">
+	</style-->
+	<link rel="stylesheet" href="default.css">
+
+	<title>KW2</title>
+
+	<!-- //this line redirect to get jquery in current computer   -->
+	<script src="scripts/jquery-2.0.0.min.js"></script>
+
+	<script type="text/javascript">
+
+	</script>
+</head>
+<body>
+
+<div id="wrapper">
+	<div id="div_header">
+		SIIT Form Workflow System
+	</div>
+	<div id="div_subhead">
+
+	</div>
+	<div id="div_main">
+		<div id="div_left">
+
+				<p class="menu-color" id="Login">Login</p>
+				<p class="menu-color" id="Request">Request</p>
+				<p class="menu-color" id="Approve">Current form list</p>
+
+		</div>
+
+		<div id="div_content" class="form">
+      <div id="current_work_list_page">
+        <h2>Please input username & password</h2>
+      </div>
+			<form action="05_log_in.php" method="POST" id="logging">
+	      <div style="padding-left:2%">
+						<div style="width:100px;display:inline-block;">Username : </div>
+						<input type="text" name="login" placeholder="Please Enter your username" id="upload_btn">
+	      </div>
+				<div style="padding-left:2%">
+					<div style="width:100px;display:inline-block;">Password : </div>
+	        <input type="password" name="pass" placeholder="Please Enter your password" id="upload_btn">
+				</div>
+			</form>
+			<button type="submit" form="logging" style="margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;">
+				Log-in
+			</button>
+		</div>
+	</div>
+
+	<div id="div_footer">
+	</div>
+
+</div>
+
+
+</body>
+</html>
