@@ -18,7 +18,22 @@
   // var WFRequestID;
 	var approverid ;
 	var groupid;
+	var cur_cmt_tab;
+	var cur_cmt_state;
 	$(document).ready(function() {
+
+		$("#student_tab").click(function(){
+			console.log(cur_cmt_state);
+			cur_cmt_tab = 0;
+			cmtlist(cur_cmt_state, cur_cmt_tab);
+		});
+
+		$("#admin_tab").click(function(){
+			console.log(cur_cmt_state);
+			cur_cmt_tab = 1;
+			cmtlist(cur_cmt_state, cur_cmt_tab);
+		});
+
     $.post("formadmin_handle/formadmin_show_worklist_handle.php", {cur_userid: user_id}, function(data){
       console.log(data);
       json_return_all_wf = JSON.parse(data);
@@ -35,8 +50,10 @@
     WFRequestID = obj.WFRequestID;
 		CreateTime = obj.CreateTime;
 		requestorName = obj.Name + " " +obj.Surname;
-    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><Text>Create time: "+CreateTime+"</Text></td> <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
+    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><Text>Create time: "+CreateTime+"</Text></td>  <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
     $(str).appendTo("#all-form-table");
+
+
 
     $("#wfrq_"+index+"").click(function(){
 			$("#wfrqdetail-table").empty();
@@ -67,8 +84,18 @@
     // StartTime = obj.StartTime;
     // EndTime = obj.EndTime;
 
-    var str = "<tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td>  <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td></tr>";
+    var str = "<tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td> <td><input type='button' value='comment' id='comment"+index+"' ></td> <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td></tr>";
     $(str).appendTo("#wfrqdetail-table");
+
+		$("#comment"+index+"").click(function(){
+			// if (cur_cmt_tab == 0 || cur_cmt_tab == 1 ) {
+			// 	console.log(cur_cmt_tab);
+			// 	console.log(obj.WFRequestDetailID);
+			// 	cmtlist(obj.WFRequestDetailID, cur_cmt_tab);
+			// }
+			cur_cmt_state = obj.WFRequestDetailID;
+		});
+
 // it pull last data that was store in variable
     $("#up_"+index+"").click(function(){
       console.log("up");
@@ -222,6 +249,23 @@
 		});
 	}
 
+	function cmtlist(wfrequestdetailID, cur_cmt_tab){
+		 $.post("formadmin_handle/cmt_list.php",{data: {wfrequestdetail_ID: wfrequestdetailID, userid: user_id, speakto: cur_cmt_tab}},function(response){
+			 console.log(response);
+			 json_ret_cmtlist = JSON.parse(response);
+			 console.log(json_ret_cmtlist);
+			 console.log(json_ret_cmtlist.length);
+			 $("#formadmin_comment-table").empty();
+			 if (json_ret_cmtlist.length != 0) {
+				 // show cmt list
+				 for (var i = 0; i < json_ret_cmtlist.length; i++) {
+					 str_cmtlist = "<tr><td><Text>Comment: "+json_ret_cmtlist[i].Comment+"</Text></td> <td><Text>CommentTime: "+json_ret_cmtlist[i].CommentTime+"</Text></td> <td><Text>CommentBy: "+json_ret_cmtlist[i].CommentBy+"</Text></td></tr>";
+					 $(str_cmtlist).appendTo("#formadmin_comment-table");
+				 }
+			 }
+		 });
+	}
+
 
 
 
@@ -259,6 +303,24 @@
 				<form id="chose_wfrqdetail">
         	<table id="wfrqdetail-table"></table>
 				</form>
+      </div>
+
+			<div id=comment_page>
+					<h2>Comment</h2>
+					<div class="makeinline">
+						<div id="student_tab" class="makeinline" style="background-color: #da45c8; color: white;" ><Text >Student</Text></div>
+						<div id="admin_tab" class="makeinline" style="background-color: #da45c8; color: white;" ><Text >Admin</Text></div>
+					</div>
+	        <table id="formadmin_comment-table"></table>
+					<table id="comment_submit">
+						<tr>
+							<td><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style="width: 90px;"></td>
+						</tr>
+					</table>
+
+					<div class="right">
+						<input type="button" value="back" id="backtolistpage_btn" style="width: 90px;">
+					</div>
       </div>
 
 
