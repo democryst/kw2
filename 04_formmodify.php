@@ -34,6 +34,20 @@
 			cmtlist(cur_cmt_state, cur_cmt_tab);
 		});
 
+		$("#comment_btn").click(function(){
+			cmttxt = $("#comment_text").val();
+			console.log(cmttxt);
+			$.post("formadmin_handle/cmt_save.php",{data: {comment: cmttxt, wfrequestdetailid: cur_cmt_state, userid: user_id, speakto: cur_cmt_tab}},function(response){
+				console.log(response);
+				json_ret_cmtsave = JSON.parse(response);
+				console.log(json_ret_cmtsave);
+				if (json_ret_cmtsave.length != 0) {
+					cmtlist(json_ret_cmtsave.wfrequestdetailid, cur_cmt_tab);
+				}
+
+			});
+		});
+
     $.post("formadmin_handle/formadmin_show_worklist_handle.php", {cur_userid: user_id}, function(data){
       console.log(data);
       json_return_all_wf = JSON.parse(data);
@@ -57,6 +71,7 @@
 
     $("#wfrq_"+index+"").click(function(){
 			$("#wfrqdetail-table").empty();
+			$("#formadmin_comment-table").empty(); //clear comment
       console.log(WFRequestID);
       $.post("formadmin_handle/formadmin_show_wfrqdetail_handle.php", {wfrequest_id: obj.WFRequestID}, function(data){
         console.log(data);
@@ -88,12 +103,15 @@
     $(str).appendTo("#wfrqdetail-table");
 
 		$("#comment"+index+"").click(function(){
-			// if (cur_cmt_tab == 0 || cur_cmt_tab == 1 ) {
-			// 	console.log(cur_cmt_tab);
-			// 	console.log(obj.WFRequestDetailID);
-			// 	cmtlist(obj.WFRequestDetailID, cur_cmt_tab);
-			// }
 			cur_cmt_state = obj.WFRequestDetailID;
+			if (cur_cmt_tab == null){
+				cur_cmt_tab = 0;
+			}
+			if (cur_cmt_tab == 0 || cur_cmt_tab == 1 ) {
+				$("#formadmin_comment-table").empty(); //clear comment
+				// cmtlist(obj.WFRequestDetailID, cur_cmt_tab);.
+				cmtlist(cur_cmt_state, cur_cmt_tab);
+			}
 		});
 
 // it pull last data that was store in variable

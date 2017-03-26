@@ -5,7 +5,8 @@ if (isset($_POST['data']) ) {
   $wfrequestdetail_id = $data_parse['WFRequestDetailID'];
   $userid = $data_parse['userid'];
   $data=array();
-  $q = "SELECT * FROM comment WHERE WFRequestDetailID='$wfrequestdetail_id' AND (CommentTo='$userid' OR CommentBy='$userid')";
+  // $q = "SELECT * FROM comment WHERE WFRequestDetailID='$wfrequestdetail_id' AND (CommentTo='$userid' OR CommentBy='$userid')";
+  $q = "SELECT * FROM comment WHERE WFRequestDetailID='$wfrequestdetail_id' AND (CommentTo='0' OR CommentBy='$userid')";
   $result = $mysqli->query($q);
   if($result && $result->num_rows >= 1){
     while ($row=$result->fetch_array() ) {
