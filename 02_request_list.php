@@ -101,28 +101,32 @@
         //   fn3_add_cmt(obj.WFRequestDetailID, text_current_comment);
         // });
 
-        $("#request_comment_table").empty();
-        $.post("request_list_handle/requestlist_commentlist.php", {data: {WFRequestDetailID: obj.WFRequestDetailID, userid: userid}}, function(response){
-          console.log(response);
-          json_ret_cmt = JSON.parse(response);
-          if (json_ret_cmt.length >=1) {
-            var str_add_cmt_list = "<tr style='background-color: azure;'><td><Text>Comment</Text></td> <td><Text>Comment by</Text></td> <td><Text>Comment Time</Text></td></tr>";
-            $(str_add_cmt_list).appendTo("#request_comment_table");
-            // json_ret_cmt = JSON.parse(response);
-            for (var k = 0; k < json_ret_cmt.length; k++) {
-              fn2_eachstate_cmt_list(json_ret_cmt[k]);
-            }
-
-          }else{
-            var str_add_cmt_list = "<tr><td><Text>No comment</Text></td></tr>";
-            $(str_add_cmt_list).appendTo("#request_comment_table");
-          }
-
-
-
-        });
+        fn2_eachstate_post(obj.WFRequestDetailID);
       });
     }
+
+		function fn2_eachstate_post(WFRQDetailID){
+			$("#request_comment_table").empty();
+			$.post("request_list_handle/requestlist_commentlist.php", {data: {WFRequestDetailID: WFRQDetailID, userid: userid}}, function(response){
+				console.log(response);
+				json_ret_cmt = JSON.parse(response);
+				if (json_ret_cmt.length >=1) {
+					var str_add_cmt_list = "<tr style='background-color: azure;'><td><Text>Comment</Text></td> <td><Text>Comment by</Text></td> <td><Text>Comment Time</Text></td></tr>";
+					$(str_add_cmt_list).appendTo("#request_comment_table");
+					// json_ret_cmt = JSON.parse(response);
+					for (var k = 0; k < json_ret_cmt.length; k++) {
+						fn2_eachstate_cmt_list(json_ret_cmt[k]);
+					}
+
+				}else{
+					var str_add_cmt_list = "<tr><td><Text>No comment</Text></td></tr>";
+					$(str_add_cmt_list).appendTo("#request_comment_table");
+				}
+
+
+
+			});
+		}
 
     function fn2_eachstate_cmt_list(obj) {
       var str_add_cmt_list = "<tr><td><Text>"+obj.Comment+"</Text></td> <td><Text>"+obj.CommentBy+"</Text></td> <td><Text>"+obj.CommentTime+"</Text></td></tr>";
@@ -133,6 +137,8 @@
       if (text_current_comment != "") {
         $.post("request_list_handle/addcomment.php", {data: {WFRequestDetailID: WFRequestDetailID, comment: text_current_comment, userid: userid}}, function(response){
           console.log(response);
+					jret = JSON.parse(response);
+					fn2_eachstate_post(jret.WFRequestDetailID);
         });
       }else {
         console.log("no current comment");
