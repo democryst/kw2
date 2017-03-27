@@ -17,7 +17,7 @@ var json_return_wfgeninfo;
 var json_return_wfdoc;
 var json_return_wfdetail;
 // var json_return_wfdetail_access;
-
+var groupid_send_to_person;
 		$(document).ready(function() {
 
 			$("#CreateFormType_wfdoc").hide();
@@ -147,6 +147,7 @@ var json_return_wfdetail;
 								// console.log(json_wf_det_access_group);
 								for(i = 0; i < json_return_wfdetail.length; i++){
 									var str_accessgroup_select = '<tr><td><text>   By Group: </text></td> <td><select id="gselect_'+i+'" name="group_id[]" class="makeinline">';
+									str_accessgroup_select = str_accessgroup_select + '<option value="">--SELECT GROUP--</option>';
 									for(j = 0; j < json_wf_det_access_group.length; j++){
 										let groupid = json_wf_det_access_group[j].GroupID;
 										let groupname = json_wf_det_access_group[j].GroupName;
@@ -160,8 +161,8 @@ var json_return_wfdetail;
 											var person_tab_index = group_sel_tab_index.match(/\d/g);
 											person_tab_index = person_tab_index.join("");
 								        // alert( $(this).find("option:selected").attr('value') );
-												var groupid_send_to_person = $(this).find("option:selected").attr('value');
-												if(groupid_send_to_person){
+												groupid_send_to_person = $(this).find("option:selected").attr('value');
+												if(groupid_send_to_person!=""){
 													$.post("createformType_wfdetail_accessSELECTOR_PERSON.php", {data: groupid_send_to_person}, function(data){
 														//  console.log(data);
 														 var json_return_wfdetail_access = JSON.parse(data);
@@ -174,6 +175,7 @@ var json_return_wfdetail;
 
 																// str_access_select_person = '<td><text>   By Person : </text></td> <td> <select name="user_id[]" class="makeinline">';
 																str_access_select_person = '<td> <select name="user_id[]" class="makeinline">';
+																str_access_select_person = str_access_select_person + '<option value="">--SELECT USER--</option>';
 																for(j = 0; j < json_return_wfdetail_access.length; j++){
 																		let userid = json_return_wfdetail_access[j].UserID;
 																		let name_surname = json_return_wfdetail_access[j].Name + "  "+json_return_wfdetail_access[j].Surname;
@@ -181,13 +183,27 @@ var json_return_wfdetail;
 																}
 																str_access_select_person = str_access_select_person+'</select></td>';
 																$('#person_tab_'+person_tab_index+'').empty();
-
+																if ( (json_return_wfdetail_access.length != 0)&&($('#chb_'+person_tab_index+'').is(":checked") ) ) {
+																	$(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
+																}else{
+																	str_access_select_person_usernull = "<td><input type='hidden' name='user_id[]' value='0'></td>";
+																	$(str_access_select_person_usernull).appendTo('#person_tab_'+person_tab_index+'');
+																}
 																	// console.log(person_tab_index);
 																	// 	console.log( $('#chb_'+person_tab_index+'').is(":checked") );
+																$('#chb_'+person_tab_index+'').on('change',function(){
+																	$('#person_tab_'+person_tab_index+'').empty();
+																	if ( (json_return_wfdetail_access.length != 0)&&($('#chb_'+person_tab_index+'').is(":checked") ) ) {
+																		$(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
+																	}else{
+																		str_access_select_person_usernull = "<td><input type='hidden' name='user_id[]' value='0'></td>";
+																		$(str_access_select_person_usernull).appendTo('#person_tab_'+person_tab_index+'');
+																	}
+																});
 
-																if( (json_return_wfdetail_access.length != 0)&&($('#chb_'+person_tab_index+'').is(":checked") ) ){
-																	$(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
-																}
+																// if( (json_return_wfdetail_access.length != 0)&&($('#chb_'+person_tab_index+'').is(":checked") ) ){
+																// 	$(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
+																// }
 																// $(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
 													});
 												}

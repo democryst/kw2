@@ -6,13 +6,13 @@ if (isset($_POST['cur_wfrequestdetailID']) ) {
 }else {
   $wfrequestdetailid = 1;
 }
-$q_SELECT_FormName = "SELECT WFGenInfoID FROM `wfdetail` WHERE WFDetailID = '$wfrequestdetailid'";
+$q_SELECT_FormName = "SELECT WFRequestID FROM `wfrequestdetail` WHERE WFRequestDetailID = '$wfrequestdetailid'";
 $result_SELECT_FormName = $mysqli->query($q_SELECT_FormName);
 $row_SELECT_FormName = $result_SELECT_FormName->fetch_array();
-$WFrequestID = $row_SELECT_FormName['WFGenInfoID'];
+$WFrequestID = $row_SELECT_FormName['WFRequestID'];
 
 
-$q_SELECT_CreatorID = "SELECT * FROM `wfgeninfo` WHERE WFGenInfoID = '$WFrequestID'";
+$q_SELECT_CreatorID = "SELECT * FROM `wfrequest` WHERE WFRequestID = '$WFrequestID'";
 $result_SELECT_CreatorID = $mysqli->query($q_SELECT_CreatorID);
 while($row_SELECT_CreatorID = $result_SELECT_CreatorID->fetch_array()){
   $CreatorID = $row_SELECT_CreatorID['CreatorID'];

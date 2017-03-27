@@ -1,6 +1,6 @@
 <?php
 require_once('connect.php');
-
+date_default_timezone_set("Asia/Bangkok");
 /*
 if(isset($_POST['form_name'])){
 $form_name = $_POST['form_name'];
