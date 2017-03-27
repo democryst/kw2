@@ -7,6 +7,7 @@ if(isset($_POST['login']) && isset($_POST['pass'])){
 	$res = $mysqli -> query($q);
 	if ($res && $res->num_rows == 1 ){
 		while($row = $res -> fetch_array()){
+				$_SESSION['user_id'] = $row['UserID'];
 				$_SESSION['user_name'] = $row['UserName'];
 				$_SESSION['password'] = $row['Password'];
 				$_SESSION['gName'] = $row['GroupName'];
