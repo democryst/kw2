@@ -1,3 +1,8 @@
+<?php
+session_start();
+echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -13,8 +18,8 @@
 
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
-  //user_id = $_SESSION['user_id'];
-  user_id = 0;
+
+  // user_id = 0;
 
 
 	$(document).ready(function() {
@@ -138,7 +143,7 @@
 
 		<div id="div_content" class="form">
       <div id="current_work_list_page">
-        <h2>Approve list</h2>
+        <h2>Request list</h2>
 				<form id="chose_available_form">
         	<table id="all-form-table"></table>
 				</form>

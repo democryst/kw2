@@ -1,3 +1,8 @@
+<?php
+session_start();
+echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -13,11 +18,11 @@
 
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
-  var userid = 0;
   var State_id;
   var State_status;
 		$(document).ready(function() {
       $.post("request_list_handle/requestlist_showlist.php",{requestor_id: userid},function(response){
+
         console.log(response);
         json_ret_formlist = JSON.parse(response);
         for (var i = 0; i < json_ret_formlist.length; i++) {

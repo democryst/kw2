@@ -1,3 +1,8 @@
+<?php
+session_start();
+echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -202,10 +207,6 @@ var groupid_send_to_person;
 																	}
 																});
 
-																// if( (json_return_wfdetail_access.length != 0)&&($('#chb_'+person_tab_index+'').is(":checked") ) ){
-																// 	$(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
-																// }
-																// $(str_access_select_person).appendTo('#person_tab_'+person_tab_index+'');
 													});
 												}
 								    });
@@ -213,41 +214,10 @@ var groupid_send_to_person;
 
 
 							});
-							// .then(function() {
-							// 	$.ajax({
-							// 	   url: 'createformType_wfdetail_accessSELECTOR_group.php',
-							// 	   type: 'POST',
-							// 	   data: {data:'data'},
-							// 	   async: false,
-							// 	   cache: false,
-							// 	   contentType: false,
-							// 	   enctype: 'multipart/form-data',
-							// 	   processData: false,
-							// 	   success: function (response) {
-							// 		 console.log(response);
-							// 		 json_return_wfdetail_access_group = JSON.parse(response);
-							// 	   }
-							//   });
-							// 	return false;
-						  // })
-							// ;
-							// return false;
+
 					  });
 
-						// $.ajax({
-						//    url: 'createformType_wfdetail_accessSELECTOR_PERSON.php.php',
-						//    type: 'POST',
-						//    data: {},
-						//    async: false,
-						//    cache: false,
-						//    contentType: false,
-						//    enctype: 'multipart/form-data',
-						//    processData: false,
-						//    success: function (response) {
-						// 	 console.log(response);
-						// 	 json_return_wfdetail_access = JSON.parse(response);
-						//    }
-					  // });
+
 						var str_access_select;
 						var	StateName;
 						var wf_detailID; //need to pass wfdetailID to wfaccess

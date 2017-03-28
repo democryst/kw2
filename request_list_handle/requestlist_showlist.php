@@ -31,7 +31,7 @@ if (isset($_POST['requestor_id']) ) {
   for ($i=0; $i < count($data_select_wfrequest); $i++) {
      $data_curform = $data_select_wfrequest[$i];
      $wfrequestid = $data_curform['WFRequestID'];
-     $q_select_wfrequest_2 = "SELECT * FROM wfrequest WHERE WFRequestID='$wfrequestid' ";
+     $q_select_wfrequest_2 = "SELECT * FROM wfrequest WHERE WFRequestID='$wfrequestid' AND CreatorID='$requestor_id' ";
      $result_select_wfrequest_2 = $mysqli->query($q_select_wfrequest_2);
      while ($row_select_wfrequest_2=$result_select_wfrequest_2->fetch_array() ) {
        array_push($data_ret, $row_select_wfrequest_2);

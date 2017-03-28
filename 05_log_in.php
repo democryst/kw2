@@ -27,7 +27,7 @@ if(isset($_POST['login']) && isset($_POST['pass'])){
 						alert('Login Success!');
 					</script>";
 		echo "<script type='text/javascript'>
-						window.location = '02_request.php';
+						window.location = '02_request_list.php';
 					</script>";
 	}else if($_SESSION['gName'] == 'Approver'){
 		echo "<script type='text/javascript'>

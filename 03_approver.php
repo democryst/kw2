@@ -1,3 +1,8 @@
+<?php
+session_start();
+echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -14,7 +19,7 @@
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
 
-	var userid = 1;//test approver id
+	// var userid = 1;//test approver id
 	var cur_wfrqstate_id;
 
 	$(document).ready(function() {

@@ -1,3 +1,8 @@
+<?php
+session_start();
+echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -14,7 +19,7 @@
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
   //var user_id = $_SESSION['user_id'];
-  var user_id = 2;
+  // var user_id = 2;
   // var WFRequestID;
 	var approverid ;
 	var groupid;
