@@ -3,11 +3,16 @@ require_once('../connect.php');
 
 
 /*if(isset($_POST['form_name'])){*/
-$form_name = $_POST['form_name'];
-$form_description = $_POST['form_description'];
-
-$adminid = 2;
-$sys_adminid = 3;
+if (isset($_POST['data'])) {
+	$dataparse = $_POST['data'];
+	$form_name = $dataparse['form_name'];
+	$form_description = $dataparse['form_description'];
+	$adminid = $dataparse['form_admin_select'];
+}
+// else{
+// 	// $adminid = 2;
+// 	exit();
+// }
 // time()  return unix timestamp
 $date_hrs = date("h-i-s");
 $date_day = date("Y-m-d");

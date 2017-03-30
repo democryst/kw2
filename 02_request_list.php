@@ -66,7 +66,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 		});
 
     function fn1_formlist(obj, index){
-      var str_formlist = "<tr><td><Text></Text></td> <td><Text>FormName: "+obj.FormName+"</Text></td> <td><Text>Description: "+obj.Description+"</Text></td> <td><Text>CreateTime: "+obj.CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"'></td></tr>";
+      var str_formlist = "<tr><td><Text></Text></td> <td><Text>FormName: "+obj.FormName+"</Text></td> <td><Text>Description: "+obj.Description+"</Text></td> <td><Text>CreateTime: "+obj.CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
       $(str_formlist).appendTo("#requestlist_table");
       $("#select_form_btn_"+index+"").click(function(){
         console.log(obj.WFRequestID);
@@ -93,7 +93,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
       }else{
         str_state= str_state + "<td></td> <td><Text>Status : </Text></td> <td><img src='images/reddot.png' width='20' height='20'></td>"
       }
-      str_state = str_state + "<td><input type='button' value='comments' id='comment_btn_"+index+"'></td></tr>";
+      str_state = str_state + "<td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
 
       $(str_state).appendTo("#requestflow_table");
 
@@ -186,7 +186,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
         <h2>Comment</h2>
         <table id="request_comment_table"></table>
         <table id="commentbox">
-          <tr><td><Text>Comment box: </Text><input type="text" id="current_comment"><input type="button" id="current_comment_btn" value="comment"></td></tr>
+          <tr><td><Text>Comment box: </Text></td> <td><input type="text" id="current_comment"></td> <td><input type="button" id="current_comment_btn" value="comment" style="margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;"></td></tr>
         </table>
 			</div>
 

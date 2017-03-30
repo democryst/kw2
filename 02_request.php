@@ -41,7 +41,7 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
 		}
 
 		function fn2_strout(formname, description, wfgeninfo, index){
-			var showformlist = "<tr><td><Text>FormName : "+formname+"</Text></td><td><input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'><text>Description : "+description+"</text></td> <td><input type='button' value='Select' id='chose_form_btn_"+index+"'></td></tr>";
+			var showformlist = "<tr><td><Text>FormName : "+formname+"</Text></td><td><input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'><text>Description : "+description+"</text></td> <td><input type='button' value='Select' id='chose_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
 			$(showformlist).appendTo("#all-form-table");
 			$("#chose_form_btn_"+index+"").click(function(){
 				// $.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
@@ -154,7 +154,7 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
         	<table id="file-download-table"></table>
 				</form>
 				<div class="right">
-          <input type="button" value="next" id="next_upload_page" style="width: 90px;">
+          <input type="button" value="next" id="next_upload_page" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;' >
         </div>
       </div>
 
@@ -164,7 +164,7 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
         	<table id="file-upload-table"></table>
 				</form>
 				<div class="right">
-          <input type="button" value="upload" id="file_upload" style="width: 90px;">
+          <input type="button" value="upload" id="file_upload" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'">
         </div>
       </div>
 

@@ -9,8 +9,12 @@ $form_description = "description";
 $adminid = 2;
 */
 //$state_array = $_POST['state_array'];
+if(isset($_POST['adminid'])){
+	$sys_adminid = $_POST['adminid'];
+}else{
+	$sys_adminid = 3;
+}
 
-$sys_adminid = 3;
 
 $upload_destination = "../uploads/";
 

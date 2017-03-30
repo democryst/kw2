@@ -82,7 +82,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 	 		 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
 	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
 	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
-	 			 var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"'></td></tr>";
+	 			 var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
 	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
 
 				 	//show comment of that state
@@ -209,7 +209,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
         <h2>Student graduation form</h2><!--need to change name according to one that select-->
         <table id="file-download-table"></table>
 				<div class="right">
-          <input type="button" value="Next" id="Next_file_upload_page" style="width: 90px;">
+          <input type="button" value="Next" id="Next_file_upload_page" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
         </div>
       </div>
 
@@ -219,9 +219,9 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
         	<table id="file-upload-table"></table>
 				</form>
         <div class="right">
-					<input type="button" value="Approve" id="upload_btn" style="width: 90px;">
+					<input type="button" value="Approve" id="upload_btn" style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
           <!--input type="button" value="Approve" id="approve_form" style="width: 90px;"-->
-          <input type="button" value="Reject" id="reject_form" style="width: 90px;">
+          <input type="button" value="Reject" id="reject_form" style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
         </div>
       </div>
 
@@ -231,12 +231,12 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 	        <table id="approver_comment-table"></table>
 					<table id="comment_submit">
 						<tr>
-							<td><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style="width: 90px;"></td>
+							<td><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td>
 						</tr>
 					</table>
 
 					<div class="right">
-						<input type="button" value="back" id="backtolistpage_btn" style="width: 90px;">
+						<input type="button" value="back" id="backtolistpage_btn" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
 					</div>
 
       </div>

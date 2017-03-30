@@ -23,8 +23,8 @@ var json_return_wfdoc;
 var json_return_wfdetail;
 // var json_return_wfdetail_access;
 var groupid_send_to_person;
-		$(document).ready(function() {
 
+		$(document).ready(function() {
 			$("#CreateFormType_wfdoc").hide();
 			$("#CreateFormType_wfdetail").hide();
 			$("#CreateFormType_wfaccess").hide();
@@ -49,47 +49,47 @@ var groupid_send_to_person;
 				$(str).appendTo("#upload_state_table");
 			});
 
+			$.getJSON("createformtype_handle/select_formadmin.php", function(data){
+				console.log(data);
+				// select_formadmin = JSON.parse(data);
+				select_formadmin = data;
+				str_s_formadmin = '<tr><td><Text>Admin: </Text></td> <td> <select id="form_admin_select" name="form_admin" form="form_admin" class="makeinline">';
+				str_s_formadmin = str_s_formadmin + '<option value="0">admin name...</option>';
+				for (var i = 0; i < select_formadmin.length; i++) {
+					str_s_formadmin = str_s_formadmin + '<option value="'+select_formadmin[i].UserID+'">'+select_formadmin[i].Name+' '+select_formadmin[i].Surname+'</option>';
+				}
+				str_s_formadmin = str_s_formadmin + '</select> </td></tr>';
+				$(str_s_formadmin).appendTo("#form_admin_table");
+			});
+
 			$("#Create_Form_submit_wfgeninfo").click(function(evt){
-					$("#CreateFormType_wfgeninfo").hide();
-					$("#CreateFormType_wfdetail").hide();
-					$("#CreateFormType_wfaccess").hide();
-					$("#form_success").hide();
-					$("#CreateFormType_wfdoc").show();
-					  // //evt.preventDefault();
-					  var formData = new FormData($('#CreateFormType_wfgeninfo')[0]);
-					  $.ajax({
-						   url: 'createformtype_handle/createformType_geninfo_handle.php',
-						   type: 'POST',
-						   data: formData,
-						   async: false,
-						   cache: false,
-						   contentType: false,
-						   enctype: 'multipart/form-data',
-						   processData: false,
-						   success: function (response) {
-							 console.log(response);
-							 json_return_wfgeninfo = JSON.parse(response);
+					if (  ( $("#form_admin_select").val() != 0 ) && ( $("#form_name").val().length != 0 ) ){
+						$("#CreateFormType_wfgeninfo").hide();
+						$("#CreateFormType_wfdetail").hide();
+						$("#CreateFormType_wfaccess").hide();
+						$("#form_success").hide();
+						$("#CreateFormType_wfdoc").show();
 
-						   }
-					  });
-					  // return false;
+							let gen_formname = $("#form_name").val();
+							let gen_form_description = $("#form_description").val();
+							let gen_form_admin_select = $("#form_admin_select").val();
+							$.post("createformtype_handle/createformType_geninfo_handle.php", {data: {form_name: gen_formname, form_description: gen_form_description, form_admin_select: gen_form_admin_select}},function(response){
+								console.log(response);
+								json_return_wfgeninfo = JSON.parse(response);
+								var WFGenInfoID = json_return_wfgeninfo.WFGenInfoID;
+								var CreateTime = json_return_wfgeninfo.CreateTime;
+								var str_wfgeninfo = '<tr> <td><input type="hidden" value="'+WFGenInfoID+'" name="wfgeninfo" /></td>'+
+								'<td><input type="hidden" value="'+CreateTime+'" name="all_date" /></td></tr>';
+								$(str_wfgeninfo).appendTo("#upload_doc_table");
+								$(str_wfgeninfo).appendTo("#wfdetail");
+								$(str_wfgeninfo).appendTo("#wfaccess");
+							});
 
-						//need to return WfgenInfoID
-						// and return date_hrs, date_day, all_date to make data in wfdoc to be same as wfgeninfo
-						// from ajax
-						// Maybe return json object    <input type="hidden" value="foo" name="response" />
-						var WFGenInfoID = json_return_wfgeninfo.WFGenInfoID;
-						var CreateTime = json_return_wfgeninfo.CreateTime;
-						var str_wfgeninfo = '<tr> <td><input type="hidden" value="'+WFGenInfoID+'" name="wfgeninfo" /></td>'+
-						'<td><input type="hidden" value="'+CreateTime+'" name="all_date" /></td></tr>';
-						$(str_wfgeninfo).appendTo("#upload_doc_table");
-						$(str_wfgeninfo).appendTo("#wfdetail");
-						$(str_wfgeninfo).appendTo("#wfaccess");
-
-						return false; //need it here
+					}
 			});
 
 			$("#Create_Form_submit_wfdoc").click(function(evt){
+				if ($("[name = 'file_array[]']").val().length != 0) {
 					$("#CreateFormType_wfgeninfo").hide();
 					$("#CreateFormType_wfdoc").hide();
 					$("#CreateFormType_wfaccess").hide();
@@ -107,49 +107,45 @@ var groupid_send_to_person;
 						   enctype: 'multipart/form-data',
 						   processData: false,
 						   success: function (response) {
-							// 	 console.log("----------");
-							// 	 console.log("----------");
-							// 	 console.log("----------");
 							 console.log(response);
-							//  console.log("----------");
-							//  console.log("----------");
-							//  console.log("----------");
 							 json_return_wfdoc = JSON.parse(response);
 
 						   }
 					  });
 					  return false;
 
-						//need to return WfdocID from ajax and give it to selector
+				}
+
 			});
 
 			$("#Create_Form_submit_wfdetail").click(function(evt){
+				if ( $("[name = 'state_array[]']").val().length != 0 ) {
 					$("#CreateFormType_wfgeninfo").hide();
 					$("#CreateFormType_wfdoc").hide();
 					$("#CreateFormType_wfdetail").hide();
 					$("#form_success").hide();
 					$("#CreateFormType_wfaccess").show();
-					  //evt.preventDefault();
-					  var formData = new FormData($('#CreateFormType_wfdetail')[0]);
-					  $.ajax({
-						   url: 'createformtype_handle/createFormType_wfdetail_handle.php',
-						   type: 'POST',
-						   data: formData,
-						   async: false,
-						   cache: false,
-						   contentType: false,
-						   enctype: 'multipart/form-data',
-						   processData: false,
-						   success: function (response) {
+						//evt.preventDefault();
+						var formData = new FormData($('#CreateFormType_wfdetail')[0]);
+						$.ajax({
+							 url: 'createformtype_handle/createFormType_wfdetail_handle.php',
+							 type: 'POST',
+							 data: formData,
+							 async: false,
+							 cache: false,
+							 contentType: false,
+							 enctype: 'multipart/form-data',
+							 processData: false,
+							 success: function (response) {
 							 console.log(response);
 							 json_return_wfdetail = JSON.parse(response);
-						   }
-					  }).then(function() {
+							 }
+						}).then(function() {
 							$.getJSON("createformtype_handle/createformType_wfdetail_accessSELECTOR_group.php", function(data){
 								console.log(data);
 								var json_wf_det_access_group = data;
 								console.log(json_wf_det_access_group);
-			        }).then(function(json_wf_det_access_group){
+							}).then(function(json_wf_det_access_group){
 								console.log(json_wf_det_access_group);
 								for(i = 0; i < json_return_wfdetail.length; i++){
 									var str_accessgroup_select = '<tr><td><text>   By Group: </text></td> <td><select id="gselect_'+i+'" name="group_id[]" class="makeinline">';
@@ -166,7 +162,7 @@ var groupid_send_to_person;
 											var group_sel_tab_index = this.id;
 											var person_tab_index = group_sel_tab_index.match(/\d/g);
 											person_tab_index = person_tab_index.join("");
-								        // alert( $(this).find("option:selected").attr('value') );
+												// alert( $(this).find("option:selected").attr('value') );
 												groupid_send_to_person = $(this).find("option:selected").attr('value');
 												if(groupid_send_to_person!=""){
 													$.post("createformtype_handle/createformType_wfdetail_accessSELECTOR_PERSON.php", {data: groupid_send_to_person}, function(data){
@@ -174,7 +170,7 @@ var groupid_send_to_person;
 														 var json_return_wfdetail_access = JSON.parse(data);
 														//  console.log(json_return_wfdetail_access);
 
-												  }).then(function(json_return_wfdetail_access){
+													}).then(function(json_return_wfdetail_access){
 														json_return_wfdetail_access = JSON.parse(json_return_wfdetail_access);
 														console.log(json_return_wfdetail_access);
 																console.log(person_tab_index);
@@ -209,13 +205,13 @@ var groupid_send_to_person;
 
 													});
 												}
-								    });
+										});
 									}
 
 
 							});
 
-					  });
+						});
 
 
 						var str_access_select;
@@ -236,7 +232,7 @@ var groupid_send_to_person;
 							// 	str_access_select = str_access_select + '<option value="'+groupid+'">'+groupname+'</option>';
 							// }
 							// str_access_select = str_access_select+'</select></td>';
-    // str_access_select = str_access_select
+		// str_access_select = str_access_select
 		// 					+'<td><text>   By Person : </text></td> <td>'
 		// 					+'<select name="user_id[]" class="makeinline">';
 		// 					for(j = 0; j < json_return_wfdetail_access.length; j++){
@@ -245,7 +241,7 @@ var groupid_send_to_person;
 		// 						str_access_select = str_access_select + '<option value="'+userid+'">'+name_surname+'</option>';
 		// 					}
 		// 					str_access_select = str_access_select+'</select></td>';
-		str_access_select = str_access_select+'<td><table id="gtab_'+i+'"></table></td>';
+								str_access_select = str_access_select+'<td><table id="gtab_'+i+'"></table></td>';
 								str_access_select = str_access_select+'</tr>';
 							$(str_access_select).appendTo("#state_table_for_access");
 						}
@@ -267,30 +263,35 @@ var groupid_send_to_person;
 						// to let user set who can access in next step
 
 						return false;
+				}
+
 			});
 
 			$("#Create_Form_submit_wfaccess").click(function(evt){
+
 					$("#CreateFormType_wfgeninfo").hide();
 					$("#CreateFormType_wfdoc").hide();
 					$("#CreateFormType_wfdetail").hide();
 					$("#CreateFormType_wfaccess").hide();
 					$("#form_success").show();
-					  //evt.preventDefault();
-					  var formData = new FormData($('#CreateFormType_wfaccess')[0]);
-					  $.ajax({
-						   url: 'createformtype_handle/CreateFormType_access_handle.php',
-						   type: 'POST',
-						   data: formData,
-						   async: false,
-						   cache: false,
-						   contentType: false,
-						   enctype: 'multipart/form-data',
-						   processData: false,
-						   success: function (response) {
+						//evt.preventDefault();
+						var formData = new FormData($('#CreateFormType_wfaccess')[0]);
+						$.ajax({
+							 url: 'createformtype_handle/CreateFormType_access_handle.php',
+							 type: 'POST',
+							 data: formData,
+							 async: false,
+							 cache: false,
+							 contentType: false,
+							 enctype: 'multipart/form-data',
+							 processData: false,
+							 success: function (response) {
 							 console.log(response);
-						   }
-					  });
-					  return false;
+							 }
+						});
+						return false;
+
+
 
 			});
 
@@ -322,7 +323,7 @@ var groupid_send_to_person;
 
 			<div id="CreateFormScreen">
 
-				<form action="createformtype_handle/createformType_wfgeninfo_handler.php" method="post" enctype="multipart/form-data" id="CreateFormType_wfgeninfo" >
+				<form action="createformtype_handle/createformType_geninfo_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType_wfgeninfo" >
 					<div id="wfgeninfo">
 					<h2>Create Form</h2>
 						<div>
@@ -334,10 +335,12 @@ var groupid_send_to_person;
 							<input type="text" id="form_description" name="form_description" class="makeinline">
 						</div>
 						<div>
-							<Text class="makeinline">Admin:</Text>
-							<select name="form_admin" form="form_admin" class="makeinline">
-							  <option value="1">admin name...</option>  <!-- will make it query admin that exist in system -->
-							</select>
+							<!-- <Text class="makeinline">Admin:</Text> -->
+							<Table id="form_admin_table"></Table>
+							<!-- <select name="form_admin" form="form_admin" class="makeinline"> -->
+							  <!-- <option value="1">admin name...</option>   -->
+								<!-- will make it query admin that exist in system -->
+							<!-- </select> -->
 						</div>
 					</div>
 
@@ -348,8 +351,8 @@ var groupid_send_to_person;
 				</form>
 
 				<form action="createformtype_handle/createformType_doc_handle.php" method="post" enctype="multipart/form-data" id="CreateFormType_wfdoc" >
-
 					<div id="wfdoc">
+					<input type="hidden" id="adminid" value="<?php echo $_SESSION['user_id']; ?>">
 					<h2>Document</h2>
 						<table id="upload_doc_table"></table>
 						<div class="right" id="doc_box">

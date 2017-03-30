@@ -69,7 +69,7 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
     WFRequestID = obj.WFRequestID;
 		CreateTime = obj.CreateTime;
 		requestorName = obj.Name + " " +obj.Surname;
-    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><Text>Create time: "+CreateTime+"</Text></td>  <td><input type='button' value='select' id='wfrq_"+index+"' ></td></tr>";
+    var str = "<tr> <td><Text>FormName: "+FormName+"</Text><td> <td><Text>Description: "+Description+"</Text><td> <td><Text>Create by: "+requestorName+"</Text><td> <td><Text>Create time: "+CreateTime+"</Text></td>  <td><input type='button' value='select' id='wfrq_"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
     $(str).appendTo("#all-form-table");
 
 
@@ -104,7 +104,7 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
     // StartTime = obj.StartTime;
     // EndTime = obj.EndTime;
 
-    var str = "<tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td> <td><input type='button' value='comment' id='comment"+index+"' ></td> <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td></tr>";
+    var str = "<tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td> <td><input type='button' value='comment' id='comment"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td></tr>";
     $(str).appendTo("#wfrqdetail-table");
 
 		$("#comment"+index+"").click(function(){
@@ -173,7 +173,7 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
 					groupid = $(this).find("option:selected").attr('value');
 
 					console.log(groupid);
-					str_moda_ii = "<tr><td> <input type='checkbox' id='chk_"+index+"' name='chose person' value='1'></td> <td><table id='table_person_"+index+"'></table></td> <td><input type='button' value='confirm' id='confirm_mod_btn_"+index+"'></td> </tr>";
+					str_moda_ii = "<tr><td> <input type='checkbox' id='chk_"+index+"' name='chose person' value='1'></td> <td><table id='table_person_"+index+"'></table></td> <td><input type='button' value='confirm' id='confirm_mod_btn_"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> </tr>";
 					$(str_moda_ii).appendTo("#table_gtop_"+index+"");
 
 					if (groupid == "") {
@@ -317,32 +317,32 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
       <div id="current_work_list_page">
         <h2>Work list</h2>
 				<form id="chose_available_form">
-        	<table id="all-form-table"></table>
+        	<table id="all-form-table" style="margin-left:2%;"></table>
 				</form>
       </div>
 
       <div id="chose_work_list_page">
         <h2>Form Work Flow</h2>
 				<form id="chose_wfrqdetail">
-        	<table id="wfrqdetail-table"></table>
+        	<table id="wfrqdetail-table" style="margin-left:2%;"></table>
 				</form>
       </div>
 
 			<div id=comment_page>
 					<h2>Comment</h2>
 					<div class="makeinline">
-						<div id="student_tab" class="makeinline" style="background-color: #da45c8; color: white;" ><Text >Student</Text></div>
-						<div id="admin_tab" class="makeinline" style="background-color: #da45c8; color: white;" ><Text >Admin</Text></div>
+						<div id="student_tab" class="makeinline" style="margin-left:1%;background-color: #da45c8;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color: white; font-size: small;" ><Text >Student</Text></div>
+						<div id="admin_tab" class="makeinline" style="background-color: #da45c8;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color: white; font-size: small;" ><Text >Admin</Text></div>
 					</div>
-	        <table id="formadmin_comment-table"></table>
-					<table id="comment_submit">
+	        <table id="formadmin_comment-table" style="margin-left:2%;"></table>
+					<table id="comment_submit" style="margin-left:2%;">
 						<tr>
-							<td><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style="width: 90px;"></td>
+							<td><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td>
 						</tr>
 					</table>
 
 					<div class="right">
-						<input type="button" value="back" id="backtolistpage_btn" style="width: 90px;">
+						<input type="button" value="back" id="backtolistpage_btn" style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
 					</div>
       </div>
 
