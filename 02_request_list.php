@@ -66,7 +66,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 		});
 
     function fn1_formlist(obj, index){
-      var str_formlist = "<tr><td><Text></Text></td> <td><Text>FormName: "+obj.FormName+"</Text></td> <td><Text>Description: "+obj.Description+"</Text></td> <td><Text>CreateTime: "+obj.CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
+      var str_formlist = "<tr><td><Text></Text></td> <td><Text>FormName: "+obj.FormName+"</Text></td> <td><Text>Description: "+obj.Description+"</Text></td> <td><Text>CreateTime: "+obj.CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
       $(str_formlist).appendTo("#requestlist_table");
       $("#select_form_btn_"+index+"").click(function(){
         console.log(obj.WFRequestID);
@@ -93,7 +93,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
       }else{
         str_state= str_state + "<td></td> <td><Text>Status : </Text></td> <td><img src='images/reddot.png' width='20' height='20'></td>"
       }
-      str_state = str_state + "<td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
+      str_state = str_state + "<td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
 
       $(str_state).appendTo("#requestflow_table");
 
@@ -116,17 +116,20 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 				console.log(response);
 				json_ret_cmt = JSON.parse(response);
 				if (json_ret_cmt.length >=1) {
-					var str_add_cmt_list = "<tr style='background-color: azure;'><td><Text>Comment</Text></td> <td><Text>Comment by</Text></td> <td><Text>Comment Time</Text></td></tr>";
-					$(str_add_cmt_list).appendTo("#request_comment_table");
+					// var str_add_cmt_list = "<tr style='background-color: azure;'><td><Text>Comment</Text></td> <td><Text>Comment by</Text></td> <td><Text>Comment Time</Text></td></tr>";
+					// $(str_add_cmt_list).appendTo("#request_comment_table");
+					var str_add_cmt_list;
+
 					// json_ret_cmt = JSON.parse(response);
 					for (var k = 0; k < json_ret_cmt.length; k++) {
 						fn2_eachstate_cmt_list(json_ret_cmt[k]);
 					}
 
-				}else{
-					var str_add_cmt_list = "<tr><td><Text>No comment</Text></td></tr>";
-					$(str_add_cmt_list).appendTo("#request_comment_table");
 				}
+				// else{
+				// 	var str_add_cmt_list = "<tr><td style='width: 100px;font-size: small;'><Text style='margin-left:5%;'>No comment</Text></td></tr>";
+				// 	$(str_add_cmt_list).appendTo("#request_comment_table");
+				// }
 
 
 
@@ -134,7 +137,15 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 		}
 
     function fn2_eachstate_cmt_list(obj) {
-      var str_add_cmt_list = "<tr><td><Text>"+obj.Comment+"</Text></td> <td><Text>"+obj.CommentBy+"</Text></td> <td><Text>"+obj.CommentTime+"</Text></td></tr>";
+			if (obj.CommentBy == userid) {
+				m_left = 65;
+				// m_color = "#3c8dbc";
+				m_color = "violet";
+			}else{
+				m_left = 10;
+				m_color = "purple";
+			}
+      var str_add_cmt_list = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+obj.CommentBy+"</Text></td></tr> <tr><td><Text>"+obj.Comment+"</Text></td></tr> <tr><td><Text>"+obj.CommentTime+"</Text></table></td></tr>   </td></tr>";
       $(str_add_cmt_list).appendTo("#request_comment_table");
     }
 
@@ -174,19 +185,19 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 		<div id="div_content" class="form">
 			<div id="Requestlist">
         <h2>Current Request list</h2>
-        <table id="requestlist_table"></table>
+        <table id="requestlist_table" style="margin-left:5%;font-size:small;"></table>
 			</div>
 
       <div id="requestflow">
         <h2>Workflow</h2>
-        <table id="requestflow_table"></table>
+        <table id="requestflow_table" style="margin-left:5%;font-size:small;"></table>
 			</div>
 
       <div id="comment">
         <h2>Comment</h2>
         <table id="request_comment_table"></table>
-        <table id="commentbox">
-          <tr><td><Text>Comment box: </Text></td> <td><input type="text" id="current_comment"></td> <td><input type="button" id="current_comment_btn" value="comment" style="margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;"></td></tr>
+        <table id="commentbox" style="margin-left:5%;background-color:#8282fe;border-radius:3px;border:1px solid transparent;width:450px;height:18px;color:white;font-size:small;">
+          <tr><td style="width:100px"><Text>Comment box: </Text></td> <td><input type="text" id="current_comment" style="width: 220px;"></td> <td><input type="button" id="current_comment_btn" value="comment" style="background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;"></td></tr>
         </table>
 			</div>
 

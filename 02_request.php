@@ -154,7 +154,7 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
         	<table id="file-download-table"></table>
 				</form>
 				<div class="right">
-          <input type="button" value="next" id="next_upload_page" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;' >
+          <input type="button" value="next" id="next_upload_page" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;' >
         </div>
       </div>
 
@@ -164,7 +164,7 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
         	<table id="file-upload-table"></table>
 				</form>
 				<div class="right">
-          <input type="button" value="upload" id="file_upload" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'">
+          <input type="button" value="upload" id="file_upload" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'">
         </div>
       </div>
 

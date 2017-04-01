@@ -163,7 +163,16 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 				if (json_ret_cmtlist.length != 0) {
 					// show cmt list
 					for (var i = 0; i < json_ret_cmtlist.length; i++) {
-						str_cmtlist = "<tr><td><Text>Comment: "+json_ret_cmtlist[i].Comment+"</Text></td> <td><Text>CommentTime: "+json_ret_cmtlist[i].CommentTime+"</Text></td> <td><Text>CommentBy: "+json_ret_cmtlist[i].CommentBy+"</Text></td></tr>";
+						if (json_ret_cmtlist[i].CommentBy == userid) {
+							m_left = 65;
+							// m_color = "#3c8dbc";
+							m_color = "violet";
+						}else{
+							m_left = 10;
+							m_color = "purple";
+						}
+						str_cmtlist = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+json_ret_cmtlist[i].CommentBy+"</Text></td></tr> <tr><td><Text>"+json_ret_cmtlist[i].Comment+"</Text></td></tr> <tr><td><Text>"+json_ret_cmtlist[i].CommentTime+"</Text></table></td></tr>   </td> </tr>";
+						// str_cmtlist = "<tr> <td><Text>CommentBy: "+json_ret_cmtlist[i].CommentBy+"</Text></td> <td><Text>Comment: "+json_ret_cmtlist[i].Comment+"</Text></td> <td><Text>CommentTime: "+json_ret_cmtlist[i].CommentTime+"</Text></td></tr>";
 						$(str_cmtlist).appendTo("#approver_comment-table");
 					}
 				}
@@ -201,13 +210,13 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
       <div id="current_work_list_page">
         <h2>Approve list</h2>
 				<form action="apporver_currentwork_wfrequestdoc.php" method="post" id="currentwork_wfrequestdoc">
-        	<table id="current-work-table"></table>
+        	<table id="current-work-table" style="margin-left:5%;font-size:small;"></table>
 				</form>
       </div>
 
       <div id="currentwork_select_page">
         <h2>Student graduation form</h2><!--need to change name according to one that select-->
-        <table id="file-download-table"></table>
+        <table id="file-download-table" style="margin-left:5%;font-size:small;"></table>
 				<div class="right">
           <input type="button" value="Next" id="Next_file_upload_page" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
         </div>
@@ -216,7 +225,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
       <div id="file_upload_page">
         <h2>File upload</h2>
 				<form id="upload_form">
-        	<table id="file-upload-table"></table>
+        	<table id="file-upload-table" style="margin-left:5%;font-size:small;"></table>
 				</form>
         <div class="right">
 					<input type="button" value="Approve" id="upload_btn" style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
@@ -229,9 +238,9 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 
 					<h2>Comment</h2>
 	        <table id="approver_comment-table"></table>
-					<table id="comment_submit">
+					<table id="comment_submit" style="margin-left:5%;background-color:#8282fe;border-radius:3px;border:1px solid transparent;width:450px;height:18px;color:white;font-size:small;">
 						<tr>
-							<td><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td>
+							<td style="width:100px"><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td>
 						</tr>
 					</table>
 
