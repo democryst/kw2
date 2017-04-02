@@ -60,11 +60,11 @@ if ($_SESSION['gName'] != "Approver") {
 				window.location = '06_logout.php';
 		});
 		$("#Request").click(function(){
-				alert('Move to request!');
+				// alert('Move to request!');
 				window.location = '02_request.php';
 		});
 		$("#RequestList").click(function(){
-				alert('Move to current request form list!');
+				// alert('Move to current request form list!');
 				window.location = '02_request_list.php';
 		});
 		// $("#Approve").click(function(){

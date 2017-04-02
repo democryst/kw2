@@ -178,6 +178,7 @@ h2{
 p.menu-color {
 	background-color: #D73289;
 	border: 0.1px solid white;
+	border-radius:3px;
 	font-family: Verdana, sans-serif;
 	padding:0.6em;
 	color:white;

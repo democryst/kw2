@@ -349,7 +349,7 @@ var groupid_send_to_person;
 
 				<!-- <p class="menu-color" id="Login">Login</p> -->
 				<!-- <p class="menu-color" id="CreateAccount">CreateAccount</p> -->
-				<p class="menu-color" id="AdminSystem_Create">CreateForm(SystemAdmin)</p>
+				<p class="menu-color" id="AdminSystem_Create">Create Form Type</p>
 				<p class="menu-color" id="Logout">Log out</p>
 
 		</div>

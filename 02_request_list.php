@@ -6,11 +6,7 @@ if(isset($_SESSION['user_id'])){
 				</script>";
 }
 echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
-// if ($_SESSION['gName'] != "Requester") {
-if ( ($_SESSION['gName'] == "Requester") or ($_SESSION['gName'] == "Approver") ) {
-	// Stay in this page
-}
-else{
+if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") ) {
 ?>
 <script type='text/javascript'>
 	alert('You dont have permission!');
@@ -61,7 +57,7 @@ else{
 					window.location = '06_logout.php';
 			});
 			$("#Request").click(function(){
-					alert('Move to request!');
+					// alert('Move to request!');
 					window.location = '02_request.php';
 			});
 			// $("#RequestList").click(function(){
@@ -72,7 +68,7 @@ else{
 				if ($_SESSION['gName'] == 'Approver') {
 			?>
 			$("#Approve").click(function(){
-					alert('Move to current work form list!');
+					// alert('Move to current work form list!');
 					window.location = '02_request_list.php';
 			});
 			<?php

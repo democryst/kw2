@@ -55,6 +55,9 @@ if ($_SESSION['gName'] != "Flow_Admin") {
 		$("#Logout").click(function(){
 				window.location = '06_logout.php';
 		});
+		// $("#FormModify").click(function(){
+		// 		window.location = '04_formmodify.php';
+		// });
 		//************************************************************
 		$("#student_tab").click(function(){
 			console.log(cur_cmt_state);
@@ -367,9 +370,9 @@ if ($_SESSION['gName'] != "Flow_Admin") {
 	<div id="div_main">
 		<div id="div_left">
 
-				<p class="menu-color" id="Login">Login</p>
-				<p class="menu-color" id="Request">Request</p>
-				<p class="menu-color" id="Approve">Current form list</p>
+				<!-- <p class="menu-color" id="Login">Login</p> -->
+				<p class="menu-color" id="FormModify">Current work form list</p>
+				<p class="menu-color" id="Logout">Logout</p>
 
 		</div>
 
