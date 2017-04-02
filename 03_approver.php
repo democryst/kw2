@@ -79,8 +79,8 @@ if ($_SESSION['gName'] != "Approver") {
 		$("#comment_page").hide();
 
 		$("#Next_file_upload_page").click(function(){
-			$("#current_work_list_page").hide();
-			$("#currentwork_select_page").hide();
+			// $("#current_work_list_page").hide();
+			// $("#currentwork_select_page").hide();
 			$("#file_upload_page").show();
 			$("#comment_page").hide();
 
@@ -91,6 +91,14 @@ if ($_SESSION['gName'] != "Approver") {
 			$("#currentwork_select_page").hide();
 			$("#file_upload_page").hide();
 			$("#comment_page").hide();
+
+		});
+
+		$("#reject_form").click(function(){
+			$("#current_work_list_page").show();
+			$("#currentwork_select_page").hide();
+			$("#file_upload_page").hide();
+			// $("#comment_page").hide();
 
 		});
 
@@ -121,7 +129,9 @@ if ($_SESSION['gName'] != "Approver") {
 	 	for(i=0; i<approve_cur_arr_l; i++){
 	 		var wfrequestdetailID = json_return_approve_currentworklist[i].WFRequestDetailID;
 	 		var StateName = json_return_approve_currentworklist[i].StateName;
-			var CreateTime = json_return_approve_currentworklist[i].CreateTime;
+			// var CreateTime = json_return_approve_currentworklist[i].CreateTime;
+			Create_Time = json_return_approve_currentworklist[i].CreateTime;
+			CreateTime = Create_Time.replace("***", " ");
 	 		showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, i);
 	 	}
 	 }
@@ -145,7 +155,7 @@ if ($_SESSION['gName'] != "Approver") {
 					});
 
 				 	$("#select_work_btn_"+index+"").click(function(){
-				 				$("#current_work_list_page").hide();
+								// 	$("#current_work_list_page").hide();
 				 				$("#currentwork_select_page").show();
 				 				$("#file_upload_page").hide();
 				 				$("#comment_page").hide();

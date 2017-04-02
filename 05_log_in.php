@@ -68,7 +68,11 @@ if(isset($_POST['login']) && isset($_POST['pass'])){
 	<script src="scripts/jquery-2.0.0.min.js"></script>
 
 	<script type="text/javascript">
-
+	// $(document).ready(function() {
+	// 	$("#Register").click(function(){
+	// 			window.location = '07_register.php';
+	// 	});
+	// });
 	</script>
 </head>
 <body>
