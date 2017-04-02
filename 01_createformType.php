@@ -1,6 +1,36 @@
 <?php
 session_start();
+if(isset($_SESSION['user_id'])){
+	echo "<script type='text/javascript'>
+					console.log(".$_SESSION['user_id'].");
+				</script>";
+}
 echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
+if ($_SESSION['gName'] != "Sys_Admin") {
+?>
+<script type='text/javascript'>
+	alert('you dont have permission!');
+</script>
+<?php
+	if($_SESSION['gName'] == 'Requester'){
+		echo "<script type='text/javascript'>
+						window.location = '02_request_list.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Approver'){
+		echo "<script type='text/javascript'>
+						window.location = '03_approver.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Flow_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '04_formmodify.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Sys_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '01_createformType.php';
+					</script>";
+	}
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +55,11 @@ var json_return_wfdetail;
 var groupid_send_to_person;
 
 		$(document).ready(function() {
+			//************************************************************
+			$("#Logout").click(function(){
+					window.location = '06_logout.php';
+			});
+			//************************************************************
 			$("#CreateFormType_wfdoc").hide();
 			$("#CreateFormType_wfdetail").hide();
 			$("#CreateFormType_wfaccess").hide();
@@ -312,9 +347,10 @@ var groupid_send_to_person;
 	<div id="div_main">
 		<div id="div_left">
 
-				<p class="menu-color" id="Login">Login</p>
-				<p class="menu-color" id="CreateAccount">CreateAccount</p>
+				<!-- <p class="menu-color" id="Login">Login</p> -->
+				<!-- <p class="menu-color" id="CreateAccount">CreateAccount</p> -->
 				<p class="menu-color" id="AdminSystem_Create">CreateForm(SystemAdmin)</p>
+				<p class="menu-color" id="Logout">Log out</p>
 
 		</div>
 

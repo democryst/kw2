@@ -1,6 +1,31 @@
 <?php
 session_start();
 echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
+if ($_SESSION['gName'] != "Flow_Admin") {
+?>
+<script type='text/javascript'>
+	alert('You dont have permission!');
+</script>
+<?php
+	if($_SESSION['gName'] == 'Requester'){
+		echo "<script type='text/javascript'>
+						window.location = '02_request_list.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Approver'){
+		echo "<script type='text/javascript'>
+						window.location = '03_approver.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Flow_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '04_formmodify.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Sys_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '01_createformType.php';
+					</script>";
+	}
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +51,11 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
 	var cur_cmt_tab;
 	var cur_cmt_state;
 	$(document).ready(function() {
-
+		//************************************************************
+		$("#Logout").click(function(){
+				window.location = '06_logout.php';
+		});
+		//************************************************************
 		$("#student_tab").click(function(){
 			console.log(cur_cmt_state);
 			cur_cmt_tab = 0;
@@ -282,20 +311,42 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
 			 if (json_ret_cmtlist.length != 0) {
 				 // show cmt list
 				 for (var i = 0; i < json_ret_cmtlist.length; i++) {
-					 if (json_ret_cmtlist[i].CommentBy == user_id) {
-						 m_left = 65;
-						 // m_color = "#3c8dbc";
-						 m_color = "violet";
-					 }else{
-						 m_left = 10;
-						 m_color = "purple";
-					 }
-					 str_cmtlist = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+json_ret_cmtlist[i].CommentBy+"</Text></td></tr> <tr><td><Text>"+json_ret_cmtlist[i].Comment+"</Text></td></tr> <tr><td><Text>"+json_ret_cmtlist[i].CommentTime+"</Text></table></td></tr>   </td> </tr>";
-					//  str_cmtlist = "<tr><td><Text>Comment: "+json_ret_cmtlist[i].Comment+"</Text></td> <td><Text>CommentTime: "+json_ret_cmtlist[i].CommentTime+"</Text></td> <td><Text>CommentBy: "+json_ret_cmtlist[i].CommentBy+"</Text></td></tr>";
-					 $(str_cmtlist).appendTo("#formadmin_comment-table");
+					 $.post("formadmin_handle/userid_name.php", {data:{userid:json_ret_cmtlist[i].CommentBy, jcmtlist_obj: json_ret_cmtlist[i]}}, function(res){
+						 console.log(res);
+						 json_ret_cmt_userid_name =JSON.parse(res);
+						 // json_ret_cmt_userid_name =res;
+						 jret_userinfo = json_ret_cmt_userid_name.userinfo;
+						 jret_jcmtlist_obj = json_ret_cmt_userid_name.jcmtlist_obj;
+						 cmtbyname = jret_userinfo.Name + " "+jret_userinfo.Surname;
+						 cmtlist_2(jret_jcmtlist_obj, cmtbyname);
+					 });
+					//  if (json_ret_cmtlist[i].CommentBy == user_id) {
+					// 	 m_left = 65;
+					// 	 // m_color = "#3c8dbc";
+					// 	 m_color = "violet";
+					//  }else{
+					// 	 m_left = 10;
+					// 	 m_color = "purple";
+					//  }
+					//  str_cmtlist = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+json_ret_cmtlist[i].CommentBy+"</Text></td></tr> <tr><td><Text>"+json_ret_cmtlist[i].Comment+"</Text></td></tr> <tr><td><Text>"+json_ret_cmtlist[i].CommentTime+"</Text></table></td></tr>   </td> </tr>";
+					// //  str_cmtlist = "<tr><td><Text>Comment: "+json_ret_cmtlist[i].Comment+"</Text></td> <td><Text>CommentTime: "+json_ret_cmtlist[i].CommentTime+"</Text></td> <td><Text>CommentBy: "+json_ret_cmtlist[i].CommentBy+"</Text></td></tr>";
+					//  $(str_cmtlist).appendTo("#formadmin_comment-table");
 				 }
 			 }
 		 });
+	}
+
+	function cmtlist_2(jret_cmtlist, cmtbyname){
+		if (jret_cmtlist.CommentBy == user_id) {
+			m_left = 65;
+			// m_color = "#3c8dbc";
+			m_color = "violet";
+		}else{
+			m_left = 10;
+			m_color = "purple";
+		}
+		str_cmtlist = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+cmtbyname+"</Text></td></tr> <tr><td><Text>"+jret_cmtlist.Comment+"</Text></td></tr> <tr><td><Text>"+jret_cmtlist.CommentTime+"</Text></table></td></tr>   </td> </tr>";
+		$(str_cmtlist).appendTo("#formadmin_comment-table");
 	}
 
 

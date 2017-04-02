@@ -36,13 +36,6 @@ if(isset($_POST['login']) && isset($_POST['pass'])){
 		echo "<script type='text/javascript'>
 						window.location = '03_approver.php';
 					</script>";
-	}else if($_SESSION['gName'] == 'ICT Teacher'){
-		echo "<script type='text/javascript'>
-						alert('Login Success!');
-					</script>";
-		echo "<script type='text/javascript'>
-						window.location = '03_approver.php';
-					</script>";
 	}else if($_SESSION['gName'] == 'Flow_Admin'){
 		echo "<script type='text/javascript'>
 						alert('Login Success!');
@@ -91,8 +84,7 @@ if(isset($_POST['login']) && isset($_POST['pass'])){
 		<div id="div_left">
 
 				<p class="menu-color" id="Login">Login</p>
-				<p class="menu-color" id="Request">Request</p>
-				<p class="menu-color" id="Approve">Current form list</p>
+				<p class="menu-color" id="Register">Register</p>
 
 		</div>
 

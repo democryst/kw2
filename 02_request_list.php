@@ -1,6 +1,41 @@
 <?php
 session_start();
+if(isset($_SESSION['user_id'])){
+	echo "<script type='text/javascript'>
+					console.log(".$_SESSION['user_id'].");
+				</script>";
+}
 echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
+// if ($_SESSION['gName'] != "Requester") {
+if ( ($_SESSION['gName'] == "Requester") or ($_SESSION['gName'] == "Approver") ) {
+	// Stay in this page
+}
+else{
+?>
+<script type='text/javascript'>
+	alert('You dont have permission!');
+</script>
+<?php
+	// if($_SESSION['gName'] == 'Requester'){
+	// 	echo "<script type='text/javascript'>
+	// 					window.location = '02_request_list.php';
+	// 				</script>";
+	// }else if($_SESSION['gName'] == 'Approver'){
+	// 	echo "<script type='text/javascript'>
+	// 					window.location = '03_approver.php';
+	// 				</script>";
+	// }else
+	if($_SESSION['gName'] == 'Flow_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '04_formmodify.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Sys_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '01_createformType.php';
+					</script>";
+	}
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +56,30 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
   var State_id;
   var State_status;
 		$(document).ready(function() {
+			//************************************************************
+			$("#Logout").click(function(){
+					window.location = '06_logout.php';
+			});
+			$("#Request").click(function(){
+					alert('Move to request!');
+					window.location = '02_request.php';
+			});
+			// $("#RequestList").click(function(){
+			// 		alert('Move to current request form list!');
+			// 		window.location = '02_request_list.php';
+			// });
+			<?php
+				if ($_SESSION['gName'] == 'Approver') {
+			?>
+			$("#Approve").click(function(){
+					alert('Move to current work form list!');
+					window.location = '02_request_list.php';
+			});
+			<?php
+				}
+			?>
+			//************************************************************
+
       $.post("request_list_handle/requestlist_showlist.php",{requestor_id: userid},function(response){
 
         console.log(response);
@@ -75,6 +134,7 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
     }
 
     function fn2_formstate(wfrequestid,index){
+			$("#request_comment_table").empty();
       $.post("request_list_handle/requestlist_formstate.php",{wfrequest_id: wfrequestid},function(response){
         console.log(response);
         json_ret_formstate = JSON.parse(response);
@@ -137,16 +197,31 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 		}
 
     function fn2_eachstate_cmt_list(obj) {
-			if (obj.CommentBy == userid) {
-				m_left = 65;
-				// m_color = "#3c8dbc";
-				m_color = "violet";
-			}else{
-				m_left = 10;
-				m_color = "purple";
-			}
-      var str_add_cmt_list = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+obj.CommentBy+"</Text></td></tr> <tr><td><Text>"+obj.Comment+"</Text></td></tr> <tr><td><Text>"+obj.CommentTime+"</Text></table></td></tr>   </td></tr>";
-      $(str_add_cmt_list).appendTo("#request_comment_table");
+			$.post("request_list_handle/userid_name.php", {userid:obj.CommentBy}, function(res){
+				console.log(res);
+				json_ret_cmt_userid_name =JSON.parse(res);
+				cmtbyname = json_ret_cmt_userid_name.Name + " "+json_ret_cmt_userid_name.Surname;
+				if (obj.CommentBy == userid) {
+					m_left = 65;
+					// m_color = "#3c8dbc";
+					m_color = "violet";
+				}else{
+					m_left = 10;
+					m_color = "purple";
+				}
+	      var str_add_cmt_list = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+cmtbyname+"</Text></td></tr> <tr><td><Text>"+obj.Comment+"</Text></td></tr> <tr><td><Text>"+obj.CommentTime+"</Text></table></td></tr>   </td></tr>";
+	      $(str_add_cmt_list).appendTo("#request_comment_table");
+			});
+			// if (obj.CommentBy == userid) {
+			// 	m_left = 65;
+			// 	// m_color = "#3c8dbc";
+			// 	m_color = "violet";
+			// }else{
+			// 	m_left = 10;
+			// 	m_color = "purple";
+			// }
+      // var str_add_cmt_list = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+cmtbyname+"</Text></td></tr> <tr><td><Text>"+obj.Comment+"</Text></td></tr> <tr><td><Text>"+obj.CommentTime+"</Text></table></td></tr>   </td></tr>";
+      // $(str_add_cmt_list).appendTo("#request_comment_table");
     }
 
     function fn3_add_cmt(WFRequestDetailID, text_current_comment){
@@ -176,9 +251,16 @@ echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
 	<div id="div_main">
 		<div id="div_left">
 
-      <p class="menu-color" id="Login">Login</p>
-      <p class="menu-color" id="Request">Request</p>
-      <p class="menu-color" id="Approve">Current form list</p>
+			<p class="menu-color" id="Request">Request</p>
+			<p class="menu-color" id="RequestList">Current request form list</p>
+			<?php
+				if ($_SESSION['gName'] == 'Approver') {
+			?>
+			<p class="menu-color" id="Approve">Current work form list</p>
+			<?php
+				}
+			?>
+			<p class="menu-color" id="Logout">Logout</p>
 
 		</div>
 

@@ -1,6 +1,41 @@
 <?php
 session_start();
+if(isset($_SESSION['user_id'])){
+	echo "<script type='text/javascript'>
+					console.log(".$_SESSION['user_id'].");
+				</script>";
+}
 echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
+// if ($_SESSION['gName'] != "Requester") {
+if ( ($_SESSION['gName'] == "Requester") or ($_SESSION['gName'] == "Approver") ) {
+	// Stay in this page
+}
+else{
+?>
+<script type='text/javascript'>
+	alert('You dont have permission!');
+</script>
+<?php
+	// if($_SESSION['gName'] == 'Requester'){
+	// 	echo "<script type='text/javascript'>
+	// 					window.location = '02_request_list.php';
+	// 				</script>";
+	// }else if($_SESSION['gName'] == 'Approver'){
+	// 	echo "<script type='text/javascript'>
+	// 					window.location = '03_approver.php';
+	// 				</script>";
+	// }else
+	if($_SESSION['gName'] == 'Flow_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '04_formmodify.php?user_id=".$_SESSION['user_id']."';
+					</script>";
+	}else if($_SESSION['gName'] == 'Sys_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '01_createformType.php';
+					</script>";
+	}
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +58,30 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
 
 
 	$(document).ready(function() {
+		//************************************************************
+		$("#Logout").click(function(){
+				window.location = '06_logout.php';
+		});
+		// $("#Request").click(function(){
+		// 		alert('Move to request!');
+		// 		window.location = '02_request.php';
+		// });
+		$("#RequestList").click(function(){
+				alert('Move to current request form list!');
+				window.location = '02_request_list.php';
+		});
+		<?php
+			if ($_SESSION['gName'] == 'Approver') {
+		?>
+		$("#Approve").click(function(){
+				alert('Move to current work form list!');
+				window.location = '02_request_list.php';
+		});
+		<?php
+			}
+		?>
+		//************************************************************
+
     $.post("request_handle/request_avialable_form.php", {requestor_id: user_id}, function(response){
 			var all_form = JSON.parse(response);
 			fn1_loopform(all_form);
@@ -135,9 +194,17 @@ echo "<script>var user_id = " . $_SESSION['user_id'] . ";</script>";
 	<div id="div_main">
 		<div id="div_left">
 
-				<p class="menu-color" id="Login">Login</p>
+				<!-- <p class="menu-color" id="Login">Login</p> -->
 				<p class="menu-color" id="Request">Request</p>
-				<p class="menu-color" id="Approve">Current form list</p>
+				<p class="menu-color" id="RequestList">Current request form list</p>
+				<?php
+					if ($_SESSION['gName'] == 'Approver') {
+				?>
+				<p class="menu-color" id="Approve">Current work form list</p>
+				<?php
+					}
+				?>
+				<p class="menu-color" id="Logout">Logout</p>
 
 		</div>
 
