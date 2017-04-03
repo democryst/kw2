@@ -210,3 +210,12 @@ p.AdminFormList{
 	display: inline;
 
 }
+
+.cardbox {
+	/*margin-left:17%;*/
+	background-color:#ffb5f8;
+	/*border-color:#ff0000;*/
+	border-radius:3px;
+	border:1px solid transparent;
+	color:white;
+}

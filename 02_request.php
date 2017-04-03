@@ -96,7 +96,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 		}
 
 		function fn2_strout(formname, description, wfgeninfo, index){
-			var showformlist = "<tr><td><Text>FormName : "+formname+"</Text></td><td><input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'><text>Description : "+description+"</text></td> <td><input type='button' value='Select' id='chose_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
+			var showformlist = "<tr class='cardbox'><td><Text>FormName : "+formname+"</Text></td><td><input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'><text>Description : "+description+"</text></td> <td><input type='button' value='Select' id='chose_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
 			$(showformlist).appendTo("#all-form-table");
 			$("#chose_form_btn_"+index+"").click(function(){
 				// $.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
@@ -117,7 +117,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 			// 	WFRequestDocID = doc_obj['WFRequestDocID'];
 			// 	filename = doc_obj['DocName'];
 			// 	filepath = doc_obj['DocURL'];
-			// 	str_f_download = "<tr> <tr><td><Text>filename : "+filename+"</Text></td></tr> <tr><td><a href='"+localhost+filepath+"'>Download</a></td></tr> </tr>";
+			// 	str_f_download = "<tr> <tr><td><Text>filename : "+filename+"</Text></td></tr> <tr><td><a target="_tab" href='"+localhost+filepath+"'>Download</a></td></tr> </tr>";
 			// 	$(str_f_download).appendTo("#file-download-table");
 			//
 			// 	let str_f_upload = "<tr> <td><Text>filename : "+filename+"</Text><input type='hidden' value='"+user_id+"' name='user_id' ><input type='hidden' value='"+filename+"' name='filename_arr[]' ><input type='hidden' value='"+WFRequestDocID+"' name='WFRequestDocID_arr[]' ></td> <td><input type='file' name='file_array[]'></td> </tr>";
@@ -131,7 +131,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 				filepath = doc_obj['DocURL'];
 				var requestor_id = doc_obj['requestor_id'];
 				var wfgeninfo = doc_obj['wfgeninfo'];
-				str_f_download = "<tr> <tr><td><Text>filename : "+filename+"</Text></td></tr> <tr><td><a href='"+localhost+filepath+"'>Download</a></td></tr> </tr>";
+				str_f_download = "<tr> <tr><td><Text>filename : "+filename+"</Text></td></tr> <tr><td><a target='_tab' href='"+localhost+filepath+"'>Download</a></td></tr> </tr>";
 				$(str_f_download).appendTo("#file-download-table");
 
 				let str_f_upload = "<tr> <td><Text>filename : "+filename+"</Text><input type='hidden' value='"+requestor_id+"' name='requestor_id' ><input type='hidden' value='"+filename+"' name='filename_arr[]' ><input type='hidden' value='"+WFDocID+"' name='WFDocID_arr[]' ></td> <td><input type='file' name='file_array[]'></td> </tr>";
@@ -143,6 +143,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 				$.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: requestor_id}}, function(response){
 					wfrequestid=JSON.parse(response);
+					$("#file-upload-table").empty();
 					str_f2_upload = "<tr><td><input type='hidden' value='"+wfrequestid+"' name='wf_requestid'></td></tr>";
 					$(str_f2_upload).appendTo("#file-upload-table");
 					// fn3_fileshow(doc_ret);
@@ -208,7 +209,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
       <div id="current_work_list_page">
         <h2>Request list</h2>
 				<form id="chose_available_form">
-        	<table id="all-form-table"></table>
+        	<table id="all-form-table" style='margin-left:5%;'></table>
 				</form>
       </div>
 			<div id="download_page">

@@ -121,7 +121,9 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 		});
 
     function fn1_formlist(obj, index){
-      var str_formlist = "<tr><td><Text></Text></td> <td><Text>FormName: "+obj.FormName+"</Text></td> <td><Text>Description: "+obj.Description+"</Text></td> <td><Text>CreateTime: "+obj.CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+			let create_time = obj.CreateTime;
+			let CreateTime = create_time.replace("***"," ");
+      var str_formlist = "<tr > <td class='cardbox'><Text>FormName: "+obj.FormName+"</Text></td> <td class='cardbox'><Text>Description: "+obj.Description+"</Text></td> <td class='cardbox'><Text>CreateTime: "+CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
       $(str_formlist).appendTo("#requestlist_table");
       $("#select_form_btn_"+index+"").click(function(){
         console.log(obj.WFRequestID);
@@ -142,12 +144,12 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
     }
 
     function fn2_eachstate(obj, index){
-      var str_state = "<tr> <td><Text>State :"+obj.StateName+"</Text></td> ";
+      var str_state = "<tr > <td class='cardbox'><Text>State :"+obj.StateName+"</Text></td> ";
       if (obj.DoneBy!=0) {
         // str_state= str_state + "<td><Text>DoneBy :"+obj.DoneBy+"</Text></td>"
-        str_state= str_state + "<td></td> <td><Text>Status : </Text></td> <td><img src='images/greendot.png' width='20' height='20'></td>"
+        str_state= str_state + "<td class='cardbox' style='margin-left:10px'><Text>Status : </Text></td> <td style='margin-left:10px'><img src='images/greendot.png' width='20' height='20'></td>"
       }else{
-        str_state= str_state + "<td></td> <td><Text>Status : </Text></td> <td><img src='images/reddot.png' width='20' height='20'></td>"
+        str_state= str_state + "<td><Text class='cardbox' style='margin-left:10px'>Status : </Text></td> <td style='margin-left:10px'><img src='images/reddot.png' width='20' height='20'></td>"
       }
       str_state = str_state + "<td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
 
