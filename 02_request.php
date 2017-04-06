@@ -96,7 +96,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 		}
 
 		function fn2_strout(formname, description, wfgeninfo, index){
-			var showformlist = "<tr class='cardbox'><td><Text>FormName : "+formname+"</Text></td><td><input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'><text>Description : "+description+"</text></td> <td><input type='button' value='Select' id='chose_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
+			var showformlist = "<div class='cardbox' style='margin-top:10px;'><div style='display:block;'><Text style='margin-left:10px;display:block;'>FormName : "+formname+"</Text><text style='margin-left:10px;display:block;'>Description : "+description+"</text></div> <input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'> <div style='direction: rtl;'><input type='button' value='Select' id='chose_form_btn_"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></div> </div>";
+			// var showformlist = "<tr><td><Text>FormName : "+formname+"</Text></td><td><input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'><text>Description : "+description+"</text></td> <td><input type='button' value='Select' id='chose_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
 			$(showformlist).appendTo("#all-form-table");
 			$("#chose_form_btn_"+index+"").click(function(){
 				// $.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
@@ -209,7 +210,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
       <div id="current_work_list_page">
         <h2>Request list</h2>
 				<form id="chose_available_form">
-        	<table id="all-form-table" style='margin-left:5%;'></table>
+        	<!-- <table id="all-form-table" style='margin-left:5%;'></table> -->
+					<div id="all-form-table" style='margin-left:5%;'></div>
 				</form>
       </div>
 			<div id="download_page">

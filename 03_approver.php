@@ -76,12 +76,14 @@ if ($_SESSION['gName'] != "Approver") {
 		$("#current_work_list_page").show();
 		$("#currentwork_select_page").hide();
 		$("#file_upload_page").hide();
+		$("#upload_btn").hide();
 		$("#comment_page").hide();
 
 		$("#Next_file_upload_page").click(function(){
 			// $("#current_work_list_page").hide();
 			// $("#currentwork_select_page").hide();
 			$("#file_upload_page").show();
+			$("#upload_btn").hide();
 			$("#comment_page").hide();
 
 		});
@@ -90,6 +92,7 @@ if ($_SESSION['gName'] != "Approver") {
 			$("#current_work_list_page").show();
 			$("#currentwork_select_page").hide();
 			$("#file_upload_page").hide();
+			$("#upload_btn").hide();
 			$("#comment_page").hide();
 
 		});
@@ -98,6 +101,7 @@ if ($_SESSION['gName'] != "Approver") {
 			$("#current_work_list_page").show();
 			$("#currentwork_select_page").hide();
 			$("#file_upload_page").hide();
+			$("#upload_btn").hide();
 			// $("#comment_page").hide();
 
 		});
@@ -142,16 +146,19 @@ if ($_SESSION['gName'] != "Approver") {
 	 		 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
 	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
 	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
-	 			 var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
+				 //  var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
+				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text></div></div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='btn_select'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
 	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
 
 				 	//show comment of that state
 				  $("#comment_btn_"+index+"").click(function(){
 						$("#comment_page").show();
+						// console.log("comment_page");
 						console.log("wfrequestdetailID :");
 						console.log(wfrequestdetailID);
-						cmtlist(wfrequestdetailID);
 						cur_wfrqstate_id = wfrequestdetailID;
+						cmtlist(wfrequestdetailID);
+						// cur_wfrqstate_id = wfrequestdetailID;
 					});
 
 				 	$("#select_work_btn_"+index+"").click(function(){
@@ -167,16 +174,10 @@ if ($_SESSION['gName'] != "Approver") {
 									 console.log(json_return_wfrequestdoc);
 									 var filepath = json_return_wfrequestdoc.DocURL;
  									 var filename = json_return_wfrequestdoc.DocName;
+									 $("#file-download-table").empty();
 									 var str_file_download_table = '<tr><td><Text>'+filename+'</Text></td></tr><tr><td><a target="_tab" href="'+localhost+filepath+'">Download</a><td></tr>';
 									 $(str_file_download_table).appendTo("#file-download-table");
-									//  var str_file_download_table = str_file_download_table+'<tr>';
-									// 	for(j=0; j<json_return_wfrequestdoc.length; j++){
-									// 		var filepath = json_return_wfrequestdoc[j].DocURL;
-									// 		var filename = json_return_wfrequestdoc[j].DocName;
-									// 		str_file_download_table = str_file_download_table+'<td> <tr><td><text>'+filename+'<text><td></tr> <tr><td> <a href="'+localhost+filepath+'">Download</a></td></tr> </td>';
-									// 	}
-									// str_file_download_table = str_file_download_table+'</tr>';
-									// $(str_file_download_table).appendTo("#file-download-table");
+
 									var TimeStamp = json_return_wfrequestdoc.TimeStamp;
 									console.log(TimeStamp);
 									var datestring = Date.parse(TimeStamp);
@@ -186,6 +187,7 @@ if ($_SESSION['gName'] != "Approver") {
 									var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
 									var DocID = json_return_wfrequestdoc.WFRequestDocID;
 									console.log("User id : "+userid);
+									$("#file-upload-table").empty();
 									var str_file_upload_table = '<tr><td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
 									$(str_file_upload_table).appendTo("#file-upload-table");
 								});
@@ -194,23 +196,77 @@ if ($_SESSION['gName'] != "Approver") {
 
 	 	});
 	 }
-	 $("#upload_btn").click(function(){
-		 var formData = new FormData($('#upload_form')[0]);
-		 console.log(formData);  //json formdata
-		 $.ajax({
-				url: 'approver_handle/approver_doc_handle.php',
-				type: 'POST',
-				data: formData,
-				async: false,
-				cache: false,
-				contentType: false,
-				enctype: 'multipart/form-data',
-				processData: false,
-				success: function (response) {
-				console.log(response);
-				}
-		 });
-		 return false;
+	//  $("#upload_btn").click(function(){
+	// 	//  $("[name='CurrentWorkListID[]']").val();
+	// 	//  $("[name='TimeStamp[]']").val();
+	// 	//  $("[name='userid']").val();
+	// 	//  $("[name='WFRequestDocID_arr[]']").val();
+	// 	//  $("[name='file_array[]']").val();
+	 //
+	// 	 var formData = new FormData($('#upload_form')[0]);
+	// 	 console.log(formData);  //json formdata
+	// 	 $.ajax({
+	// 			url: 'approver_handle/approver_doc_handle.php',
+	// 			type: 'POST',
+	// 			data: formData,
+	// 			async: false,
+	// 			cache: false,
+	// 			contentType: false,
+	// 			enctype: 'multipart/form-data',
+	// 			processData: false,
+	// 			success: function (response) {
+	// 			console.log(response);
+	// 			}
+	// 	 });
+	// 	 return false;
+	//  });
+	$("#upload_btn").click(function(){
+	 //  $("[name='CurrentWorkListID[]']").val();
+	 //  $("[name='TimeStamp[]']").val();
+	 //  $("[name='userid']").val();
+	 //  $("[name='WFRequestDocID_arr[]']").val();
+	 //  $("[name='file_array[]']").val();
+	 if($("[name='file_array[]']").val().length!=0){
+		var formData = new FormData($('#upload_form')[0]);
+ 		console.log(formData);  //json formdata
+ 		$.ajax({
+ 			 url: 'approver_handle/approver_approve_btn.php',
+ 			 type: 'POST',
+ 			 data: formData,
+ 			 async: false,
+ 			 cache: false,
+ 			 contentType: false,
+ 			 enctype: 'multipart/form-data',
+ 			 processData: false,
+ 			 success: function (response) {
+ 			 console.log(response);
+ 			 }
+ 		});
+ 		return false;
+	 }
+
+	});
+
+	 $("#upload_form_btn").click(function(){
+		 if($("[name='file_array[]']").val().length!=0){
+			 var formData = new FormData($('#upload_form')[0]);
+			 console.log(formData);  //json formdata
+			 $.ajax({
+					url: 'approver_handle/approver_doc_handle.php',
+					type: 'POST',
+					data: formData,
+					async: false,
+					cache: false,
+					contentType: false,
+					enctype: 'multipart/form-data',
+					processData: false,
+					success: function (response) {
+					console.log(response);
+					}
+			 });
+			 $("#upload_btn").show();
+			 return false;
+		 }
 	 });
 
 	 function cmtlist(wfrequestdetailID){
@@ -221,6 +277,7 @@ if ($_SESSION['gName'] != "Approver") {
 				console.log(json_ret_cmtlist.length);
 				$("#approver_comment-table").empty();
 				if (json_ret_cmtlist.length != 0) {
+					// $("#approver_comment-table").empty();
 					// show cmt list
 					for (var i = 0; i < json_ret_cmtlist.length; i++) {
 						$.post("approver_handle/userid_name.php", {data:{userid:json_ret_cmtlist[i].CommentBy, jcmtlist_obj: json_ret_cmtlist[i]}}, function(res){
@@ -253,15 +310,15 @@ if ($_SESSION['gName'] != "Approver") {
 	 }
 
 	 function cmtlist_2(jret_cmtlist, cmtbyname){
+		 console.log(cmtbyname);
 		 if (jret_cmtlist.CommentBy == userid) {
 			 m_left = 65;
-			 // m_color = "#3c8dbc";
 			 m_color = "violet";
 		 }else{
 			 m_left = 10;
 			 m_color = "purple";
 		 }
-		 str_cmtlist = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+cmtbyname+"</Text></td></tr> <tr><td><Text>"+jret_cmtlist.Comment+"</Text></td></tr> <tr><td><Text>"+jret_cmtlist.CommentTime+"</Text></table></td></tr>   </td> </tr>";
+		 str_cmtlist = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+cmtbyname+"</Text></td></tr> <tr><td><Text>"+jret_cmtlist.Comment+"</Text></td></tr> <tr><td><Text>"+jret_cmtlist.CommentTime+"</Text></table></td></tr>   ";
 		 $(str_cmtlist).appendTo("#approver_comment-table");
 	 }
 
@@ -314,6 +371,8 @@ if ($_SESSION['gName'] != "Approver") {
 				<form id="upload_form">
         	<table id="file-upload-table" style="margin-left:5%;font-size:small;"></table>
 				</form>
+				<div class="right">
+					<input type="button" value="Upload" id="upload_form_btn" style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
         <div class="right">
 					<input type="button" value="Approve" id="upload_btn" style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
           <!--input type="button" value="Approve" id="approve_form" style="width: 90px;"-->
@@ -321,23 +380,26 @@ if ($_SESSION['gName'] != "Approver") {
         </div>
       </div>
 
-      <div id=comment_page>
 
-					<h2>Comment</h2>
-	        <table id="approver_comment-table"></table>
-					<table id="comment_submit" style="margin-left:5%;background-color:#8282fe;border-radius:3px;border:1px solid transparent;width:450px;height:18px;color:white;font-size:small;">
-						<tr>
-							<td style="width:100px"><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td>
-						</tr>
-					</table>
-
-					<div class="right">
-						<input type="button" value="back" id="backtolistpage_btn" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
-					</div>
-
-      </div>
 
 		</div>
+
+		<div id=comment_page>
+
+				<h2>Comment</h2>
+				<table id="approver_comment-table"></table>
+				<table id="comment_submit" style="margin-left:5%;background-color:#8282fe;border-radius:3px;border:1px solid transparent;width:450px;height:18px;color:white;font-size:small;">
+					<tr>
+						<td style="width:100px"><Text>Comment box: </Text></td> <td><input type="text" id="comment_text" ></td> <td><input type="button" value="comment" id="comment_btn" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td>
+					</tr>
+				</table>
+
+				<div class="right">
+					<input type="button" value="back" id="backtolistpage_btn" style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'>
+				</div>
+
+		</div>
+
 	</div>
 
 	<div id="div_footer">

@@ -1,6 +1,6 @@
 <?php
-require_once('connect.php');
 session_start();
+require_once('connect.php');
 
 if(isset($_POST['login']) && isset($_POST['pass'])){
 	$q = 'SELECT * FROM user, userpriority, priority WHERE UserName = "'.$_POST['login'].'" AND Password = "'.$_POST['pass'].'" AND user.UserID = userpriority.UserID AND userpriority.PriorityID = priority.PriorityID;';
