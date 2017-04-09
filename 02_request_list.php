@@ -94,10 +94,6 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 						// j_doc_re[i].DocURL;
 						// j_doc_re[i].TimeStamp;
 						// j_doc_re[i].WFDocID;
-						console.log(e_WFRequestDocID);
-						console.log(e_WFRequestID);
-						console.log(e_DocName);
-						console.log(i);
 						str_show_doc = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><form id='formupload_"+i+"'><input type='file' name='file' id='file_update_"+i+"'><input type='hidden' name='docid' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid' value='"+userid+"' ></form></td>   <td><input type='button' value='edit' id='editdoc_btn_"+i+"'></td> </tr>";
 						// str_show_doc = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><form id='formupload_"+i+"'><input type='file' id='file_update_"+i+"'><input type='hidden' name='docid' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid' value='"+userid+"' ></form></td>   <td><input type='button' value='edit' id='editdoc_btn_"+i+"'></td> </tr>";
 						$(str_show_doc).appendTo("#relate_doc_table");
@@ -159,7 +155,10 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
     function fn1_formlist(obj, index){
 			let create_time = obj.CreateTime;
 			let CreateTime = create_time.replace("***"," ");
-      var str_formlist = "<tr > <td class='cardbox'><Text>FormName: "+obj.FormName+"</Text></td> <td class='cardbox'><Text>Description: "+obj.Description+"</Text></td> <td class='cardbox'><Text>CreateTime: "+CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+      // var str_formlist = "<tr > <td class='cardbox'><Text>FormName: "+obj.FormName+"</Text></td> <td class='cardbox'><Text>Description: "+obj.Description+"</Text></td> <td class='cardbox'><Text>CreateTime: "+CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+      // var str_formlist = "<tr > <td > <div class='cardbox' style='display:inline-block;'> <div style='display:inline-block;'><Text>FormName: "+obj.FormName+"</Text><Text>Description: "+obj.Description+"</Text><Text>CreateTime: "+CreateTime+"</Text></div> <div style='display:inline-block;'><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></div> </div></td></tr>";
+      var str_formlist = "<tr > <td > <div class='cardbox' style='display:inline-block;'> <table ><tr><td><table style='font-size:small;color:black;'><tr><td><Text>FormName: "+obj.FormName+"</Text></td></tr><tr><td><Text>Description: "+obj.Description+"</Text></td></tr><tr><td><Text>CreateTime: "+CreateTime+"</Text></td></tr></table></td> <td><div style='display:inline-block;'><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td> </tr></table></td></tr>";
+
       $(str_formlist).appendTo("#requestlist_table");
       $("#select_form_btn_"+index+"").click(function(){
 				$("#moveto_edit_doc_box").show();
@@ -187,14 +186,23 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
     }
 
     function fn2_eachstate(obj, index){
-      var str_state = "<tr > <td class='cardbox'><Text>State :"+obj.StateName+"</Text></td> ";
+      // var str_state = "<tr > <td class='cardbox'><Text>State :"+obj.StateName+"</Text></td> ";
+      // if (obj.DoneBy!=0) {
+      //   // str_state= str_state + "<td><Text>DoneBy :"+obj.DoneBy+"</Text></td>"
+      //   str_state= str_state + "<td class='cardbox' style='margin-left:10px'><Text>Status : </Text></td> <td style='margin-left:10px'><img src='images/greendot.png' width='20' height='20'></td>"
+      // }else{
+      //   str_state= str_state + "<td><Text class='cardbox' style='margin-left:10px'>Status : </Text></td> <td style='margin-left:10px'><img src='images/reddot.png' width='20' height='20'></td>"
+      // }
+      // str_state = str_state + "<td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+
+			var str_state = "<tr > <td ><div class='cardbox' style='display:inline-block;color:black;'><Text style='margin-left:10px;'>State :"+obj.StateName+"</Text>";
       if (obj.DoneBy!=0) {
         // str_state= str_state + "<td><Text>DoneBy :"+obj.DoneBy+"</Text></td>"
-        str_state= str_state + "<td class='cardbox' style='margin-left:10px'><Text>Status : </Text></td> <td style='margin-left:10px'><img src='images/greendot.png' width='20' height='20'></td>"
+        str_state= str_state + "<Text style='margin-left:10px;'>Status : </Text> <img src='images/greendot.png' width='20' height='20' style='margin-left:10px;'>"
       }else{
-        str_state= str_state + "<td><Text class='cardbox' style='margin-left:10px'>Status : </Text></td> <td style='margin-left:10px'><img src='images/reddot.png' width='20' height='20'></td>"
+        str_state= str_state + "<Text style='margin-left:10px;'>Status : </Text> <img src='images/reddot.png' width='20' height='20' style='margin-left:10px;'>"
       }
-      str_state = str_state + "<td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+      str_state = str_state + "<input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:10px;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'> </div></td></tr>";
 
       $(str_state).appendTo("#requestflow_table");
 
