@@ -98,13 +98,14 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 						console.log(e_WFRequestID);
 						console.log(e_DocName);
 						console.log(i);
-						str_show_doc = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' id='file_update_"+i+"'></td>   <td><input type='button' value='edit' id='editdoc_btn_"+i+"'></td></tr>";
+						str_show_doc = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><form id='formupload_"+i+"'><input type='file' name='file' id='file_update_"+i+"'><input type='hidden' name='docid' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid' value='"+userid+"' ></form></td>   <td><input type='button' value='edit' id='editdoc_btn_"+i+"'></td> </tr>";
+						// str_show_doc = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><form id='formupload_"+i+"'><input type='file' id='file_update_"+i+"'><input type='hidden' name='docid' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid' value='"+userid+"' ></form></td>   <td><input type='button' value='edit' id='editdoc_btn_"+i+"'></td> </tr>";
 						$(str_show_doc).appendTo("#relate_doc_table");
 						let index = i;
 						$("#editdoc_btn_"+i+"").click(function(){
-							console.log(index);
+							// console.log(index);
 							e_fileupdate = $("#file_update_"+index+"").val();
-							fn4_doc_update(e_WFRequestDocID, e_fileupdate);
+							fn4_doc_update(index, e_fileupdate);
 						});
 
 					}
@@ -276,15 +277,26 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
       }
     }
 
-		function fn4_doc_update(docid_for_update, e_fileupdate){
-
-			console.log(docid_for_update);
-			console.log(e_fileupdate);
-			if (docid_for_update.length != 0) {
+		function fn4_doc_update(index, e_fileupdate){
+			// console.log(e_fileupdate);
+			if (e_fileupdate.length != 0) {
 				console.log("update file");
-				// $.post("request_list_handle/edit_doc.php", {data: {userid: userid, docid: docid_for_update, fileupdate: e_fileupdate}}, function(res){
-				// 	console.log(res);
-				// });
+				var formData = new FormData($('#formupload_'+index+'')[0]);
+				console.log(formData);  //json formdata
+		 		$.ajax({
+		 			 url: 'request_list_handle/edit_doc.php',
+		 			 type: 'POST',
+		 			 data: formData,
+		 			 async: false,
+		 			 cache: false,
+		 			 contentType: false,
+		 			 enctype: 'multipart/form-data',
+		 			 processData: false,
+		 			 success: function (response) {
+		 			 console.log(response);
+		 			 }
+		 		});
+		 		return false;
 			}
 		}
 
