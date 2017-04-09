@@ -51,6 +51,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 	var localhost = "http://localhost:8080/kw2/";
   var State_id;
   var State_status;
+	var WFreq_ID;
 		$(document).ready(function() {
 			//************************************************************
 			$("#Logout").click(function(){
@@ -75,7 +76,41 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 				}
 			?>
 			//************************************************************
+			$("#moveto_edit_doc_box").hide();
+			$("#editdoc").hide();
+			//edit doc display
+			$("#moveto_edit_doc_box").click(function(){
+				$("#editdoc").show();
+				$("#relate_doc_table").empty();
+				console.log(WFreq_ID);
+				$.post("request_list_handle/requestlist_show_all_doc.php",{wfrequest_id: WFreq_ID},function(res){
+					// console.log(res);
+					j_doc_re = JSON.parse(res);
+					console.log(j_doc_re);
+					for (var i = 0; i < j_doc_re.length; i++) {
+						let e_WFRequestDocID = j_doc_re[i].WFRequestDocID;
+						let e_WFRequestID = j_doc_re[i].WFRequestID;
+						let e_DocName = j_doc_re[i].DocName;
+						// j_doc_re[i].DocURL;
+						// j_doc_re[i].TimeStamp;
+						// j_doc_re[i].WFDocID;
+						console.log(e_WFRequestDocID);
+						console.log(e_WFRequestID);
+						console.log(e_DocName);
+						console.log(i);
+						str_show_doc = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' id='file_update_"+i+"'></td>   <td><input type='button' value='edit' id='editdoc_btn_"+i+"'></td></tr>";
+						$(str_show_doc).appendTo("#relate_doc_table");
+						let index = i;
+						$("#editdoc_btn_"+i+"").click(function(){
+							console.log(index);
+							e_fileupdate = $("#file_update_"+index+"").val();
+							fn4_doc_update(e_WFRequestDocID, e_fileupdate);
+						});
 
+					}
+				});
+			});
+			//************************************************************
       $.post("request_list_handle/requestlist_showlist.php",{requestor_id: userid},function(response){
 
         console.log(response);
@@ -126,10 +161,17 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
       var str_formlist = "<tr > <td class='cardbox'><Text>FormName: "+obj.FormName+"</Text></td> <td class='cardbox'><Text>Description: "+obj.Description+"</Text></td> <td class='cardbox'><Text>CreateTime: "+CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
       $(str_formlist).appendTo("#requestlist_table");
       $("#select_form_btn_"+index+"").click(function(){
+				$("#moveto_edit_doc_box").show();
+				$("#editdoc").hide();
+				$("#relate_doc_table").empty();
         console.log(obj.WFRequestID);
+				WFreq_ID = obj.WFRequestID;
         fn2_formstate(obj.WFRequestID,index);
+
+
       });
     }
+
 
     function fn2_formstate(wfrequestid,index){
 			$("#request_comment_table").empty();
@@ -234,6 +276,18 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
       }
     }
 
+		function fn4_doc_update(docid_for_update, e_fileupdate){
+
+			console.log(docid_for_update);
+			console.log(e_fileupdate);
+			if (docid_for_update.length != 0) {
+				console.log("update file");
+				// $.post("request_list_handle/edit_doc.php", {data: {userid: userid, docid: docid_for_update, fileupdate: e_fileupdate}}, function(res){
+				// 	console.log(res);
+				// });
+			}
+		}
+
 
 	</script>
 </head>
@@ -270,7 +324,13 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
       <div id="requestflow">
         <h2>Workflow</h2>
+				<div id="moveto_edit_doc_box" class="right"><input type="button" value="Edit" id="moveto_edit_doc_btn" style="background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;"></div>
         <table id="requestflow_table" style="margin-left:5%;font-size:small;"></table>
+			</div>
+
+			<div id="editdoc">
+        <h2>Relate documents</h2>
+        <table id="relate_doc_table" style="margin-left:5%;font-size:small;"></table>
 			</div>
 
       <div id="comment">

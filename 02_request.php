@@ -100,6 +100,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 			// var showformlist = "<tr><td><Text>FormName : "+formname+"</Text></td><td><input type=hidden value='"+wfgeninfo+"' name='wfgeninfoID' id='wfgeninfoID"+index+"'><text>Description : "+description+"</text></td> <td><input type='button' value='Select' id='chose_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
 			$(showformlist).appendTo("#all-form-table");
 			$("#chose_form_btn_"+index+"").click(function(){
+				$("#file-download-table").empty();
+				$("#file-upload-table").empty();
 				// $.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
 				// 	doc_ret=JSON.parse(response);
 				// 	fn3_fileshow(doc_ret);
@@ -144,7 +146,6 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 				$.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: requestor_id}}, function(response){
 					wfrequestid=JSON.parse(response);
-					$("#file-upload-table").empty();
 					str_f2_upload = "<tr><td><input type='hidden' value='"+wfrequestid+"' name='wf_requestid'></td></tr>";
 					$(str_f2_upload).appendTo("#file-upload-table");
 					// fn3_fileshow(doc_ret);
@@ -164,6 +165,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 						 }
 					});
 					return false;
+
 				});
 
 

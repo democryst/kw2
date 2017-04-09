@@ -17,10 +17,10 @@ echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 
 	if ($TimeStamp_mark == $row_check_timestamp['TimeStamp']) {
 		echo "\nTimeStamp match allow to upload\n";
-		$upload_destination = "../uploads/";
-		$pathname;
-		$date_hrs = date("H-i-s");
-		$date_day = date("Y-m-d");
+		// $upload_destination = "../uploads/";
+		// $pathname;
+		// $date_hrs = date("H-i-s");
+		// $date_day = date("Y-m-d");
 
 	//need to insert starttime endtime to wfrequestdetail
 
@@ -32,7 +32,7 @@ echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 
 	$q_SELECT_wfrequestdetail_n = "SELECT * FROM wfrequestdetail WHERE ParentID='$wfrequestdetailID_old'";
 	$result_SELECT_wfrequestdetail_n = $mysqli->query($q_SELECT_wfrequestdetail_n);
-	if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_rows == 1 ){
+	if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_rows >= 1 ){
 		// use to insert
  	 while ($row_SELECT_wfrequestdetail_n=$result_SELECT_wfrequestdetail_n->fetch_array() ) {
  		 $c1_WFRequestDetailID = $row_SELECT_wfrequestdetail_n['WFRequestDetailID'];
@@ -51,10 +51,10 @@ echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 	$q_delete = "DELETE FROM currentworklist WHERE CurrentWorkListID='$CurrentWorkListID_mark'";
 	$mysqli->query($q_delete);
 
-if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_rows == 1 ){
-	$q_INSERT_currentworklist="INSERT INTO `currentworklist`(`WFRequestDetailID`, `StateName`, `State`, `Priority`, `DoneBy`, `Status`, `StartTime`, `EndTime`, `ApproveStatus`, `TimeStamp`) values('$c1_WFRequestDetailID', '$c1_StateName', '$c1_State', '$c1_Priority', '$c1_DoneBy', '$c1_Status', '$c1_StartTime', '$c1_EndTime', '0', CURRENT_TIMESTAMP) " ;
-	$mysqli->query($q_INSERT_currentworklist);
-}
+// if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_rows >= 1 ){
+// 	$q_INSERT_currentworklist="INSERT INTO `currentworklist`(`WFRequestDetailID`, `StateName`, `State`, `Priority`, `DoneBy`, `Status`, `StartTime`, `EndTime`, `ApproveStatus`, `TimeStamp`) values('$c1_WFRequestDetailID', '$c1_StateName', '$c1_State', '$c1_Priority', '$c1_DoneBy', '$c1_Status', '$c1_StartTime', '$c1_EndTime', '0', CURRENT_TIMESTAMP) " ;
+// 	$mysqli->query($q_INSERT_currentworklist);
+// }
 
 	//need to update old wfdetail form currentworklist to history    ---> we want to use history to create permission to modify form state
 	//query data from old State
@@ -80,7 +80,7 @@ if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_ro
 	$q_update_old = "UPDATE `wfrequestdetail` SET `DoneBy`='$userid', `EndTime`='$curtime_for_old' WHERE WFRequestDetailID='$wfrequestdetailID_old' ";
 	$result_update_old  = $mysqli->query($q_update_old);
 	//update new wfdetail StartTime
-if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_rows == 1 ){
+if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_rows >= 1 ){
 	$q_update_new = "UPDATE `wfrequestdetail` SET `StartTime`='$curtime_for_old' WHERE WFRequestDetailID='$c1_WFRequestDetailID' ";
 	$result_update_new  = $mysqli->query($q_update_new);
 }
@@ -90,7 +90,25 @@ if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_ro
 
 		// Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user’s experience. For more help http://xhr.spec.whatwg.org/
 
+	//select new requestdetail after it update
+	$q_s_wfrd_new = "SELECT * FROM wfrequestdetail WHERE WFRequestDetailID='$c1_WFRequestDetailID'";
+	$result_s_wfrd_new  = $mysqli->query($q_s_wfrd_new);
+	if ($result_s_wfrd_new && $result_s_wfrd_new->num_rows >= 1 ){
+		while ($row_s_wfrd_new=$result_s_wfrd_new->fetch_array() ) {
+			$c2_WFRequestDetailID = $row_s_wfrd_new['WFRequestDetailID'];
+			$c2_StateName = $row_s_wfrd_new['StateName'];
+			$c2_State = $row_s_wfrd_new['State'];
+			$c2_Priority = $row_s_wfrd_new['Priority'];
+			$c2_DoneBy = $row_s_wfrd_new['DoneBy'];
+			$c2_Status = $row_s_wfrd_new['Status'];
+			$c2_StartTime = $row_s_wfrd_new['StartTime'];
+			$c2_EndTime = $row_s_wfrd_new['EndTime'];
+		}
 
+		//insert new currentworklist after starttime , endtime was update
+		$q_INSERT_currentworklist="INSERT INTO `currentworklist`(`WFRequestDetailID`, `StateName`, `State`, `Priority`, `DoneBy`, `Status`, `StartTime`, `EndTime`, `ApproveStatus`, `TimeStamp`) values('$c2_WFRequestDetailID', '$c2_StateName', '$c2_State', '$c2_Priority', '$c2_DoneBy', '$c2_Status', '$c2_StartTime', '$c2_EndTime', '0', CURRENT_TIMESTAMP) " ;
+		$mysqli->query($q_INSERT_currentworklist);
+	}
 
 	}   //TimeStamp check if not same mean someone done this work first
 }
