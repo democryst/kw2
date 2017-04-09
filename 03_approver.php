@@ -147,7 +147,7 @@ if ($_SESSION['gName'] != "Approver") {
 	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
 	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
 				 //  var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
-				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text></div></div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='btn_select'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
+				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;color:black;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text></div></div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='btn_select'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
 	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
 
 				 	//show comment of that state
@@ -175,7 +175,7 @@ if ($_SESSION['gName'] != "Approver") {
 									 var filepath = json_return_wfrequestdoc.DocURL;
  									 var filename = json_return_wfrequestdoc.DocName;
 									 $("#file-download-table").empty();
-									 var str_file_download_table = '<tr><td><Text>'+filename+'</Text></td></tr><tr><td><a target="_tab" href="'+localhost+filepath+'">Download</a><td></tr>';
+									 var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
 									 $(str_file_download_table).appendTo("#file-download-table");
 
 									var TimeStamp = json_return_wfrequestdoc.TimeStamp;
@@ -188,7 +188,7 @@ if ($_SESSION['gName'] != "Approver") {
 									var DocID = json_return_wfrequestdoc.WFRequestDocID;
 									console.log("User id : "+userid);
 									$("#file-upload-table").empty();
-									var str_file_upload_table = '<tr><td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><Text>File:'+filename+'</Text></td><td><input type="file" name="file_array[]"></td></tr>';
+									var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
 									$(str_file_upload_table).appendTo("#file-upload-table");
 								});
 
