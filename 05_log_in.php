@@ -1,16 +1,16 @@
 <?php
-require_once('connect.php');
 session_start();
+require_once('connect.php');
 
 if(isset($_POST['login']) && isset($_POST['pass'])){
-	$q = 'SELECT * FROM user, usergroup, ugroup WHERE UserName = "'.$_POST['login'].'" AND Password = "'.$_POST['pass'].'" AND user.UserID = usergroup.UserID AND usergroup.GroupID = ugroup.GroupID;';
+	$q = 'SELECT * FROM user, userpriority, priority WHERE UserName = "'.$_POST['login'].'" AND Password = "'.$_POST['pass'].'" AND user.UserID = userpriority.UserID AND userpriority.PriorityID = priority.PriorityID;';
 	$res = $mysqli -> query($q);
 	if ($res && $res->num_rows == 1 ){
 		while($row = $res -> fetch_array()){
 				$_SESSION['user_id'] = $row['UserID'];
 				$_SESSION['user_name'] = $row['UserName'];
 				$_SESSION['password'] = $row['Password'];
-				$_SESSION['gName'] = $row['GroupName'];
+				$_SESSION['gName'] = $row['Priority'];
 		}
 	}else{
 ?>
@@ -24,38 +24,31 @@ if(isset($_POST['login']) && isset($_POST['pass'])){
 	}
 	if($_SESSION['gName'] == 'Requester'){
 		echo "<script type='text/javascript'>
-						alert('Login Seccess!');
+						alert('Login Success!');
 					</script>";
 		echo "<script type='text/javascript'>
-						window.location = '02_request.php';
+						window.location = '02_request_list.php';
 					</script>";
 	}else if($_SESSION['gName'] == 'Approver'){
 		echo "<script type='text/javascript'>
-						alert('Login Seccess!');
-					</script>";
-		echo "<script type='text/javascript'>
-						window.location = '03_approver.php';
-					</script>";
-	}else if($_SESSION['gName'] == 'ICT Teacher'){
-		echo "<script type='text/javascript'>
-						alert('Login Seccess!');
+						alert('Login Success!');
 					</script>";
 		echo "<script type='text/javascript'>
 						window.location = '03_approver.php';
 					</script>";
 	}else if($_SESSION['gName'] == 'Flow_Admin'){
 		echo "<script type='text/javascript'>
-						alert('Login Seccess!');
+						alert('Login Success!');
 					</script>";
 		echo "<script type='text/javascript'>
 						window.location = '04_formmodify.php';
 					</script>";
 	}else if($_SESSION['gName'] == 'Sys_Admin'){
 		echo "<script type='text/javascript'>
-						alert('Login Seccess!');
+						alert('Login Success!');
 					</script>";
 		echo "<script type='text/javascript'>
-						window.location = '01_createformType-2.php';
+						window.location = '01_createformType.php';
 					</script>";
 	}
 }
@@ -75,7 +68,11 @@ if(isset($_POST['login']) && isset($_POST['pass'])){
 	<script src="scripts/jquery-2.0.0.min.js"></script>
 
 	<script type="text/javascript">
-
+	// $(document).ready(function() {
+	// 	$("#Register").click(function(){
+	// 			window.location = '07_register.php';
+	// 	});
+	// });
 	</script>
 </head>
 <body>
@@ -91,8 +88,7 @@ if(isset($_POST['login']) && isset($_POST['pass'])){
 		<div id="div_left">
 
 				<p class="menu-color" id="Login">Login</p>
-				<p class="menu-color" id="Request">Request</p>
-				<p class="menu-color" id="Approve">Current form list</p>
+				<p class="menu-color" id="Register">Register</p>
 
 		</div>
 
