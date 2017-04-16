@@ -172,24 +172,45 @@ if ($_SESSION['gName'] != "Approver") {
 								$.post("approver_handle/apporver_currentwork_wfrequestdoc.php", {data: wfrequestdetailID}, function(data){
 									 var json_return_wfrequestdoc = JSON.parse(data);
 									 console.log(json_return_wfrequestdoc);
-									 var filepath = json_return_wfrequestdoc.DocURL;
- 									 var filename = json_return_wfrequestdoc.DocName;
 									 $("#file-download-table").empty();
-									 var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
-									 $(str_file_download_table).appendTo("#file-download-table");
+									 $("#file-upload-table").empty();
+									 var TimeStamp = json_return_wfrequestdoc.TimeStamp;
+									 var datestring = Date.parse(TimeStamp);
+									 var TimeStamp_unix =  datestring/1000; //for use in php need to divide by 1000
+									 var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
 
-									var TimeStamp = json_return_wfrequestdoc.TimeStamp;
-									console.log(TimeStamp);
-									var datestring = Date.parse(TimeStamp);
- 									var TimeStamp_unix =  datestring/1000; //for use in php need to divide by 1000
-									console.log(TimeStamp_unix);
+									 var ret_document = json_return_wfrequestdoc.Document;
+									 for (var i = 0; i < ret_document.length; i++) {
+										 var filepath = ret_document[i].DocURL;
+   									 var filename = ret_document[i].DocName;
+										 var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
+	 									 $(str_file_download_table).appendTo("#file-download-table");
 
-									var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
-									var DocID = json_return_wfrequestdoc.WFRequestDocID;
-									console.log("User id : "+userid);
-									$("#file-upload-table").empty();
-									var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
-									$(str_file_upload_table).appendTo("#file-upload-table");
+										 var DocID = ret_document[i].WFRequestDocID;
+										 var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
+										 $(str_file_upload_table).appendTo("#file-upload-table");
+									 }
+
+
+
+									//  var filepath = json_return_wfrequestdoc.DocURL;
+ 								// 	 var filename = json_return_wfrequestdoc.DocName;
+									//
+									//  var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
+									//  $(str_file_download_table).appendTo("#file-download-table");
+									//
+									// var TimeStamp = json_return_wfrequestdoc.TimeStamp;
+									// console.log(TimeStamp);
+									// var datestring = Date.parse(TimeStamp);
+ 								// 	var TimeStamp_unix =  datestring/1000; //for use in php need to divide by 1000
+									// console.log(TimeStamp_unix);
+									//
+									// var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
+									// var DocID = json_return_wfrequestdoc.WFRequestDocID;
+									// console.log("User id : "+userid);
+									// $("#file-upload-table").empty();
+									// var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
+									// $(str_file_upload_table).appendTo("#file-upload-table");
 								});
 
 					});
