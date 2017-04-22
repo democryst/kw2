@@ -54,6 +54,7 @@ if ($_SESSION['gName'] != "Approver") {
 	// var userid = 1;//test approver id
 	var cur_wfrqstate_id;
 	var cmtbyname;
+	var wfrequestdocarr_new = new Array();
 	$(document).ready(function() {
 		//************************************************************
 		$("#Logout").click(function(){
@@ -67,10 +68,10 @@ if ($_SESSION['gName'] != "Approver") {
 				// alert('Move to current request form list!');
 				window.location = '02_request_list.php';
 		});
-		// $("#Approve").click(function(){
-		// 		alert('Move to current work form list!');
-		// 		window.location = '03_approver.php';
-		// });
+		$("#Approve").click(function(){
+				// alert('Move to current work form list!');
+				window.location = '03_approver.php';
+		});
 		//************************************************************
 
 		$("#current_work_list_page").show();
@@ -170,6 +171,7 @@ if ($_SESSION['gName'] != "Approver") {
 								let wfrequestdetailID = $("#wfrequestdetailID_"+index+"").attr('value');
 								console.log(wfrequestdetailID);
 								$.post("approver_handle/apporver_currentwork_wfrequestdoc.php", {data: wfrequestdetailID}, function(data){
+									console.log(data);
 									 var json_return_wfrequestdoc = JSON.parse(data);
 									 console.log(json_return_wfrequestdoc);
 									 $("#file-download-table").empty();
@@ -178,7 +180,7 @@ if ($_SESSION['gName'] != "Approver") {
 									 var datestring = Date.parse(TimeStamp);
 									 var TimeStamp_unix =  datestring/1000; //for use in php need to divide by 1000
 									 var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
-
+console.log(CurrentWorkListID);
 									 var ret_document = json_return_wfrequestdoc.Document;
 									 for (var i = 0; i < ret_document.length; i++) {
 										 var filepath = ret_document[i].DocURL;
@@ -186,8 +188,9 @@ if ($_SESSION['gName'] != "Approver") {
 										 var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
 	 									 $(str_file_download_table).appendTo("#file-download-table");
 
-										 var DocID = ret_document[i].WFRequestDocID;
-										 var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
+										 var RequestDocID = ret_document[i].WFRequestDocID;
+										 var DocID = ret_document[i].WFDocID;
+										 var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+RequestDocID+' name="WFRequestDocID_arr[]"><input type="hidden" value='+DocID+' name="WFDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
 										 $(str_file_upload_table).appendTo("#file-upload-table");
 									 }
 
@@ -248,22 +251,71 @@ if ($_SESSION['gName'] != "Approver") {
 	 //  $("[name='WFRequestDocID_arr[]']").val();
 	 //  $("[name='file_array[]']").val();
 	 if($("[name='file_array[]']").val().length!=0){
-		var formData = new FormData($('#upload_form')[0]);
- 		console.log(formData);  //json formdata
- 		$.ajax({
- 			 url: 'approver_handle/approver_approve_btn.php',
- 			 type: 'POST',
- 			 data: formData,
- 			 async: false,
- 			 cache: false,
- 			 contentType: false,
- 			 enctype: 'multipart/form-data',
- 			 processData: false,
- 			 success: function (response) {
- 			 console.log(response);
- 			 }
- 		});
- 		return false;
+		// var formData = new FormData($('#upload_form')[0]);
+ 	// 	console.log(formData);  //json formdata
+ 	// 	$.ajax({
+ 	// 		 url: 'approver_handle/approver_approve_btn.php',
+ 	// 		 type: 'POST',
+ 	// 		 data: formData,
+ 	// 		 async: false,
+ 	// 		 cache: false,
+ 	// 		 contentType: false,
+ 	// 		 enctype: 'multipart/form-data',
+ 	// 		 processData: false,
+ 	// 		 success: function (response) {
+ 	// 		 console.log(response);
+ 	// 		 }
+ 	// 	});
+ 	// 	return false;
+		fileinarr = new Array();
+		$('[name^="file_array[]"]').each(function(){
+				if ($(this).val() != "") {
+					fileinarr.push($(this).val());
+				}
+		});
+		console.log(fileinarr);
+		CurrentWorkListIDarr = new Array();
+		$('[name^="CurrentWorkListID[]"]').each(function(){
+				if ($(this).val() != "") {
+					CurrentWorkListIDarr.push($(this).val());
+				}
+		});
+		console.log(CurrentWorkListIDarr);
+		WFDocIDarr = new Array();
+		$('[name^="WFDocID_arr[]"]').each(function(){
+				if ($(this).val() != "") {
+					WFDocIDarr.push($(this).val());
+				}
+		});
+		console.log(WFDocIDarr);
+		WFRequestDocIDarr = new Array();
+		$('[name^="WFRequestDocID_arr[]"]').each(function(){
+				if ($(this).val() != "") {
+					WFRequestDocIDarr.push($(this).val());
+				}
+		});
+		console.log(WFRequestDocIDarr);
+		TimeStamparr = new Array();
+		$('[name^="TimeStamp"]').each(function(){
+				if ($(this).val() != "") {
+					TimeStamparr.push($(this).val());
+				}
+		});
+		console.log(TimeStamparr);
+		useridarr = new Array();
+		$('[name^="userid"]').each(function(){
+				if ($(this).val() != "") {
+					useridarr.push($(this).val());
+				}
+		});
+		console.log(useridarr);
+
+		console.log(wfrequestdocarr_new);
+		$.post("approver_handle/approver_approve_btn.php", {data:{CurrentWorkListID: CurrentWorkListIDarr,  WFDocIDarr: WFDocIDarr, WFRequestDocIDarr: WFRequestDocIDarr, TimeStamp: TimeStamparr, userid: useridarr, wfrequestdocarr_new: wfrequestdocarr_new}}, function(res) {
+			console.log(res);
+			alert("Approve successfully!");
+			window.location = '03_approver.php';
+		});
 	 }
 
 	});
@@ -283,6 +335,15 @@ if ($_SESSION['gName'] != "Approver") {
 					processData: false,
 					success: function (response) {
 					console.log(response);
+					  let docbox = JSON.parse(response);
+						for (var i = 0; i < docbox.length; i++) {
+							let innerarr = docbox[i];
+							let innerlen_index = innerarr.length - 1;
+							let lastobj = innerarr[innerlen_index];
+							wfrequestdocarr_new.push(lastobj.WFRequestDocID);
+						}
+						console.log(wfrequestdocarr_new);
+
 					}
 			 });
 			 $("#upload_btn").show();

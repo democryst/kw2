@@ -5,18 +5,20 @@ $TimeStamp_mark_arr =  $_POST['TimeStamp'];
 $userid =  $_POST['userid'];
 $CurrentWorkListID_mark_arr = $_POST['CurrentWorkListID'];
 $WFRequestDocID_arr = $_POST['WFRequestDocID_arr'];
+$WFDocID_arr = $_POST['WFDocID_arr'];
+
+$wfrequestdocarr = array();
+
 for ($i=0; $i < count($CurrentWorkListID_mark_arr); $i++) {
 	$TimeStamp_mark = date("Y-m-d H:i:s", $TimeStamp_mark_arr);
 	$CurrentWorkListID_mark = $CurrentWorkListID_mark_arr[$i];
-	$q_check_timestamp = "SELECT `TimeStamp` FROM currentworklist WHERE CurrentWorkListID='$CurrentWorkListID_mark' ";
+	$q_check_timestamp = "SELECT `TimeStamp`, `WFRequestDetailID` FROM currentworklist WHERE CurrentWorkListID='$CurrentWorkListID_mark' ";
 	$result_check_timestamp = $mysqli->query($q_check_timestamp);
 	$row_check_timestamp  = $result_check_timestamp->fetch_array();
-echo "TimeStamp: ". $TimeStamp_mark_arr ."\n";
-echo "date from timestamp: ".$TimeStamp_mark ."\n";
-echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 
+	$cur_WFRequestDetailID = $row_check_timestamp['WFRequestDetailID'];
 	if ($TimeStamp_mark == $row_check_timestamp['TimeStamp']) {
-		echo "\nTimeStamp match allow to upload\n";
+
 		$upload_destination = "../uploads/";
 		$pathname;
 		$date_hrs = date("H-i-s");
@@ -32,9 +34,12 @@ echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 			$error_array = $_FILES['file_array']['error'];  //return 1 if error
 
 			for($i = 0; $i < count($tmp_name_array); $i++){
+
+				$box2 = array();
+
 				if($tmp_name_array[$i]){
 		      $WFRequestDocID = $WFRequestDocID_arr[$i];
-
+					$WFDocID = $WFDocID_arr[$i];
 					$ext = explode('.', $name_array[$i]);
 					$fname = strtolower(reset($ext));
 					$ext = strtolower(end($ext));
@@ -56,12 +61,31 @@ echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 
 						$DocName = $fname . $ext;
 
-		        $q_update_wfrequestdoc = "UPDATE `wfrequestdoc` SET `DocName`='$DocName',`DocURL`='$destination',`TimeStamp`=CURRENT_TIMESTAMP WHERE `WFRequestDocID`='$WFRequestDocID' ";
-		        $result_update_wfrequestdoc  = $mysqli->query($q_update_wfrequestdoc);
+						$q_SELECT_wfrequestdetail_o1 = "SELECT * FROM wfrequestdetail WHERE WFRequestDetailID='$cur_WFRequestDetailID' ";
+						$result_SELECT_wfrequestdetail_o1 = $mysqli->query($q_SELECT_wfrequestdetail_o1);
+						$row_SELECT_wfrequestdetail_o1 = $result_SELECT_wfrequestdetail_o1->fetch_array();
+						$WFRequestDetailID_o1 = $row_SELECT_wfrequestdetail_o1['WFRequestDetailID'];
+						$WFRequestID_o1 = $row_SELECT_wfrequestdetail_o1['WFRequestID'];
 
+		        // $q_update_wfrequestdoc = "UPDATE `wfrequestdoc` SET `DocName`='$DocName',`DocURL`='$destination',`TimeStamp`=CURRENT_TIMESTAMP WHERE `WFRequestDocID`='$WFRequestDocID' ";
+		        // $result_update_wfrequestdoc  = $mysqli->query($q_update_wfrequestdoc);
+
+						$q_INSERT_wfrequestdoc="INSERT INTO `wfrequestdoc`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`, `WFRequestDetailID`) values('$WFRequestID_o1', '$DocName', '$destination', CURRENT_TIMESTAMP, '$WFDocID', '$WFRequestDetailID_o1') " ;
+						$mysqli->query($q_INSERT_wfrequestdoc);
 
 						// $q_INSERT_wfdoc="INSERT INTO `wfdoc`(`WFGenInfoID`, `DocName`, `DocURL`, `TimeStamp`) values('$wfgeninfoID', '$DocName', '$destination', CURRENT_TIMESTAMP) " ;
 						// $mysqli->query($q_INSERT_wfdoc);
+
+						$q_SELECT_wfrequestdoc = "SELECT `WFRequestDocID`, `WFDocID`, `TimeStamp` FROM wfrequestdoc WHERE WFRequestDetailID='$WFRequestDetailID_o1' AND WFDocID='$WFDocID' ";
+						$result_SELECT_wfrequestdoc = $mysqli->query($q_SELECT_wfrequestdoc);
+						while ($row_SELECT_wfrequestdoc=$result_SELECT_wfrequestdoc->fetch_array()) {
+							// $wfrequestdoc = $row_SELECT_wfrequestdoc['WFRequestDocID'];
+							$box = array();
+							$box['WFRequestDocID'] = $row_SELECT_wfrequestdoc['WFRequestDocID'];
+							$box['WFDocID'] = $row_SELECT_wfrequestdoc['WFDocID'];
+							$box['TimeStamp'] = $row_SELECT_wfrequestdoc['TimeStamp'];
+							array_push($box2, $box);
+						}
 
 					}else{
 						exit();
@@ -69,9 +93,11 @@ echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 
 				}
 
-
+				array_push($wfrequestdocarr, $box2);
 
 			}
+
+
 	//need to insert starttime endtime to wfrequestdetail
 
 	// // need to remove currenworklist and insert history    //need get current wfrequestdetailID and match it as parentid
@@ -137,8 +163,9 @@ echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 
 
 	}   //TimeStamp check if not same mean someone done this work first
+
 }
 
-
+echo json_encode($wfrequestdocarr);
 
 ?>

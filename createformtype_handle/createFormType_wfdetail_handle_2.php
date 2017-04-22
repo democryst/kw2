@@ -16,9 +16,10 @@ if ( isset($_POST['data']) ) {
       $statename = $cur_state_doc_array['statename'];
       $deadline = $cur_state_doc_array['deadline'];
       $docarr = $cur_state_doc_array['docarr'];
+      $docchose = $cur_state_doc_array['docchose'];
       // http://stackoverflow.com/questions/3413291/how-to-store-an-array-into-mysql
       $string_docarray = serialize($docarr);
-      $q_INSERT_wfdetail="INSERT INTO wfdetail(ParentID,StateName,CreateTime,ModifyTime,Deadline,WFDocID,WFGenInfoID) values('$ParentStateID' , '$statename' , '$all_date' , 'null' , '$deadline' , '$string_docarray', '$wfgeninfo') " ;
+      $q_INSERT_wfdetail="INSERT INTO wfdetail(ParentID,StateName,CreateTime,ModifyTime,Deadline,WFDocID,WFGenInfoID,TemplateFileChose) values('$ParentStateID' , '$statename' , '$all_date' , 'null' , '$deadline' , '$string_docarray', '$wfgeninfo', '$docchose') " ;
       $result_INSERT_wfdetail=$mysqli->query($q_INSERT_wfdetail);
 
       // get ParentID

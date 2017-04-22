@@ -56,7 +56,7 @@ while($row_SELECT_currentworklist = $result_SELECT_currentworklist->fetch_array(
 $wfquestdetailID_arr = array();
 for($i=0; $i< count($currentworklist_WFDetailID_arr); $i++){
   for($j=0; $j<count($currentworklist_GroupID_arr); $j++){
-    $q_SELECT_wfrequestaccess = "SELECT * FROM wfrequestaccess WHERE (WFRequestDetailID = '$currentworklist_WFDetailID_arr[$i]') AND (GroupID = '$currentworklist_GroupID_arr[$j]' OR UserID = '$cur_userid')";
+    $q_SELECT_wfrequestaccess = "SELECT * FROM wfrequestaccess WHERE (WFRequestDetailID = '$currentworklist_WFDetailID_arr[$i]') AND ((GroupID = '$currentworklist_GroupID_arr[$j]' AND UserID = 0) OR UserID = '$cur_userid')";
     $result_SELECT_wfrequestaccess = $mysqli->query($q_SELECT_wfrequestaccess);
     $row_SELECT_wfrequestaccess=$result_SELECT_wfrequestaccess->fetch_array();
     if(empty($row_SELECT_wfrequestaccess) ){

@@ -26,7 +26,7 @@ if ($_SESSION['gName'] != "Sys_Admin") {
 					</script>";
 	}else if($_SESSION['gName'] == 'Sys_Admin'){
 		echo "<script type='text/javascript'>
-						window.location = '01_createformType.php';
+						window.location = '01_createformType_multidoc.php';
 					</script>";
 	}
 }
@@ -60,6 +60,10 @@ var all_add_doc_count = 0;
 			$("#Logout").click(function(){
 					window.location = '06_logout.php';
 			});
+
+			$("#AdminSystem_Create").click(function(){
+					window.location = '01_createformType_multidoc.php';
+			});
 			//************************************************************
 			$("#CreateFormType_wfdoc").hide();
 			$("#CreateFormType_wfdetail").hide();
@@ -86,7 +90,7 @@ var all_add_doc_count = 0;
 				state_doc_index++;
         let cur_index = state_doc_index;
 				var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td>'
-				+'<td><text> Deadline: </text></td> <td><input type="text" name="deadline[]" id="state_doc_deadline_'+cur_index+'"></td>'
+				+'<td><text> Deadline: </text></td> <td><input type="text" name="deadline[]" id="state_doc_deadline_'+cur_index+'"></td> <td><Text>Document display</Text></td><td><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select></td>'
 				+'<td><text> file: </text></td> <td><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
 				$(str).appendTo("#upload_state_table");
         console.log(str);
@@ -187,12 +191,13 @@ var all_add_doc_count = 0;
 						for (var i = 1; i <= state_doc_index; i++) {
               let statedocstatename = $('#state_doc_statename_'+i+'').val();
               let statedocdeadline = $('#state_doc_deadline_'+i+'').val();
+							let docchose = $('#docchose_'+i+'').val();
               //     http://stackoverflow.com/questions/2627813/how-to-get-an-array-with-jquery-multiple-input-with-the-same-name
               let statedocarray = new Array();
               $('[name^="select_state_doc_'+i+'[]"]').each(function(){
                   statedocarray.push($(this).val());
               });
-              let statedocdata = {statename: statedocstatename, deadline: statedocdeadline, docarr: statedocarray};
+              let statedocdata = {statename: statedocstatename, deadline: statedocdeadline, docarr: statedocarray, docchose: docchose};
               state_doc_array.push(statedocdata);
               console.log(statedocdata);
 						}

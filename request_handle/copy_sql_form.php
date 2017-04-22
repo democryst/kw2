@@ -53,10 +53,12 @@ if (isset($_POST['data']) ) {
       $d2_timestamp = $d2['TimeStamp'];
 
       if($d2['DocName']){
-        $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoc`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid') ";
+        // $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoc`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid') ";
+        $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoctemplate`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid') ";
         $mysqli->query($q_insert_wfrequestdoc);
 
-        $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoc WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' ";
+        // $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoc WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' ";
+        $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoctemplate WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' ";
         $result_select_wfrequestdoc = $mysqli->query($q_select_wfrequestdoc);
         while ($row_select_wfrequestdoc=$result_select_wfrequestdoc->fetch_array() ) {
           $doc_arr_inner = array();
@@ -86,6 +88,7 @@ $mapping_wfdetail_access = array();
       $d3_deadline = $d3['Deadline'];
       $d3_wfdocid = $d3['WFDocID']; // array
       $d3_wfdetailid = $d3['WFDetailID'];
+      $d3_TemplateFileChose = $d3['TemplateFileChose'];
       //problem multi wfdocid and multi wfrequestdocid need to match them
       $this_state_request_docid = array();
       for ($j=0; $j < count($doc_arr); $j++) {
@@ -117,7 +120,7 @@ $mapping_wfdetail_access = array();
 
       }
       $cur_request_docid = serialize($this_state_request_docid);
-        $q_insert_wfrequestdetail = "INSERT INTO `wfrequestdetail`(`ParentID`, `StateName`, `CreateTime`, `Deadline`, `WFRequestDocID`, `WFRequestID`) values('$ParentStateID', '$d3_statename', '$all_date', '$d3_deadline', '$cur_request_docid', '$WFRequestID') ";
+        $q_insert_wfrequestdetail = "INSERT INTO `wfrequestdetail`(`ParentID`, `StateName`, `CreateTime`, `Deadline`, `WFRequestDocID`, `WFRequestID`, `TemplateFileChose`) values('$ParentStateID', '$d3_statename', '$all_date', '$d3_deadline', '$cur_request_docid', '$WFRequestID', '$d3_TemplateFileChose') ";
         $mysqli->query($q_insert_wfrequestdetail) or trigger_error($mysqli->error."[$q_insert_wfrequestdetail]");
 
         $q_SELECT_wfrequestdetail="SELECT * FROM wfrequestdetail where StateName = '$d3_statename' AND CreateTime = '$all_date' AND WFRequestDocID='$cur_request_docid' AND WFRequestID='$WFRequestID' ";
