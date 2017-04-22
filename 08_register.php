@@ -68,7 +68,16 @@
       if (groupid!=0 && priorityid!=0) {
         $.post("08_register/post_register.php",{ data:{ groupid: groupid, priorityid: priorityid, username: username, password: password, name: name, surname: surname} }, function(res){
           console.log(res);
-          alert(res);
+					register_res = JSON.parse(res);
+          if (register_res == 1) {
+          	alert("Register Successfully!");
+						window.location = '05_log_in.php';
+          }else if(register_res == -1 ){
+						alert("Register Fail!");
+					}else if(register_res == 0 ){
+						alert("User Already Exist!");
+					}
+
         });
       }
     });

@@ -21,7 +21,7 @@ if ($_SESSION['gName'] != "Flow_Admin") {
 					</script>";
 	}else if($_SESSION['gName'] == 'Sys_Admin'){
 		echo "<script type='text/javascript'>
-						window.location = '01_createformType.php';
+						window.location = '01_createformType_multidoc.php';
 					</script>";
 	}
 }

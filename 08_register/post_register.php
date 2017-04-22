@@ -12,7 +12,7 @@ if (isset($_POST['data'])) {
     $q_s_userid_0 = "SELECT UserID FROM user WHERE UserName='$username0', Password='$password0', Name='$name0', Surname='$surname0' ";
     $result_s_userid_0 = $mysqli->query($q_s_userid_0);
     if ($result_s_userid_0 && $result_s_userid_0->num_rows>=1 ) {
-      echo 'User Already Exist!';
+      echo json_encode(0);
       exit();
     }else {
       $q_i_user = "INSERT INTO `user`(`UserName`, `Password`, `Name`, `Surname`) VALUES ('$username0','$password0','$name0','$surname0')";
@@ -30,7 +30,7 @@ if (isset($_POST['data'])) {
         $q_i_userpriority = "INSERT INTO `userpriority`(`UserID`, `PriorityID`) VALUES ('$UserID','$priorityid0')";
         $mysqli->query($q_i_userpriority);
 
-        echo 'Register Successfully!';
+        echo json_encode(1);
         exit();
     }
 
@@ -55,7 +55,7 @@ if (isset($_POST['data'])) {
 
 
 }else{
-  echo 'Register Failed!';
+  echo json_encode(-1);
   exit();
 }
 ?>
