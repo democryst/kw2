@@ -311,7 +311,7 @@ console.log(CurrentWorkListID);
 		console.log(useridarr);
 
 		console.log(wfrequestdocarr_new);
-		$.post("approver_handle/approver_approve_btn.php", {data:{CurrentWorkListID: CurrentWorkListIDarr,  WFDocIDarr: WFDocIDarr, WFRequestDocIDarr: WFRequestDocIDarr, TimeStamp: TimeStamparr, userid: useridarr, wfrequestdocarr_new: wfrequestdocarr_new}}, function(res) {
+		$.post("approver_handle/approver_approve_btn.php", {data:{CurrentWorkListID: CurrentWorkListIDarr,  WFDocIDarr: WFDocIDarr, WFRequestDocIDarr: WFRequestDocIDarr, TimeStamp: TimeStamparr, userid: userid, wfrequestdocarr_new: wfrequestdocarr_new}}, function(res) {
 			console.log(res);
 			alert("Approve successfully!");
 			window.location = '03_approver.php';

@@ -115,8 +115,10 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 				$("#comment").hide();
 				$("#moveto_edit_doc_box").hide();
 				$("#editdoc").hide();
+				$("#requestflow").hide();
 
 				$("#requestflow_table").empty();
+				$("#requestcompletelist_table").empty();
 
 				$.post("request_list_handle/requestworklist_showworklist.php",{requestor_id: userid},function(response){
 	        console.log(response);
@@ -129,6 +131,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 						let cur_index = i;
 						$("#select_wfrequest_"+i+"").click(function(){
 							let wfrequestid_s_wl = $("#wfrequestid_"+cur_index+"").val();
+							$("#requestflow").show();
 							console.log(cur_index);
 							console.log(wfrequestid_s_wl);
 							showWFworklist(wfrequestid_s_wl, i);
@@ -144,8 +147,10 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 				$("#Requestlist").show();
 				$("#moveto_edit_doc_box").hide();
 				$("#editdoc").hide();
+				$("#requestflow").hide();
 
 				$("#requestlist_table").empty();
+				$("#requestcompletelist_table").empty();
 
 				$.post("request_list_handle/requestlist_showlist.php",{requestor_id: userid},function(response){
 
@@ -164,8 +169,32 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 				$("#comment").hide();
 				$("#moveto_edit_doc_box").hide();
 				$("#editdoc").hide();
+				$("#requestflow").hide();
 
 				$("#requestflow_table").empty();
+				$("#requestlist_table").empty();
+				$("#requestcompletelist_table").empty();
+				$.post("request_list_handle/requestlist_showcompletelist.php",{requestor_id: userid},function(response){
+	        console.log(response);
+					jres_completelist = JSON.parse(response);
+					console.log(jres_completelist);
+					for (var i = 0; i < jres_completelist.length; i++) {
+						let FormName_comp = jres_completelist[i].FormName;
+						let CreateTime_comp = jres_completelist[i].CreateTime;
+						let CreateTime_comp_s = CreateTime_comp.replace("***", " ");
+						let Document_comp = jres_completelist[i].Document;
+						var str_completelist = "<tr><td><div class='makeinline'><Text>FormName : "+FormName_comp+"</Text> <Text>CreateTime: "+CreateTime_comp_s+"</Text></div></td> ";
+						for (var j = 0; j < Document_comp.length; j++) {
+							let DocName_comp = Document_comp[j].DocName;
+							let DocURL_comp = Document_comp[j].DocURL;
+							// console.log(DocName_comp);
+							str_completelist = str_completelist + "<td><div style='margin-left:10px;'> <div><a target='_tab' href='"+localhost+DocURL_comp+"'><img src='images/Document.ico' height='52' width='52'></a></div> <div><Text>"+DocName_comp+"</Text></div>  </div></td>";
+						}
+
+						str_completelist = str_completelist+"</tr>";console.log(str_completelist);
+						$(str_completelist).appendTo("#requestcompletelist_table");
+					}
+	      });
 
 			});
 
@@ -215,6 +244,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
       $("#select_form_btn_"+index+"").click(function(){
 				// $("#moveto_edit_doc_box").show();
 				$("#editdoc").hide();
+				$("#requestflow").show();
 				$("#relate_doc_table").empty();
         console.log(obj.WFRequestID);
 				WFreq_ID = obj.WFRequestID;
@@ -256,20 +286,20 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
       }
       str_state = str_state + "<input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:10px;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'> ";
 
-			// if (obj.DoneBy==0) {
-			// 	str_state = str_state + "<input type='button' value='document' id='document_R_"+index+"' style='margin-left:10px;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'> </div></td></tr>";
-			// }
+			if (obj.DoneBy==userid) {
+				str_state = str_state + "<input type='button' value='document' id='document_R_"+index+"' style='margin-left:10px;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'> </div></td></tr>";
+			}
 
 			str_state = str_state + "</div></td></tr>";
       $(str_state).appendTo("#requestflow_table");
 
-			// if (obj.DoneBy==0) {
-			// 	$("#document_R_"+index+"").click(function(){
-			// 		console.log(obj);
-			//
-			// 		documentpage_Request(obj.WFRequestDetailID, obj.TemplateFileChose);
-			// 	});
-			// }
+			if (obj.DoneBy==userid) {
+				$("#document_R_"+index+"").click(function(){
+					console.log(obj);
+
+					documentpage_Request(obj.WFRequestDetailID, obj.TemplateFileChose);
+				});
+			}
 
       $("#comment_btn_"+index+"").click(function(){
         console.log(obj.WFRequestDetailID);

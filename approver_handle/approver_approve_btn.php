@@ -99,9 +99,9 @@ if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_ro
 	$q_update_new = "UPDATE `wfrequestdetail` SET `StartTime`='$curtime_for_old' WHERE WFRequestDetailID='$c1_WFRequestDetailID' ";
 	$result_update_new  = $mysqli->query($q_update_new);
 }
-	//insert into history
-	$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '0', '$curtime_for_old', '$WFRequestDocID_arr_s') " ;
-	$mysqli->query($q_INSERT_history);
+	// //insert into history
+	// $q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '0', '$curtime_for_old', '$WFRequestDocID_arr_s') " ;
+	// $mysqli->query($q_INSERT_history);
 
 		// Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user’s experience. For more help http://xhr.spec.whatwg.org/
 
@@ -123,6 +123,14 @@ if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_ro
 		//insert new currentworklist after starttime , endtime was update
 		$q_INSERT_currentworklist="INSERT INTO `currentworklist`(`WFRequestDetailID`, `StateName`, `State`, `Priority`, `DoneBy`, `Status`, `StartTime`, `EndTime`, `ApproveStatus`, `TimeStamp`) values('$c2_WFRequestDetailID', '$c2_StateName', '$c2_State', '$c2_Priority', '$c2_DoneBy', '$c2_Status', '$c2_StartTime', '$c2_EndTime', '0', CURRENT_TIMESTAMP) " ;
 		$mysqli->query($q_INSERT_currentworklist);
+
+		//insert into history
+		$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '0', '$curtime_for_old', '$WFRequestDocID_arr_s') " ;
+		$mysqli->query($q_INSERT_history);
+	}else {
+		//insert into history
+		$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '9', '$curtime_for_old', '$WFRequestDocID_arr_s') " ;
+		$mysqli->query($q_INSERT_history);
 	}
 
 	}   //TimeStamp check if not same mean someone done this work first

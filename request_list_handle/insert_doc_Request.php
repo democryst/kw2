@@ -22,7 +22,7 @@ $wfrequestdetailid_arr2 = array_values(array_unique($wfrequestdetailid_arr));
 $wfrequestdetailid = $wfrequestdetailid_arr2[0];
 
 $WFDocID_arr = $_POST['WFDocID_arr'];
-
+$data_box = array();
 // $sys_adminid = 3;
 
 $upload_destination = "../uploads/";
@@ -89,29 +89,31 @@ if(isset($_FILES['file_array'])){
 				$q_INSERT_wfrequestdoc="INSERT INTO `wfrequestdoc`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`, `WFRequestDetailID`) values('$wfrequestid', '$DocName', '$destination', CURRENT_TIMESTAMP, '$WFDocID_arr[$i]', '$wfrequestdetailid') " ;
 				$mysqli->query($q_INSERT_wfrequestdoc);
 
+				$q_SELECT_wfrequestdoc = "SELECT * FROM wfrequestdoc WHERE WFRequestDetailID='$wfrequestdetailid' AND WFDocID='$WFDocID_arr[$i]' ";
+				$result_SELECT_wfrequestdoc = $mysqli->query($q_SELECT_wfrequestdoc);
+				$h_r= array();
+				while ($row_SELECT_wfrequestdoc=$result_SELECT_wfrequestdoc->fetch_array()) {
+					array_push($h_r, $row_SELECT_wfrequestdoc['WFRequestDocID']);
+				}
 
 
-
-			}else{
-				$success_upload = 2;
 			}
 
-		}else{
-			$success_upload = 0;
 		}
-
-
+		$h_r_index = count($h_r) - 1;
+		array_push($data_box, $h_r[$h_r_index]);
 
 	}
-	$WFRequestDocID_IN_ARR = array();
-	$q_s_in_wfrequestdetail = "SELECT WFRequestDocID FROM wfrequestdoc WHERE WFRequestDetailID='$wfrequestdetailid' ";
-	$result_s_in = $mysqli->query($q_s_in_wfrequestdetail);
-	if ($result_s_in && $result_s_in->num_rows >= 0) {
-		while ($row_s_in = $result_s_in->fetch_array()) {
-			array_push($WFRequestDocID_IN_ARR, $row_s_in['WFRequestDocID']);
-		}
-	}
-	$WFRequestDocID_IN_ARR_s = serialize($WFRequestDocID_IN_ARR); //put this into history --> we will use history to trace work
+	$data_box_s = serialize($data_box);
+	// $WFRequestDocID_IN_ARR = array();
+	// $q_s_in_wfrequestdetail = "SELECT WFRequestDocID FROM wfrequestdoc WHERE WFRequestDetailID='$wfrequestdetailid'";
+	// $result_s_in = $mysqli->query($q_s_in_wfrequestdetail);
+	// if ($result_s_in && $result_s_in->num_rows >= 0) {
+	// 	while ($row_s_in = $result_s_in->fetch_array()) {
+	// 		array_push($WFRequestDocID_IN_ARR, $row_s_in['WFRequestDocID']);
+	// 	}
+	// }
+	// $WFRequestDocID_IN_ARR_s = serialize($WFRequestDocID_IN_ARR); //put this into history --> we will use history to trace work
 
 	$curtime_1 = date("Y-m-d H:i:s", time() );
 
@@ -134,7 +136,7 @@ if(isset($_FILES['file_array'])){
 	// $q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$c0_DoneBy', '$wfrequestid', '$c0_WFRequestDetailID', '0', '$c0_Priority', '0', '0', '$c0_EndTime', '$WFRequestDocID_IN_ARR_s') " ;
 	// $mysqli->query($q_INSERT_history);
 
-  $q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$c0_DoneBy', '$wfrequestid', '$c0_WFRequestDetailID', '0', '$c0_Priority', '0', '0', '$curtime_1', '$WFRequestDocID_IN_ARR_s') " ;
+  $q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$user_id', '$wfrequestid', '$wfrequestdetailid', '0', '0', '0', '1', '$curtime_1', '$data_box_s') " ;
 	$mysqli->query($q_INSERT_history);
 	// $q_update_wfrequestdetail = "UPDATE `wfrequestdetail` SET `StartTime`='$curtime_1' WHERE ParentID='$wfrequestdetailid'";
 	// $result_update_wfrequestdetail  = $mysqli->query($q_update_wfrequestdetail) or trigger_error($mysqli->error."[$q_update_wfrequestdetail]");
