@@ -23,10 +23,10 @@ if ($TemplateFileChose == 0) {
   while ($row=$result->fetch_array() ) {
     // array_push($data, $row);
     $box = array();
-    $box['DocName'] = $row_SELECT_doc['DocName'];
-    $box['DocURL'] = $row_SELECT_doc['DocURL'];
-    $box['WFRequestDocID'] = $row_SELECT_doc['WFRequestTemplateDocID'];
-    $box['WFDocID'] = $row_SELECT_doc['WFDocID'];
+    $box['DocName'] = $row['DocName'];
+    $box['DocURL'] = $row['DocURL'];
+    $box['WFRequestDocID'] = $row['WFRequestTemplateDocID'];
+    $box['WFDocID'] = $row['WFDocID'];
     array_push($doc_arr, $box);
   }
 

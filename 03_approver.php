@@ -336,6 +336,7 @@ console.log(CurrentWorkListID);
 					success: function (response) {
 					console.log(response);
 					  let docbox = JSON.parse(response);
+						wfrequestdocarr_new = new Array();
 						for (var i = 0; i < docbox.length; i++) {
 							let innerarr = docbox[i];
 							let innerlen_index = innerarr.length - 1;
