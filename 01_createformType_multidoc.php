@@ -90,7 +90,7 @@ var all_add_doc_count = 0;
 				state_doc_index++;
         let cur_index = state_doc_index;
 				var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td>'
-				+'<td><text> Deadline: </text></td> <td><input type="text" name="deadline[]" id="state_doc_deadline_'+cur_index+'"></td> <td><Text>Document display</Text></td><td><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select></td>'
+				+'<td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7"></td> <td><Text>Document display</Text></td><td><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select></td>'
 				+'<td><text> file: </text></td> <td><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
 				$(str).appendTo("#upload_state_table");
         console.log(str);

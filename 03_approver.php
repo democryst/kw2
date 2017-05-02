@@ -134,21 +134,37 @@ if ($_SESSION['gName'] != "Approver") {
 	 	for(i=0; i<approve_cur_arr_l; i++){
 	 		var wfrequestdetailID = json_return_approve_currentworklist[i].WFRequestDetailID;
 	 		var StateName = json_return_approve_currentworklist[i].StateName;
-			// var CreateTime = json_return_approve_currentworklist[i].CreateTime;
+			// var CreateTime = json_return_approve_currentworklist[i].CreateTime;StartTime
+			StartTime = json_return_approve_currentworklist[i].StartTime;
+			date_s = new Date(StartTime);
+
+			let curtime = Math.round(new Date().getTime()/1000.0);
+			date_c = new Date(curtime*1000);
+
+			//diff_date
+			let utc1 = Date.UTC(date_s.getFullYear(), date_s.getMonth(), date_s.getDate());
+ 			let utc2 = Date.UTC(date_c.getFullYear(), date_c.getMonth(), date_c.getDate());
+			let diff_date = Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24) );
+
+			console.log(StartTime);
+			console.log(curtime);
+			console.log(date_s);
+			console.log(date_c);
+			console.log(diff_date);
 			Create_Time = json_return_approve_currentworklist[i].CreateTime;
 			CreateTime = Create_Time.replace("***", " ");
-	 		showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, i);
+	 		showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, diff_date, i);
 	 	}
 	 }
 
-	 function showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, index){
+	 function showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, diff_date, index){
 	 	$.post("approver_handle/approver_worklist_wfrequest.php", {cur_wfrequestdetailID: wfrequestdetailID} ,function(data){
 	 		 var json_return_approve_currentworklist_wfrequest = JSON.parse(data);
 	 		 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
 	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
 	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
 				 //  var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
-				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;color:black;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text></div></div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='btn_select'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
+				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;color:black;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text>  </div> <div><text>State Exist : "+diff_date+" day</text></div> </div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='btn_select'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
 	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
 
 				 	//show comment of that state

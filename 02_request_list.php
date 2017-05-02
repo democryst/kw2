@@ -206,7 +206,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
           if (State_id) {
             console.log("State_id: "+State_id);
             fn3_add_cmt(State_id, text_current_comment);
-
+						$("#comment").show();
             $("#request_comment_table").empty();
             $.post("request_list_handle/requestlist_commentlist.php", {data: {WFRequestDetailID: State_id, userid: userid}}, function(response){
               console.log(response);
@@ -316,6 +316,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 		function fn2_eachstate_post(WFRQDetailID){
 			$("#request_comment_table").empty();
+			$("#comment").show();
 			$.post("request_list_handle/requestlist_commentlist.php", {data: {WFRequestDetailID: WFRQDetailID, userid: userid}}, function(response){
 				console.log(response);
 				json_ret_cmt = JSON.parse(response);
