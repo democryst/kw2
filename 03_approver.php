@@ -28,7 +28,7 @@ if ($_SESSION['gName'] != "Approver") {
 					</script>";
 	}else if($_SESSION['gName'] == 'Sys_Admin'){
 		echo "<script type='text/javascript'>
-						window.location = '01_createformType.php';
+						window.location = '01_createformType_multidoc.php';
 					</script>";
 	}
 }
@@ -54,6 +54,7 @@ if ($_SESSION['gName'] != "Approver") {
 	// var userid = 1;//test approver id
 	var cur_wfrqstate_id;
 	var cmtbyname;
+	var wfrequestdocarr_new = new Array();
 	$(document).ready(function() {
 		//************************************************************
 		$("#Logout").click(function(){
@@ -67,10 +68,10 @@ if ($_SESSION['gName'] != "Approver") {
 				// alert('Move to current request form list!');
 				window.location = '02_request_list.php';
 		});
-		// $("#Approve").click(function(){
-		// 		alert('Move to current work form list!');
-		// 		window.location = '03_approver.php';
-		// });
+		$("#Approve").click(function(){
+				// alert('Move to current work form list!');
+				window.location = '03_approver.php';
+		});
 		//************************************************************
 
 		$("#current_work_list_page").show();
@@ -133,21 +134,37 @@ if ($_SESSION['gName'] != "Approver") {
 	 	for(i=0; i<approve_cur_arr_l; i++){
 	 		var wfrequestdetailID = json_return_approve_currentworklist[i].WFRequestDetailID;
 	 		var StateName = json_return_approve_currentworklist[i].StateName;
-			// var CreateTime = json_return_approve_currentworklist[i].CreateTime;
+			// var CreateTime = json_return_approve_currentworklist[i].CreateTime;StartTime
+			StartTime = json_return_approve_currentworklist[i].StartTime;
+			date_s = new Date(StartTime);
+
+			let curtime = Math.round(new Date().getTime()/1000.0);
+			date_c = new Date(curtime*1000);
+
+			//diff_date
+			let utc1 = Date.UTC(date_s.getFullYear(), date_s.getMonth(), date_s.getDate());
+ 			let utc2 = Date.UTC(date_c.getFullYear(), date_c.getMonth(), date_c.getDate());
+			let diff_date = Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24) );
+
+			console.log(StartTime);
+			console.log(curtime);
+			console.log(date_s);
+			console.log(date_c);
+			console.log(diff_date);
 			Create_Time = json_return_approve_currentworklist[i].CreateTime;
 			CreateTime = Create_Time.replace("***", " ");
-	 		showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, i);
+	 		showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, diff_date, i);
 	 	}
 	 }
 
-	 function showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, index){
+	 function showcurrentworklist_2(wfrequestdetailID, StateName, CreateTime, diff_date, index){
 	 	$.post("approver_handle/approver_worklist_wfrequest.php", {cur_wfrequestdetailID: wfrequestdetailID} ,function(data){
 	 		 var json_return_approve_currentworklist_wfrequest = JSON.parse(data);
 	 		 //use wfrequestdetailID to query in wfrequest --then--> use CreatorID to query in userid
 	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
 	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
 				 //  var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
-				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;color:black;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text></div></div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='btn_select'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
+				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;color:black;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text>  </div> <div><text>State Exist : "+diff_date+" day</text></div> </div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='btn_select'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
 	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
 
 				 	//show comment of that state
@@ -170,26 +187,49 @@ if ($_SESSION['gName'] != "Approver") {
 								let wfrequestdetailID = $("#wfrequestdetailID_"+index+"").attr('value');
 								console.log(wfrequestdetailID);
 								$.post("approver_handle/apporver_currentwork_wfrequestdoc.php", {data: wfrequestdetailID}, function(data){
+									console.log(data);
 									 var json_return_wfrequestdoc = JSON.parse(data);
 									 console.log(json_return_wfrequestdoc);
-									 var filepath = json_return_wfrequestdoc.DocURL;
- 									 var filename = json_return_wfrequestdoc.DocName;
 									 $("#file-download-table").empty();
-									 var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
-									 $(str_file_download_table).appendTo("#file-download-table");
+									 $("#file-upload-table").empty();
+									 var TimeStamp = json_return_wfrequestdoc.TimeStamp;
+									 var datestring = Date.parse(TimeStamp);
+									 var TimeStamp_unix =  datestring/1000; //for use in php need to divide by 1000
+									 var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
+console.log(CurrentWorkListID);
+									 var ret_document = json_return_wfrequestdoc.Document;
+									 for (var i = 0; i < ret_document.length; i++) {
+										 var filepath = ret_document[i].DocURL;
+   									 var filename = ret_document[i].DocName;
+										 var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
+	 									 $(str_file_download_table).appendTo("#file-download-table");
 
-									var TimeStamp = json_return_wfrequestdoc.TimeStamp;
-									console.log(TimeStamp);
-									var datestring = Date.parse(TimeStamp);
- 									var TimeStamp_unix =  datestring/1000; //for use in php need to divide by 1000
-									console.log(TimeStamp_unix);
+										 var RequestDocID = ret_document[i].WFRequestDocID;
+										 var DocID = ret_document[i].WFDocID;
+										 var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+RequestDocID+' name="WFRequestDocID_arr[]"><input type="hidden" value='+DocID+' name="WFDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
+										 $(str_file_upload_table).appendTo("#file-upload-table");
+									 }
 
-									var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
-									var DocID = json_return_wfrequestdoc.WFRequestDocID;
-									console.log("User id : "+userid);
-									$("#file-upload-table").empty();
-									var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
-									$(str_file_upload_table).appendTo("#file-upload-table");
+
+
+									//  var filepath = json_return_wfrequestdoc.DocURL;
+ 								// 	 var filename = json_return_wfrequestdoc.DocName;
+									//
+									//  var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
+									//  $(str_file_download_table).appendTo("#file-download-table");
+									//
+									// var TimeStamp = json_return_wfrequestdoc.TimeStamp;
+									// console.log(TimeStamp);
+									// var datestring = Date.parse(TimeStamp);
+ 								// 	var TimeStamp_unix =  datestring/1000; //for use in php need to divide by 1000
+									// console.log(TimeStamp_unix);
+									//
+									// var CurrentWorkListID = json_return_wfrequestdoc.CurrentWorkListID;
+									// var DocID = json_return_wfrequestdoc.WFRequestDocID;
+									// console.log("User id : "+userid);
+									// $("#file-upload-table").empty();
+									// var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+DocID+' name="WFRequestDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
+									// $(str_file_upload_table).appendTo("#file-upload-table");
 								});
 
 					});
@@ -227,22 +267,71 @@ if ($_SESSION['gName'] != "Approver") {
 	 //  $("[name='WFRequestDocID_arr[]']").val();
 	 //  $("[name='file_array[]']").val();
 	 if($("[name='file_array[]']").val().length!=0){
-		var formData = new FormData($('#upload_form')[0]);
- 		console.log(formData);  //json formdata
- 		$.ajax({
- 			 url: 'approver_handle/approver_approve_btn.php',
- 			 type: 'POST',
- 			 data: formData,
- 			 async: false,
- 			 cache: false,
- 			 contentType: false,
- 			 enctype: 'multipart/form-data',
- 			 processData: false,
- 			 success: function (response) {
- 			 console.log(response);
- 			 }
- 		});
- 		return false;
+		// var formData = new FormData($('#upload_form')[0]);
+ 	// 	console.log(formData);  //json formdata
+ 	// 	$.ajax({
+ 	// 		 url: 'approver_handle/approver_approve_btn.php',
+ 	// 		 type: 'POST',
+ 	// 		 data: formData,
+ 	// 		 async: false,
+ 	// 		 cache: false,
+ 	// 		 contentType: false,
+ 	// 		 enctype: 'multipart/form-data',
+ 	// 		 processData: false,
+ 	// 		 success: function (response) {
+ 	// 		 console.log(response);
+ 	// 		 }
+ 	// 	});
+ 	// 	return false;
+		fileinarr = new Array();
+		$('[name^="file_array[]"]').each(function(){
+				if ($(this).val() != "") {
+					fileinarr.push($(this).val());
+				}
+		});
+		console.log(fileinarr);
+		CurrentWorkListIDarr = new Array();
+		$('[name^="CurrentWorkListID[]"]').each(function(){
+				if ($(this).val() != "") {
+					CurrentWorkListIDarr.push($(this).val());
+				}
+		});
+		console.log(CurrentWorkListIDarr);
+		WFDocIDarr = new Array();
+		$('[name^="WFDocID_arr[]"]').each(function(){
+				if ($(this).val() != "") {
+					WFDocIDarr.push($(this).val());
+				}
+		});
+		console.log(WFDocIDarr);
+		WFRequestDocIDarr = new Array();
+		$('[name^="WFRequestDocID_arr[]"]').each(function(){
+				if ($(this).val() != "") {
+					WFRequestDocIDarr.push($(this).val());
+				}
+		});
+		console.log(WFRequestDocIDarr);
+		TimeStamparr = new Array();
+		$('[name^="TimeStamp"]').each(function(){
+				if ($(this).val() != "") {
+					TimeStamparr.push($(this).val());
+				}
+		});
+		console.log(TimeStamparr);
+		useridarr = new Array();
+		$('[name^="userid"]').each(function(){
+				if ($(this).val() != "") {
+					useridarr.push($(this).val());
+				}
+		});
+		console.log(useridarr);
+
+		console.log(wfrequestdocarr_new);
+		$.post("approver_handle/approver_approve_btn.php", {data:{CurrentWorkListID: CurrentWorkListIDarr,  WFDocIDarr: WFDocIDarr, WFRequestDocIDarr: WFRequestDocIDarr, TimeStamp: TimeStamparr, userid: userid, wfrequestdocarr_new: wfrequestdocarr_new}}, function(res) {
+			console.log(res);
+			alert("Approve successfully!");
+			window.location = '03_approver.php';
+		});
 	 }
 
 	});
@@ -262,6 +351,16 @@ if ($_SESSION['gName'] != "Approver") {
 					processData: false,
 					success: function (response) {
 					console.log(response);
+					  let docbox = JSON.parse(response);
+						wfrequestdocarr_new = new Array();
+						for (var i = 0; i < docbox.length; i++) {
+							let innerarr = docbox[i];
+							let innerlen_index = innerarr.length - 1;
+							let lastobj = innerarr[innerlen_index];
+							wfrequestdocarr_new.push(lastobj.WFRequestDocID);
+						}
+						console.log(wfrequestdocarr_new);
+
 					}
 			 });
 			 $("#upload_btn").show();

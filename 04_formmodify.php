@@ -21,7 +21,7 @@ if ($_SESSION['gName'] != "Flow_Admin") {
 					</script>";
 	}else if($_SESSION['gName'] == 'Sys_Admin'){
 		echo "<script type='text/javascript'>
-						window.location = '01_createformType.php';
+						window.location = '01_createformType_multidoc.php';
 					</script>";
 	}
 }
@@ -159,135 +159,147 @@ if ($_SESSION['gName'] != "Flow_Admin") {
       console.log(obj.WFRequestDetailID);
       console.log(obj.ParentID);
 			console.log(obj.WFRequestDocID);
-			$.post("formadmin_handle/up_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
-				console.log(response);
-				if (response) {
-					j_retup = JSON.parse(response);
-					console.log(j_retup);
-					fn_refresh(j_retup);
-				}
+			if (obj.DoneBy==0) {
+				$.post("formadmin_handle/up_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
+					console.log(response);
+					if (response) {
+						j_retup = JSON.parse(response);
+						console.log(j_retup);
+						fn_refresh(j_retup);
+					}
 
-			});
+				});
+			}else{
+				console.log("this state already complete!");
+			}
     });
     $("#down_"+index+"").click(function(){
       console.log("down");
-			$.post("formadmin_handle/down_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
-				console.log(response);
-				if (response) {
-					j_retup = JSON.parse(response);
-					console.log(j_retup);
-					fn_refresh(j_retup);
-				}
-			});
+			if (obj.DoneBy==0) {
+				$.post("formadmin_handle/down_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
+					console.log(response);
+					if (response) {
+						j_retup = JSON.parse(response);
+						console.log(j_retup);
+						fn_refresh(j_retup);
+					}
+				});
+			}else{
+				console.log("this state already complete!");
+			}
     });
     $("#moda_"+index+"").click(function(){
 
 			$("#table_moda_"+index+"").empty();
-			var str_moda;
-      console.log("modifyaccess");
-			$.post("formadmin_handle/moda_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
-				console.log(response);
-				json_ret_modaccess = JSON.parse(response);
-				str_moda = "<tr><td><select id='selector_"+index+"'>";
-				str_moda = str_moda+"<option value=''>--select group--</option>";
-				for (var k = 0; k < json_ret_modaccess.length; k++) {
-					G_Name = json_ret_modaccess[k].GroupName;
-					G_id = json_ret_modaccess[k].GroupID;
-					str_moda = str_moda + "<option value='"+G_id+"'>"+G_Name+"</option>";
-				}
-				str_moda = str_moda + "</select></td><td><table id='table_gtop_"+index+"'></table></td></tr>";
-				console.log(str_moda);
-				$(str_moda).appendTo("#table_moda_"+index+"");
-
-				$("#selector_"+index+"").on('change',function(){
-					$("#table_gtop_"+index+"").empty();
-
-					groupid = ""; // clear
-					approverid = ""; // clear
-					groupid = $(this).find("option:selected").attr('value');
-
-					console.log(groupid);
-					str_moda_ii = "<tr><td> <input type='checkbox' id='chk_"+index+"' name='chose person' value='1'></td> <td><table id='table_person_"+index+"'></table></td> <td><input type='button' value='confirm' id='confirm_mod_btn_"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td> </tr>";
-					$(str_moda_ii).appendTo("#table_gtop_"+index+"");
-
-					if (groupid == "") {
-						$("#table_gtop_"+index+"").empty();
+			if (obj.DoneBy==0) {
+				var str_moda;
+				console.log("modifyaccess");
+				$.post("formadmin_handle/moda_wfrqdetail_handle.php", {data_obj : {WFrqDetail_ID: obj.WFRequestDetailID, Parent_ID: obj.ParentID, WFrqDoc_ID: obj.WFRequestDocID}}, function(response){
+					console.log(response);
+					json_ret_modaccess = JSON.parse(response);
+					str_moda = "<tr><td><select id='selector_"+index+"'>";
+					str_moda = str_moda+"<option value=''>--select group--</option>";
+					for (var k = 0; k < json_ret_modaccess.length; k++) {
+						G_Name = json_ret_modaccess[k].GroupName;
+						G_id = json_ret_modaccess[k].GroupID;
+						str_moda = str_moda + "<option value='"+G_id+"'>"+G_Name+"</option>";
 					}
+					str_moda = str_moda + "</select></td><td><table id='table_gtop_"+index+"'></table></td></tr>";
+					console.log(str_moda);
+					$(str_moda).appendTo("#table_moda_"+index+"");
 
-					$("#confirm_mod_btn_"+index+"").click(function(){
-						console.log("confirm_mod_btn_"+index+" was clicked");
+					$("#selector_"+index+"").on('change',function(){
+						$("#table_gtop_"+index+"").empty();
+
+						groupid = ""; // clear
+						approverid = ""; // clear
+						groupid = $(this).find("option:selected").attr('value');
+
 						console.log(groupid);
-						console.log(approverid);
-						wfrq_formod_val = $("#wfrq_formod"+index+"").val();
-						console.log(wfrq_formod_val);
-						if(groupid != "" && (approverid != "" && approverid != null)){
+						str_moda_ii = "<tr><td> <input type='checkbox' id='chk_"+index+"' name='chose person' value='1'></td> <td><table id='table_person_"+index+"'></table></td> <td><input type='button' value='confirm' id='confirm_mod_btn_"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td> </tr>";
+						$(str_moda_ii).appendTo("#table_gtop_"+index+"");
 
-							data = {
-								wfreqdetailID: wfrq_formod_val,
-								gid: groupid,
-								uid: approverid
-							};
-
-						}else if(groupid != "" && (approverid == "" || approverid == null)){
-							data = {
-								wfreqdetailID: wfrq_formod_val,
-								gid: groupid
-							};
+						if (groupid == "") {
+							$("#table_gtop_"+index+"").empty();
 						}
-						console.log(data);
-						$.post("formadmin_handle/updatemodaccess.php", {data: data}, function(response){
-							console.log(response);
 
-						});
-						$("#table_moda_"+index+"").empty();
-					});
+						$("#confirm_mod_btn_"+index+"").click(function(){
+							console.log("confirm_mod_btn_"+index+" was clicked");
+							console.log(groupid);
+							console.log(approverid);
+							wfrq_formod_val = $("#wfrq_formod"+index+"").val();
+							console.log(wfrq_formod_val);
+							if(groupid != "" && (approverid != "" && approverid != null)){
 
-					$("#chk_"+index+"").change(function(){
-						$("#table_person_"+index+"").empty();
-						let chkval1 = $("#chk_"+index+"").is(":checked") ;
-						if (chkval1) {
-							console.log("chkbox checked ");
-							var str_moda_iii;
-							//post to db to get person name+surname list
-							$.post("formadmin_handle/moda_person_wfrqdetail_handle.php", {group_id: groupid}, function(response){
+								data = {
+									wfreqdetailID: wfrq_formod_val,
+									gid: groupid,
+									uid: approverid
+								};
+
+							}else if(groupid != "" && (approverid == "" || approverid == null)){
+								data = {
+									wfreqdetailID: wfrq_formod_val,
+									gid: groupid
+								};
+							}
+							console.log(data);
+							$.post("formadmin_handle/updatemodaccess.php", {data: data}, function(response){
 								console.log(response);
-								json_ret_modaccess_p = JSON.parse(response);
-								if(json_ret_modaccess_p.length != 0){
-									str_moda_iii = "<tr><td><select id='selector2_"+index+"'>";
-									str_moda_iii = str_moda_iii + "<option value=''>--select individual--</option>";
-									for (var i = 0; i < json_ret_modaccess_p.length; i++) {
-										UserID = json_ret_modaccess_p[i].UserID;
-										fullname = json_ret_modaccess_p[i].Name +" "+ json_ret_modaccess_p[i].Surname;
-										console.log(UserID);
-										console.log(fullname);
-										str_moda_iii = str_moda_iii + "<option value='"+UserID+"'>"+fullname+"</option>";
-									}
-									str_moda_iii = str_moda_iii + "</select></td> </tr>";
-									console.log(str_moda_iii);
-									console.log(index);
-									$(str_moda_iii).appendTo("#table_person_"+index+"");
-
-									// var approverid = $(this).find("option:selected").attr('value');
-									$("#selector2_"+index+"").change(function(){
-										// $("#confirm_mod_table").empty();
-
-										approverid = $(this).find("option:selected").attr('value');
-										// str_confirm_mod = "<tr><td> <input type='button' value='confirm' id='confirm_mod_btn'> </td></tr>";
-										// $(str_confirm_mod).appendTo("#confirm_mod_table");
-									});
-
-								}
 
 							});
-							// add it to table table_person_'index'
+							$("#table_moda_"+index+"").empty();
+						});
 
-						}else{
-							console.log("chkbox not check ");
-						}
+						$("#chk_"+index+"").change(function(){
+							$("#table_person_"+index+"").empty();
+							let chkval1 = $("#chk_"+index+"").is(":checked") ;
+							if (chkval1) {
+								console.log("chkbox checked ");
+								var str_moda_iii;
+								//post to db to get person name+surname list
+								$.post("formadmin_handle/moda_person_wfrqdetail_handle.php", {group_id: groupid}, function(response){
+									console.log(response);
+									json_ret_modaccess_p = JSON.parse(response);
+									if(json_ret_modaccess_p.length != 0){
+										str_moda_iii = "<tr><td><select id='selector2_"+index+"'>";
+										str_moda_iii = str_moda_iii + "<option value=''>--select individual--</option>";
+										for (var i = 0; i < json_ret_modaccess_p.length; i++) {
+											UserID = json_ret_modaccess_p[i].UserID;
+											fullname = json_ret_modaccess_p[i].Name +" "+ json_ret_modaccess_p[i].Surname;
+											console.log(UserID);
+											console.log(fullname);
+											str_moda_iii = str_moda_iii + "<option value='"+UserID+"'>"+fullname+"</option>";
+										}
+										str_moda_iii = str_moda_iii + "</select></td> </tr>";
+										console.log(str_moda_iii);
+										console.log(index);
+										$(str_moda_iii).appendTo("#table_person_"+index+"");
+
+										// var approverid = $(this).find("option:selected").attr('value');
+										$("#selector2_"+index+"").change(function(){
+											// $("#confirm_mod_table").empty();
+
+											approverid = $(this).find("option:selected").attr('value');
+											// str_confirm_mod = "<tr><td> <input type='button' value='confirm' id='confirm_mod_btn'> </td></tr>";
+											// $(str_confirm_mod).appendTo("#confirm_mod_table");
+										});
+
+									}
+
+								});
+								// add it to table table_person_'index'
+
+							}else{
+								console.log("chkbox not check ");
+							}
+						});
+
 					});
-
 				});
-			});
+			}else{
+				console.log("this state already complete!");
+			}
     });
   }
 
@@ -343,11 +355,11 @@ if ($_SESSION['gName'] != "Flow_Admin") {
 
 	function cmtlist_2(jret_cmtlist, cmtbyname){
 		if (jret_cmtlist.CommentBy == user_id) {
-			m_left = 65;
+			m_left = 60;
 			// m_color = "#3c8dbc";
 			m_color = "violet";
 		}else{
-			m_left = 10;
+			m_left = 5;
 			m_color = "purple";
 		}
 		str_cmtlist = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+cmtbyname+"</Text></td></tr> <tr><td><Text>"+jret_cmtlist.Comment+"</Text></td></tr> <tr><td><Text>"+jret_cmtlist.CommentTime+"</Text></table></td></tr>   </td> </tr>";

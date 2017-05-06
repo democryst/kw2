@@ -53,10 +53,12 @@ if (isset($_POST['data']) ) {
       $d2_timestamp = $d2['TimeStamp'];
 
       if($d2['DocName']){
-        $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoc`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid') ";
+        // $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoc`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid') ";
+        $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoctemplate`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid') ";
         $mysqli->query($q_insert_wfrequestdoc);
 
-        $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoc WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' ";
+        // $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoc WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' ";
+        $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoctemplate WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' ";
         $result_select_wfrequestdoc = $mysqli->query($q_select_wfrequestdoc);
         while ($row_select_wfrequestdoc=$result_select_wfrequestdoc->fetch_array() ) {
           $doc_arr_inner = array();
@@ -84,9 +86,11 @@ $mapping_wfdetail_access = array();
       $d3 = $data_select_wfdetail[$i];
       $d3_statename = $d3['StateName'];
       $d3_deadline = $d3['Deadline'];
-      $d3_wfdocid = $d3['WFDocID'];
+      $d3_wfdocid = $d3['WFDocID']; // array
       $d3_wfdetailid = $d3['WFDetailID'];
+      $d3_TemplateFileChose = $d3['TemplateFileChose'];
       //problem multi wfdocid and multi wfrequestdocid need to match them
+      $this_state_request_docid = array();
       for ($j=0; $j < count($doc_arr); $j++) {
         $WFRequestDocID_l = $doc_arr[$j]['WFRequestDocID'];
         $DocName_l = $doc_arr[$j]['DocName'];
@@ -94,21 +98,39 @@ $mapping_wfdetail_access = array();
         $DocTimestamp = $doc_arr[$j]['TimeStamp'];
         $DocID_l = $doc_arr[$j]['WFDocID'];
         // select WFRequestDocID that have same docname docurl in db as WFDocID
-        if($d3_wfdocid == $DocID_l){
-          $q_insert_wfrequestdetail = "INSERT INTO `wfrequestdetail`(`ParentID`, `StateName`, `CreateTime`, `Deadline`, `WFRequestDocID`, `WFRequestID`) values('$ParentStateID', '$d3_statename', '$all_date', '$d3_deadline', '$WFRequestDocID_l', '$WFRequestID') ";
-          $mysqli->query($q_insert_wfrequestdetail) or trigger_error($mysqli->error."[$q_insert_wfrequestdetail]");
-
-          $q_SELECT_wfrequestdetail="SELECT * FROM wfrequestdetail where StateName = '$d3_statename' AND CreateTime = '$all_date' AND WFRequestDocID='$WFRequestDocID_l' AND WFRequestID='$WFRequestID' ";
-          $result_SELECT_wfrequestdetail=$mysqli->query($q_SELECT_wfrequestdetail);
-          while($row_SELECT_wfrequestdetail=$result_SELECT_wfrequestdetail->fetch_array()){
-            $ParentStateID = $row_SELECT_wfrequestdetail['WFRequestDetailID'];
-            $mapping['WFDetailID'] = $d3_wfdetailid;
-            $mapping['WFRequestDetailID']  = $row_SELECT_wfrequestdetail['WFRequestDetailID'];
-            array_push($mapping_wfdetail_access, $mapping);
+        $d3_wfdocid_array = unserialize($d3_wfdocid);
+        for ($k=0; $k < count($d3_wfdocid_array); $k++) {
+          if($d3_wfdocid_array[$k] == $DocID_l){
+            array_push($this_state_request_docid, $WFRequestDocID_l);
           }
         }
+        // if($d3_wfdocid == $DocID_l){
+        //   $q_insert_wfrequestdetail = "INSERT INTO `wfrequestdetail`(`ParentID`, `StateName`, `CreateTime`, `Deadline`, `WFRequestDocID`, `WFRequestID`) values('$ParentStateID', '$d3_statename', '$all_date', '$d3_deadline', '$WFRequestDocID_l', '$WFRequestID') ";
+        //   $mysqli->query($q_insert_wfrequestdetail) or trigger_error($mysqli->error."[$q_insert_wfrequestdetail]");
+        //
+        //   $q_SELECT_wfrequestdetail="SELECT * FROM wfrequestdetail where StateName = '$d3_statename' AND CreateTime = '$all_date' AND WFRequestDocID='$WFRequestDocID_l' AND WFRequestID='$WFRequestID' ";
+        //   $result_SELECT_wfrequestdetail=$mysqli->query($q_SELECT_wfrequestdetail);
+        //   while($row_SELECT_wfrequestdetail=$result_SELECT_wfrequestdetail->fetch_array()){
+        //     $ParentStateID = $row_SELECT_wfrequestdetail['WFRequestDetailID'];
+        //     $mapping['WFDetailID'] = $d3_wfdetailid;
+        //     $mapping['WFRequestDetailID']  = $row_SELECT_wfrequestdetail['WFRequestDetailID'];
+        //     array_push($mapping_wfdetail_access, $mapping);
+        //   }
+        // }
 
       }
+      $cur_request_docid = serialize($this_state_request_docid);
+        $q_insert_wfrequestdetail = "INSERT INTO `wfrequestdetail`(`ParentID`, `StateName`, `CreateTime`, `Deadline`, `WFRequestDocID`, `WFRequestID`, `TemplateFileChose`) values('$ParentStateID', '$d3_statename', '$all_date', '$d3_deadline', '$cur_request_docid', '$WFRequestID', '$d3_TemplateFileChose') ";
+        $mysqli->query($q_insert_wfrequestdetail) or trigger_error($mysqli->error."[$q_insert_wfrequestdetail]");
+
+        $q_SELECT_wfrequestdetail="SELECT * FROM wfrequestdetail where StateName = '$d3_statename' AND CreateTime = '$all_date' AND WFRequestDocID='$cur_request_docid' AND WFRequestID='$WFRequestID' ";
+        $result_SELECT_wfrequestdetail=$mysqli->query($q_SELECT_wfrequestdetail);
+        while($row_SELECT_wfrequestdetail=$result_SELECT_wfrequestdetail->fetch_array()){
+          $ParentStateID = $row_SELECT_wfrequestdetail['WFRequestDetailID'];
+          $mapping['WFDetailID'] = $d3_wfdetailid;
+          $mapping['WFRequestDetailID']  = $row_SELECT_wfrequestdetail['WFRequestDetailID'];
+          array_push($mapping_wfdetail_access, $mapping);
+        }
 
 
     }
@@ -132,17 +154,7 @@ $mapping_wfdetail_access = array();
       }
     }
 
-//return filename, url
-// $data_return = array();
-// $q_get_file = "SELECT * FROM wfrequestdoc WHERE WFRequestID='$WFRequestID' ";
-// $result_get_file=$mysqli->query($q_get_file) or trigger_error($mysqli->error."[$q_get_file]");
-// while($row_get_file=$result_get_file->fetch_array()){
-//   $ret_arr = array();
-//   $ret_arr['WFRequestDocID'] = $row_get_file['WFRequestDocID'];
-//   $ret_arr['DocName'] = $row_get_file['DocName'];
-//   $ret_arr['DocURL'] = $row_get_file['DocURL'];
-//   array_push($data_return, $ret_arr);
-// }
+
 
       echo json_encode($WFRequestID);
 

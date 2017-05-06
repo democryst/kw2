@@ -155,11 +155,11 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
         $cur_comment_CommentTime = $cur_comment['CommentTime'];
         // $cur_comment_WFRequestDetailID = $cur_comment['WFRequestDetailID'];   //replace with child_wfrqdetailID
         $cur_comment_CommentBy = $cur_comment['CommentBy'];
-
+        $cur_comment_CommentTo = $cur_comment['CommentTo'];
         $q_del_cur_comment = "DELETE FROM `comment` WHERE CommentID='$cur_comment_CommentID'";
         $mysqli->query($q_del_cur_comment);
 
-        $q_insert_cur_comment_tochild = "INSERT INTO `comment`(`Comment`, `CommentTime`, `WFRequestDetailID`, `CommentBy`) VALUES ('$cur_comment_Comment', '$cur_comment_CommentTime', '$child_wfrqdetailID', '$cur_comment_CommentBy')";
+        $q_insert_cur_comment_tochild = "INSERT INTO `comment`(`Comment`, `CommentTime`, `WFRequestDetailID`, `CommentBy`, `CommentTo`) VALUES ('$cur_comment_Comment', '$cur_comment_CommentTime', '$child_wfrqdetailID', '$cur_comment_CommentBy', '$cur_comment_CommentTo')";
         $mysqli->query($q_insert_cur_comment_tochild);
       }
     }
@@ -172,11 +172,11 @@ $WFrqDoc_ID = $data_parse['WFrqDoc_ID'];
         $cur_comment_CommentTime_child = $cur_comment_child['CommentTime'];
         // $cur_comment_WFRequestDetailID_child = $cur_comment_child['WFRequestDetailID'];   //replace with $WFrqDetail_ID
         $cur_comment_CommentBy_child = $cur_comment_child['CommentBy'];
-
+        $cur_comment_CommentTo_child = $cur_comment_child['CommentTo'];
         $q_del_child_comment = "DELETE FROM `comment` WHERE CommentID='$cur_comment_CommentID_child'";
         $mysqli->query($q_del_child_comment);
 
-        $q_insert_child_comment_tocur = "INSERT INTO `comment`(`Comment`, `CommentTime`, `WFRequestDetailID`, `CommentBy`) VALUES ('$cur_comment_Comment_child', '$cur_comment_CommentTime_child', '$WFrqDetail_ID', '$cur_comment_CommentBy_child')";
+        $q_insert_child_comment_tocur = "INSERT INTO `comment`(`Comment`, `CommentTime`, `WFRequestDetailID`, `CommentBy`, `CommentTo`) VALUES ('$cur_comment_Comment_child', '$cur_comment_CommentTime_child', '$WFrqDetail_ID', '$cur_comment_CommentBy_child', '$cur_comment_CommentTo_child')";
         $mysqli->query($q_insert_child_comment_tocur);
       }
     }

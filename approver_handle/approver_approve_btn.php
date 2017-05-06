@@ -1,22 +1,37 @@
 <?php
 require_once('../connect.php');
 date_default_timezone_set("Asia/Bangkok");
-$TimeStamp_mark_arr =  $_POST['TimeStamp'];
-$userid =  $_POST['userid'];
-$CurrentWorkListID_mark_arr = $_POST['CurrentWorkListID'];
-$WFRequestDocID_arr = $_POST['WFRequestDocID_arr'];
+$datapares = $_POST['data'];
+$TimeStamp_mark_arr =  $datapares['TimeStamp'];
+sort($TimeStamp_mark_arr);
+$TimeStamp_mark_arr_u = array_values(array_unique($TimeStamp_mark_arr));
+$TimeStamp_mark_arr_u_0 = $TimeStamp_mark_arr_u[0];
+
+$userid =  $datapares['userid'];
+$CurrentWorkListID_mark_arr = $datapares['CurrentWorkListID'];
+
+$WFRequestDocID_arr = $datapares['wfrequestdocarr_new'];
+// $WFRequestDocID_arr = $datapares['WFRequestDocID_arr'];
+// $WFRequestDocID_arr_new = $datapares['wfrequestdocarr_new'];
+$WFRequestDocID_arr_s = serialize($WFRequestDocID_arr);
+
+// $TimeStamp_mark_arr =  $_POST['TimeStamp'];
+// $userid =  $_POST['userid'];
+// $CurrentWorkListID_mark_arr = $_POST['CurrentWorkListID'];
+// $WFRequestDocID_arr = $_POST['WFRequestDocID_arr'];
 for ($i=0; $i < count($CurrentWorkListID_mark_arr); $i++) {
-	$TimeStamp_mark = date("Y-m-d H:i:s", $TimeStamp_mark_arr);
+	$TimeStamp_mark = date("Y-m-d H:i:s", $TimeStamp_mark_arr_u_0);
+	// $TimeStamp_mark = date("Y-m-d H:i:s", $TimeStamp_mark_arr);
 	$CurrentWorkListID_mark = $CurrentWorkListID_mark_arr[$i];
 	$q_check_timestamp = "SELECT `TimeStamp` FROM currentworklist WHERE CurrentWorkListID='$CurrentWorkListID_mark' ";
 	$result_check_timestamp = $mysqli->query($q_check_timestamp);
 	$row_check_timestamp  = $result_check_timestamp->fetch_array();
-echo "TimeStamp: ". $TimeStamp_mark_arr ."\n";
-echo "date from timestamp: ".$TimeStamp_mark ."\n";
-echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
+// echo "TimeStamp: ". $TimeStamp_mark_arr ."\n";
+// echo "date from timestamp: ".$TimeStamp_mark ."\n";
+// echo "date from sql: ".$row_check_timestamp['TimeStamp'] ."\n";
 
 	if ($TimeStamp_mark == $row_check_timestamp['TimeStamp']) {
-		echo "\nTimeStamp match allow to upload\n";
+		// echo "\nTimeStamp match allow to upload\n";
 		// $upload_destination = "../uploads/";
 		// $pathname;
 		// $date_hrs = date("H-i-s");
@@ -84,9 +99,9 @@ if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_ro
 	$q_update_new = "UPDATE `wfrequestdetail` SET `StartTime`='$curtime_for_old' WHERE WFRequestDetailID='$c1_WFRequestDetailID' ";
 	$result_update_new  = $mysqli->query($q_update_new);
 }
-	//insert into history
-	$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '0', '$curtime_for_old') " ;
-	$mysqli->query($q_INSERT_history);
+	// //insert into history
+	// $q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '0', '$curtime_for_old', '$WFRequestDocID_arr_s') " ;
+	// $mysqli->query($q_INSERT_history);
 
 		// Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user’s experience. For more help http://xhr.spec.whatwg.org/
 
@@ -108,6 +123,14 @@ if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_ro
 		//insert new currentworklist after starttime , endtime was update
 		$q_INSERT_currentworklist="INSERT INTO `currentworklist`(`WFRequestDetailID`, `StateName`, `State`, `Priority`, `DoneBy`, `Status`, `StartTime`, `EndTime`, `ApproveStatus`, `TimeStamp`) values('$c2_WFRequestDetailID', '$c2_StateName', '$c2_State', '$c2_Priority', '$c2_DoneBy', '$c2_Status', '$c2_StartTime', '$c2_EndTime', '0', CURRENT_TIMESTAMP) " ;
 		$mysqli->query($q_INSERT_currentworklist);
+
+		//insert into history
+		$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '0', '$curtime_for_old', '$WFRequestDocID_arr_s') " ;
+		$mysqli->query($q_INSERT_history);
+	}else {
+		//insert into history
+		$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '9', '$curtime_for_old', '$WFRequestDocID_arr_s') " ;
+		$mysqli->query($q_INSERT_history);
 	}
 
 	}   //TimeStamp check if not same mean someone done this work first
