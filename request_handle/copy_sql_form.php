@@ -51,22 +51,24 @@ if (isset($_POST['data']) ) {
       $d2_docname = $d2['DocName'];
       $d2_docurl = $d2['DocURL'];
       $d2_timestamp = $d2['TimeStamp'];
+      $d2_wfdocType = $d2['WfdocType'];
 
       if($d2['DocName']){
         // $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoc`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid') ";
-        $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoctemplate`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid') ";
+        $q_insert_wfrequestdoc = "INSERT INTO `wfrequestdoctemplate`(`WFRequestID`, `DocName`, `DocURL`, `TimeStamp`, `WFDocID`, `WfdocType`) values('$WFRequestID', '$d2_docname', '$d2_docurl', '$d2_timestamp', '$d2_docid', '$d2_wfdocType') ";
         $mysqli->query($q_insert_wfrequestdoc);
 
         // $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoc WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' ";
-        $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoctemplate WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' ";
+        $q_select_wfrequestdoc = "SELECT * FROM wfrequestdoctemplate WHERE WFRequestID='$WFRequestID' AND DocName='$d2_docname' AND DocURL='$d2_docurl' AND WfdocType='$d2_wfdocType' ";
         $result_select_wfrequestdoc = $mysqli->query($q_select_wfrequestdoc);
         while ($row_select_wfrequestdoc=$result_select_wfrequestdoc->fetch_array() ) {
           $doc_arr_inner = array();
-          $doc_arr_inner['WFRequestDocID'] = $row_select_wfrequestdoc['WFRequestDocID'];
+          $doc_arr_inner['WFRequestDocID'] = $row_select_wfrequestdoc['WFRequestTemplateDocID'];
           $doc_arr_inner['DocName'] = $row_select_wfrequestdoc['DocName'];
           $doc_arr_inner['DocURL'] = $row_select_wfrequestdoc['DocURL'];
           $doc_arr_inner['TimeStamp'] = $row_select_wfrequestdoc['TimeStamp'];
           $doc_arr_inner['WFDocID'] = $row_select_wfrequestdoc['WFDocID'];
+          $doc_arr_inner['WfdocType'] = $row_select_wfrequestdoc['WfdocType'];
           array_push($doc_arr, $doc_arr_inner);
         }
 

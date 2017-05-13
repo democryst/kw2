@@ -302,8 +302,9 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 			$("#RequestBtn").click(function(){
 				if (ret_wfdetail.length != 0) {
 					$.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
-						wfrequestid=JSON.parse(response);
-						console.log(wfrequestid);
+						console.log(response);
+						// wfrequestid=JSON.parse(response);
+						// console.log(wfrequestid);
 					});
 				}
 			});

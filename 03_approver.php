@@ -164,12 +164,21 @@ if ($_SESSION['gName'] != "Approver") {
 	 		 	 let FormName = json_return_approve_currentworklist_wfrequest.FormName;
 	 			 let requesterName = json_return_approve_currentworklist_wfrequest.Name + " " + json_return_approve_currentworklist_wfrequest.Surname;
 				 //  var str_aprove_currentworklist = "<tr><td><Text>FormName : "+FormName+"</Text></td><td><input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'><text>State : "+StateName+"</text></td> <td><text> Request By : "+requesterName+"</text></td> <td><text> CreateTime : "+CreateTime+"</text></td> <td><input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td> <td><input type='button' value='Select' id='select_work_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;'></td></tr>";
-				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;color:black;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text>  </div> <div><text>State Exist : "+diff_date+" day</text></div> </div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='btn_select'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
+				 var str_aprove_currentworklist = "<tr><td><div class='cardbox' style='margin-top:10px;display:-moz-box;color:black;'> <div><div><Text>FormName : "+FormName+"</Text></div> <input type=hidden value='"+wfrequestdetailID+"' name='wfrequestdetailID' id='wfrequestdetailID_"+index+"'> <div><text>State : "+StateName+"</text> <text style='margin-left:10'> Request By : "+requesterName+"</text> <text> CreateTime : "+CreateTime+"</text>  </div> <div><text>State Exist : "+diff_date+" day</text></div> </div> <div ><div ><input type='button' value='comments' id='comment_btn_"+index+"' class='comment_btn'></div> <div><input type='button' value='Select' id='select_work_btn_"+index+"' class='btn_select'></div></div> </div> </td> </tr>";
 	 			 $(str_aprove_currentworklist).appendTo("#current-work-table");
 
 				 	//show comment of that state
 				  $("#comment_btn_"+index+"").click(function(){
 						$("#comment_page").show();
+						let cmt_c_obj = document.getElementsByClassName('comment_btn');
+						console.log(cmt_c_obj);
+						for (var i = 0; i < cmt_c_obj.length; i++) {
+							console.log(cmt_c_obj[i].style.backgroundColor);
+							cmt_c_obj[i].style.backgroundColor ='#3c8dbc';
+						}
+						let cmt_cbtn_obj = document.getElementById("comment_btn_"+index+"");
+						cmt_cbtn_obj.style.backgroundColor ="#252726";
+
 						// console.log("comment_page");
 						console.log("wfrequestdetailID :");
 						console.log(wfrequestdetailID);
@@ -505,7 +514,7 @@ console.log(CurrentWorkListID);
 	</div>
 
 </div>
-
+</div>
 
 </body>
 </html>
