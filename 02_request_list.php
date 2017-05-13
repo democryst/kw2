@@ -284,7 +284,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
       }else{
         str_state= str_state + "<Text style='margin-left:10px;'>Status : </Text> <img src='images/reddot.png' width='20' height='20' style='margin-left:10px;'>"
       }
-      str_state = str_state + "<input type='button' value='comments' id='comment_btn_"+index+"' style='margin-left:10px;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'> ";
+      str_state = str_state + "<input type='button' value='comments' id='comment_btn_"+index+"' class='comment_btn'> ";
 
 			if (obj.DoneBy==userid) {
 				str_state = str_state + "<input type='button' value='document' id='document_R_"+index+"' style='margin-left:10px;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'> </div></td></tr>";
@@ -302,6 +302,21 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 			}
 
       $("#comment_btn_"+index+"").click(function(){
+				let cmt_c_obj = document.getElementsByClassName('comment_btn');
+				console.log(cmt_c_obj);
+				for (var i = 0; i < cmt_c_obj.length; i++) {
+					console.log(cmt_c_obj[i].style.backgroundColor);
+					// cmt_c_obj[i].style.backgroundColor ='gray';
+					cmt_c_obj[i].style.backgroundColor ='#3c8dbc';
+					// cmt_c_obj[i].style.color ='black';
+					// cmt_c_obj[i].style.color ='white';
+				}
+				let cmt_cbtn_obj = document.getElementById("comment_btn_"+index+"");
+				// cmt_cbtn_obj.style.backgroundColor ="#3c8dbc";
+				cmt_cbtn_obj.style.backgroundColor ="#252726";
+				// cmt_cbtn_obj.style.color="white";
+				// cmt_cbtn_obj.style.color="black";
+
         console.log(obj.WFRequestDetailID);
         State_id = obj.WFRequestDetailID;
         State_status = obj.DoneBy;
