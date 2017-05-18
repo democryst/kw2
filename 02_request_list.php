@@ -45,7 +45,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 	<title>KW2</title>
 
 	<!-- //this line redirect to get jquery in current computer   -->
-	<script src="scripts/jquery-2.0.0.min.js"></script>
+	<!-- <script src="scripts/jquery-2.0.0.min.js"></script> -->
+		<script src="jquery-3.1.1.min.js"></script>
 
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
@@ -53,6 +54,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
   var State_status;
 	var WFreq_ID;
 		$(document).ready(function() {
+			$('#div_kw1').hide();
+			$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
 			//************************************************************
 			$("#Logout").click(function(){
 					window.location = '06_logout.php';
@@ -212,7 +215,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
               console.log(response);
               json_ret_cmt = JSON.parse(response);
               if (json_ret_cmt.length >=1) {
-                var str_add_cmt_list = "<tr><td><Text>Comment</Text></td> <td><Text>Comment by</Text></td> <td><Text>Comment Time</Text></td></tr>";
+                var str_add_cmt_list = "<div><table><tr><td><Text>Comment</Text></td> <td><Text>Comment by</Text></td> <td><Text>Comment Time</Text></td></tr></table></div>";
                 $(str_add_cmt_list).appendTo("#request_comment_table");
                 // json_ret_cmt = JSON.parse(response);
                 for (var k = 0; k < json_ret_cmt.length; k++) {
@@ -220,7 +223,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
                 }
 
               }else{
-                var str_add_cmt_list = "<tr><td><Text>No comment</Text></td></tr>";
+                var str_add_cmt_list = "<div><table><tr><td><Text>No comment</Text></td></tr></table></div>";
                 $(str_add_cmt_list).appendTo("#request_comment_table");
               }
             });
@@ -369,7 +372,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					m_left = 10;
 					m_color = "purple";
 				}
-	      var str_add_cmt_list = "<tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+cmtbyname+"</Text></td></tr> <tr><td><Text>"+obj.Comment+"</Text></td></tr> <tr><td><Text>"+obj.CommentTime+"</Text></table></td></tr>   </td></tr>";
+	      var str_add_cmt_list = "<div><table><tr> <td><table style='margin-left:"+m_left+"%;background-color:"+m_color+";border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:300px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'><tr><td><Text>"+cmtbyname+"</Text></td></tr> <tr><td><Text>"+obj.Comment+"</Text></td></tr> <tr><td><Text>"+obj.CommentTime+"</Text></table></td></tr> </table></div>";
 	      $(str_add_cmt_list).appendTo("#request_comment_table");
 			});
 
@@ -455,6 +458,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 				let docarrwl = arr_wl[1];
 				let wfrqdetailid_wl = arr_wl[0];
 				let tempfilechose = arr_wl[2];
+
 				console.log(wfrqdetailid_wl);
 				for (var i = 0; i < docarrwl.length; i++) {
 					if (docarrwl[i].WFRequestTemplateDocID) {
@@ -462,18 +466,32 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					}else {
 						e_WFRequestDocID = docarrwl[i].WFRequestDocID;
 					}
-
+					let e_formtype = docarrwl[i].WfdocType;
+					console.log("e_formtype:");
+					console.log(e_formtype);
+					console.log("/n");
 					let e_WFRequestID = docarrwl[i].WFRequestID;
 					let e_DocName = docarrwl[i].DocName;
 					console.log(e_WFRequestDocID);
 					console.log(e_WFRequestID);
 					console.log(e_DocName);
-					// j_doc_re[i].DocURL;
-					// j_doc_re[i].TimeStamp;
-					// j_doc_re[i].WFDocID;
-					let str_show_doc_wl = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' name='file_array[]' id='file_update_"+i+"'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+
+					if (e_formtype == 0) {//comment for test kw1
+						console.log("case 0");
+						str_show_doc_wl = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' name='file_array[]' id='file_update_"+i+"'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+					}else { //e_formtype == 1  kw1form
+						console.log("case 1");
+						str_show_doc_wl = "<tr style='margin-left:10;'><td><Text style='font-size:small;'>"+e_DocName+"</Text></td> <td><input type='button' value='document' id='kw1_document_update_"+i+"' class='btn_select'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+					}
 					$(str_show_doc_wl).appendTo("#relate_doc_table");
 					let index = i;
+
+					if (e_formtype != 0) {//comment for test kw1
+						$("#kw1_document_update_"+i+"").click(function(){
+							$('#div_kw1').show();
+							$('#div_kw2').hide();
+						});
+					}
 
 
 				}
@@ -483,29 +501,28 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					// console.log(index);
 					//e_fileupdate = $("#file_update_"+index+"").val();
 					let chk=0;
-					let fileinarr = new Array();
-					$('[name^="file_array[]"]').each(function(){
-							if ($(this).val() != "") {
-								fileinarr.push($(this).val());
-							}else{
-								chk=1;
-							}
-					});
+					if (docarrwl[0].WfdocType == 0) {
+						let fileinarr = new Array();
+						$('[name^="file_array[]"]').each(function(){
+								if ($(this).val() != "") {
+									fileinarr.push($(this).val());
+								}else{
+									chk=1;
+								}
+						});
 
-					console.log(fileinarr);
+						if (chk==0) {
+							console.log("can update");
+							documentinsert();
+						}
 
-					// let stateid_arr = new Array();
-					// $('[name^="stateid_arr[]"]').each(function(){
-					// 		if ($(this).val() != "") {
-					// 			stateid_arr.push($(this).val());
-					// 		}
-					// });
-					// console.log(stateid_arr);
-
-					if (chk==0) {
-						console.log("can update");
-						documentinsert();
+					}else{//for kw1 no need to insert file b/c edit in kw1site
+						// $.post("", {data:{}}, function(res){
+						// 	console.log(res);
+						// });
 					}
+
+
 
 				});
 			});
@@ -526,19 +543,30 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					}else {
 						e_WFRequestDocID = docarrwl[i].WFRequestDocID;
 					}
+					let e_formtype = docarrwl[i].WfdocType;
 
 					let e_WFRequestID = docarrwl[i].WFRequestID;
 					let e_DocName = docarrwl[i].DocName;
 					console.log(e_WFRequestDocID);
 					console.log(e_WFRequestID);
 					console.log(e_DocName);
-					// j_doc_re[i].DocURL;
-					// j_doc_re[i].TimeStamp;
-					// j_doc_re[i].WFDocID;
-					let str_show_doc_wl = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' name='file_array[]' id='file_update_"+i+"'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+
+					if (e_formtype == 0) {
+						str_show_doc_wl = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' name='file_array[]' id='file_update_"+i+"' class='file_array_request'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+					}else { //e_formtype == 1  kw1form
+						str_show_doc_wl = "<tr style='margin-left:10;'><td><Text style='font-size:small;'>"+e_DocName+"</Text></td> <td><input type='button' value='document' id='kw1_document_update_"+i+"' class='btn_select'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+					}
+
+
 					$(str_show_doc_wl).appendTo("#relate_doc_table");
 					let index = i;
 
+					if (e_formtype != 0) {//comment for test kw1
+						$("#kw1_document_update_"+i+"").click(function(){
+							$('#div_kw1').show();
+							$('#div_kw2').hide();
+						});
+					}
 
 				}
 				str_show_doc_wl2 = "<tr><td><input type='hidden' name='userid' value='"+userid+"' ><input type='button' value='edit' id='editdoc_btn' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
@@ -547,31 +575,36 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					// console.log(index);
 					//e_fileupdate = $("#file_update_"+index+"").val();
 					let chk=0;
-					let fileinarr = new Array();
-					$('[name^="file_array[]"]').each(function(){
-							if ($(this).val() != "") {
-								fileinarr.push($(this).val());
-							}else{
-								chk=1;
-							}
-					});
+					if (docarrwl[0].WfdocType == 0) {
+						let fileinarr = new Array();
+						// $('[name^="file_array[]"]').each(function(){
+						// 		if ($(this).val() != "") {
+						// 			fileinarr.push($(this).val());
+						// 		}else{
+						// 			chk=1;
+						// 		}
+						// });
+						$('.file_array_request').each(function(){
+								if ($(this).val() != "") {
+									fileinarr.push($(this).val());
+								}else{
+									chk=1;
+								}
+						});
 
-					console.log(fileinarr);
+						if (chk==0) {
+							console.log("can update");
+							documentinsert_Request();
+						}
 
-					// let stateid_arr = new Array();
-					// $('[name^="stateid_arr[]"]').each(function(){
-					// 		if ($(this).val() != "") {
-					// 			stateid_arr.push($(this).val());
-					// 		}
-					// });
-					// console.log(stateid_arr);
-
-					if (chk==0) {
-						console.log("can update");
-						documentinsert_Request();
+					}else{//for kw1 no need to insert file b/c edit in kw1site
+						// $.post("", {data:{}}, function(res){
+						// 	console.log(res);
+						// });
 					}
 
 				});
+
 			});
 		}
 
@@ -627,6 +660,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 <body>
 
 <div id="wrapper">
+	<div id="div_kw1" style='z-index:10;'></div>
+	<div id="div_kw2">
 	<div id="div_header">
 		SIIT Form Workflow System
 	</div>
@@ -685,7 +720,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
       <div id="comment">
         <h2>Comment</h2>
-        <table id="request_comment_table"></table>
+        <div id="request_comment_table"></div>
         <table id="commentbox" style="margin-left:5%;background-color:#8282fe;border-radius:3px;border:1px solid transparent;width:450px;height:18px;color:white;font-size:small;">
           <tr><td style="width:100px"><Text>Comment box: </Text></td> <td><input type="text" id="current_comment" style="width: 220px;"></td> <td><input type="button" id="current_comment_btn" value="comment" style="background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;"></td></tr>
         </table>
@@ -696,7 +731,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 	<div id="div_footer">
 	</div>
-
+</div>
 </div>
 
 

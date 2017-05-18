@@ -46,7 +46,8 @@ if ($_SESSION['gName'] != "Approver") {
 	<title>KW2</title>
 
 	<!-- //this line redirect to get jquery in current computer   -->
-	<script src="scripts/jquery-2.0.0.min.js"></script>
+	<!-- <script src="scripts/jquery-2.0.0.min.js"></script> -->
+	<script src="jquery-3.1.1.min.js"></script>
 
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
@@ -55,7 +56,10 @@ if ($_SESSION['gName'] != "Approver") {
 	var cur_wfrqstate_id;
 	var cmtbyname;
 	var wfrequestdocarr_new = new Array();
+	var doctype = 0;
 	$(document).ready(function() {
+		$('#div_kw1').hide();
+		$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
 		//************************************************************
 		$("#Logout").click(function(){
 				window.location = '06_logout.php';
@@ -193,6 +197,17 @@ if ($_SESSION['gName'] != "Approver") {
 				 				$("#file_upload_page").hide();
 				 				$("#comment_page").hide();
 
+								//******
+								let select_work_c_obj = document.getElementsByClassName('btn_select');
+								console.log(select_work_c_obj);
+								for (var i = 0; i < select_work_c_obj.length; i++) {
+									console.log(select_work_c_obj[i].style.backgroundColor);
+									select_work_c_obj[i].style.backgroundColor ='#3c8dbc';
+								}
+								let select_work_cbtn_obj = document.getElementById("select_work_btn_"+index+"");
+								select_work_cbtn_obj.style.backgroundColor ="#252726";
+								//*******
+
 								let wfrequestdetailID = $("#wfrequestdetailID_"+index+"").attr('value');
 								console.log(wfrequestdetailID);
 								$.post("approver_handle/apporver_currentwork_wfrequestdoc.php", {data: wfrequestdetailID}, function(data){
@@ -217,6 +232,12 @@ console.log(CurrentWorkListID);
 										 var DocID = ret_document[i].WFDocID;
 										 var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+RequestDocID+' name="WFRequestDocID_arr[]"><input type="hidden" value='+DocID+' name="WFDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
 										 $(str_file_upload_table).appendTo("#file-upload-table");
+
+										 doctype = ret_document[i].WfdocType;
+										 if (doctype != 0) {
+											 $("#currentwork_select_page").hide();
+ 							 				 $("#file_upload_page").show();
+										 }
 									 }
 
 
@@ -442,6 +463,8 @@ console.log(CurrentWorkListID);
 <body>
 
 <div id="wrapper">
+	<div id="div_kw1" style='z-index:10;'></div>
+	<div id="div_kw2">
 	<div id="div_header">
 		SIIT Form Workflow System
 	</div>
@@ -509,7 +532,7 @@ console.log(CurrentWorkListID);
 		</div>
 
 	</div>
-
+	</div>
 	<div id="div_footer">
 	</div>
 

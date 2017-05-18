@@ -138,17 +138,27 @@ if ($_SESSION['gName'] != "Flow_Admin") {
     // EndTime = obj.EndTime;
 
     // var str = "<tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td> <td><input type='button' value='comment' id='comment"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td> <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td></tr>";
-		var str = "<tr> <td><div class='cardbox'><table style='font-size:small;'><tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td> <td><input type='button' value='comment' id='comment"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td> <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td> </tr></table></div></td> </tr>";
+		// var str = "<tr> <td><div class='cardbox'><table style='font-size:small;'><tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td> <td><input type='button' value='comment' id='comment"+index+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td> <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td> </tr></table></div></td> </tr>";
+		var str = "<tr> <td><div class='cardbox'><table style='font-size:small;'><tr> <td><input type='hidden' value='"+obj.WFRequestDetailID+"' id='wfrq_formod"+index+"' > <Text>State Name: "+obj.StateName+"</Text></td> <td><input type='button' value='comment' id='comment"+index+"' class='comment_btn'></td> <td><table> <tr><td><img  id='up_"+index+"' src='images/up.ico' width='20' height='20'></td></tr> <tr><td><img id='down_"+index+"' src='images/down.ico' width='20' height='20'></td></tr> </table></td> <td><img id='moda_"+index+"' src='images/access.ico'  width='30' height='30'></td> <td><Table id='table_moda_"+index+"'></Table></td> </tr></table></div></td> </tr>";
     $(str).appendTo("#wfrqdetail-table");
 
 		$("#comment"+index+"").click(function(){
+			let cmt_c_obj = document.getElementsByClassName('comment_btn');
+			console.log(cmt_c_obj);
+			for (var i = 0; i < cmt_c_obj.length; i++) {
+				console.log(cmt_c_obj[i].style.backgroundColor);
+				cmt_c_obj[i].style.backgroundColor ='#3c8dbc';
+			}
+			let cmt_cbtn_obj = document.getElementById("comment"+index+"");
+			cmt_cbtn_obj.style.backgroundColor ="#252726";
+
 			cur_cmt_state = obj.WFRequestDetailID;
 			if (cur_cmt_tab == null){
 				cur_cmt_tab = 0;
 			}
 			if (cur_cmt_tab == 0 || cur_cmt_tab == 1 ) {
 				$("#formadmin_comment-table").empty(); //clear comment
-				// cmtlist(obj.WFRequestDetailID, cur_cmt_tab);.
+				// cmtlist(obj.WFRequestDetailID, cur_cmt_tab);
 				cmtlist(cur_cmt_state, cur_cmt_tab);
 			}
 		});

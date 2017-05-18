@@ -45,7 +45,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 	<title>KW2</title>
 
 	<!-- //this line redirect to get jquery in current computer   -->
-	<script src="scripts/jquery-2.0.0.min.js"></script>
+	<!-- <script src="scripts/jquery-2.0.0.min.js"></script> -->
+	<script src="jquery-3.1.1.min.js"></script>
 
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
@@ -54,6 +55,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 
 	$(document).ready(function() {
+		$('#div_kw1').hide();
+		$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
 		//************************************************************
 		$("#Logout").click(function(){
 				window.location = '06_logout.php';
@@ -320,6 +323,8 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 <body>
 
 <div id="wrapper">
+	<div id="div_kw1" style='z-index:10;'></div>
+	<div id="div_kw2">
 	<div id="div_header">
 		SIIT Form Workflow System
 	</div>
@@ -385,7 +390,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 	</div>
 
 </div>
-
+</div>
 
 </body>
 </html>

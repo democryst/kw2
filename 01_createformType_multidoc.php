@@ -1,35 +1,35 @@
 <?php
-session_start();
-if(isset($_SESSION['user_id'])){
-	echo "<script type='text/javascript'>
-					console.log(".$_SESSION['user_id'].");
-				</script>";
-}
-echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
-if ($_SESSION['gName'] != "Sys_Admin") {
-?>
+// session_start();
+// if(isset($_SESSION['user_id'])){
+// 	echo "<script type='text/javascript'>
+// 					console.log(".$_SESSION['user_id'].");
+// 				</script>";
+// }
+// echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
+// if ($_SESSION['gName'] != "Sys_Admin") {
+// ?>
 <script type='text/javascript'>
-	alert('you dont have permission!');
-</script>
+// 	alert('you dont have permission!');
+// </script>
 <?php
-	if($_SESSION['gName'] == 'Requester'){
-		echo "<script type='text/javascript'>
-						window.location = '02_request_list.php';
-					</script>";
-	}else if($_SESSION['gName'] == 'Approver'){
-		echo "<script type='text/javascript'>
-						window.location = '03_approver.php';
-					</script>";
-	}else if($_SESSION['gName'] == 'Flow_Admin'){
-		echo "<script type='text/javascript'>
-						window.location = '04_formmodify.php';
-					</script>";
-	}else if($_SESSION['gName'] == 'Sys_Admin'){
-		echo "<script type='text/javascript'>
-						window.location = '01_createformType_multidoc.php';
-					</script>";
-	}
-}
+// 	if($_SESSION['gName'] == 'Requester'){
+// 		echo "<script type='text/javascript'>
+// 						window.location = '02_request_list.php';
+// 					</script>";
+// 	}else if($_SESSION['gName'] == 'Approver'){
+// 		echo "<script type='text/javascript'>
+// 						window.location = '03_approver.php';
+// 					</script>";
+// 	}else if($_SESSION['gName'] == 'Flow_Admin'){
+// 		echo "<script type='text/javascript'>
+// 						window.location = '04_formmodify.php';
+// 					</script>";
+// 	}else if($_SESSION['gName'] == 'Sys_Admin'){
+// 		echo "<script type='text/javascript'>
+// 						window.location = '01_createformType_multidoc.php';
+// 					</script>";
+// 	}
+// }
 
 ?>
 
@@ -49,6 +49,7 @@ if ($_SESSION['gName'] != "Sys_Admin") {
 	<meta http-equiv="pragma" content="no-cache" />
 
 	<script type="text/javascript">
+	var userid = 3;
 	var localhost = "http://localhost:8080/kw2/";
 var json_return_wfgeninfo;
 var json_return_wfdoc;
@@ -61,7 +62,7 @@ var doctype_id = 0;
 var docnum_inx = 0;
 		$(document).ready(function() {
 				 $('#div_kw1').hide();
-				  $('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4.html');
+				  $('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-newFile.html');
 
 
 			//************************************************************
@@ -73,10 +74,10 @@ var docnum_inx = 0;
 					window.location = '01_createformType_multidoc.php';
 			});
 			//************************************************************
-			$("#CreateFormType_wfdoc").hide();
-			$("#CreateFormType_wfdetail").hide();
-			$("#CreateFormType_wfaccess").hide();
-			$("#form_success").hide();
+			// $("#CreateFormType_wfdoc").hide();
+			// $("#CreateFormType_wfdetail").hide();
+			// $("#CreateFormType_wfaccess").hide();
+			// $("#form_success").hide();
 
 			$("#doctypeid").change(function(){
 				$("#upload_doc_table").empty();
@@ -99,7 +100,7 @@ var docnum_inx = 0;
 						$( "#div_kw1" ).append( "<input type='image' id='backToFirst' name='backToFirst' src='myPic/previous.png' style='position:fixed;width:80px;height:80px;left:250px;top:90px'/>");
 						setTimeout(function(){
 							$("#div_kw1").show();
-							 console.log("Asking kw1 - "+nowHaveItemCount);
+							//  console.log("Asking kw1 - "+nowHaveItemCount);
 						}, 1000);
 					});
 				}
@@ -134,9 +135,10 @@ var docnum_inx = 0;
 						});
 
 					}else if (doctype_id == 1) { //this pull each state and (formname of kw1)
-						var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td>'
-						+'<td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7"></td> <td><Text>Document display</Text></td><td><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select></td>'
-						+'<td><text> file: </text></td> <td><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
+						// var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td>'
+						// +'<td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7"></td> <td><Text>Document display</Text></td><td><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select></td>'
+						// +'<td><text> file: </text></td> <td><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
+						var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td> <td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7">  <input type="hidden" id="docchose_'+cur_index+'" value="0">  </td> <td><text> file: </text></td> <td><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
 
 						$(str).appendTo("#upload_state_table");
 						let d_chk_2 = 0;
