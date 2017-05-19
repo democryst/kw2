@@ -59,7 +59,7 @@ if ($_SESSION['gName'] != "Approver") {
 	var doctype = 0;
 	$(document).ready(function() {
 		$('#div_kw1').hide();
-		$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
+		// $('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
 		//************************************************************
 		$("#Logout").click(function(){
 				window.location = '06_logout.php';
@@ -223,6 +223,7 @@ if ($_SESSION['gName'] != "Approver") {
 console.log(CurrentWorkListID);
 									 var ret_document = json_return_wfrequestdoc.Document;
 									 for (var i = 0; i < ret_document.length; i++) {
+										 
 										 var filepath = ret_document[i].DocURL;
    									 var filename = ret_document[i].DocName;
 										 var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
@@ -230,13 +231,19 @@ console.log(CurrentWorkListID);
 
 										 var RequestDocID = ret_document[i].WFRequestDocID;
 										 var DocID = ret_document[i].WFDocID;
-										 var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+RequestDocID+' name="WFRequestDocID_arr[]"><input type="hidden" value='+DocID+' name="WFDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
+										//  var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr> <tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+RequestDocID+' name="WFRequestDocID_arr[]"><input type="hidden" value='+DocID+' name="WFDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
+
+										//  var str_file_upload_table = '<tr><td><table style="font-size:small;color:black;"><tr><td><img src="images/Document.ico" height="52" width="52"></td></tr><tr><td><Text>File:'+filename+'</Text></td></tr></table></td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+RequestDocID+' name="WFRequestDocID_arr[]"><input type="hidden" value='+DocID+' name="WFDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
+										 var str_file_upload_table = '<tr><td><div class="makeinline"><img src="images/Document.ico" height="52" width="52"><Text>File:'+filename+'</Text></div> </td> <td><input type="hidden" value='+CurrentWorkListID+' name="CurrentWorkListID[]"><input type="hidden" value='+TimeStamp_unix+' name="TimeStamp"><input type="hidden" value='+userid+' name="userid"><input type="hidden" value='+RequestDocID+' name="WFRequestDocID_arr[]"><input type="hidden" value='+DocID+' name="WFDocID_arr[]"><input type="file" name="file_array[]"></td></tr>';
 										 $(str_file_upload_table).appendTo("#file-upload-table");
 
 										 doctype = ret_document[i].WfdocType;
+										//  console.log("doctype" +doctype);
+
 										 if (doctype != 0) {
+											 $('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
 											 $("#currentwork_select_page").hide();
- 							 				 $("#file_upload_page").show();
+										 		 $("#file_upload_page").show();
 										 }
 									 }
 
@@ -291,28 +298,9 @@ console.log(CurrentWorkListID);
 	// 	 return false;
 	//  });
 	$("#upload_btn").click(function(){
-	 //  $("[name='CurrentWorkListID[]']").val();
-	 //  $("[name='TimeStamp[]']").val();
-	 //  $("[name='userid']").val();
-	 //  $("[name='WFRequestDocID_arr[]']").val();
-	 //  $("[name='file_array[]']").val();
+
 	 if($("[name='file_array[]']").val().length!=0){
-		// var formData = new FormData($('#upload_form')[0]);
- 	// 	console.log(formData);  //json formdata
- 	// 	$.ajax({
- 	// 		 url: 'approver_handle/approver_approve_btn.php',
- 	// 		 type: 'POST',
- 	// 		 data: formData,
- 	// 		 async: false,
- 	// 		 cache: false,
- 	// 		 contentType: false,
- 	// 		 enctype: 'multipart/form-data',
- 	// 		 processData: false,
- 	// 		 success: function (response) {
- 	// 		 console.log(response);
- 	// 		 }
- 	// 	});
- 	// 	return false;
+
 		fileinarr = new Array();
 		$('[name^="file_array[]"]').each(function(){
 				if ($(this).val() != "") {

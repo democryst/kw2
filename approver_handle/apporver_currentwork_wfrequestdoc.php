@@ -27,6 +27,7 @@ if ($TemplateFileChose == 0) {
     $box['DocURL'] = $row['DocURL'];
     $box['WFRequestDocID'] = $row['WFRequestTemplateDocID'];
     $box['WFDocID'] = $row['WFDocID'];
+    $box['WfdocType'] = $row['WfdocType'];
     array_push($doc_arr, $box);
   }
 
@@ -57,6 +58,7 @@ if ($TemplateFileChose == 0) {
           $box['DocURL'] = $row_doc['DocURL'];
           $box['WFRequestDocID'] = $row_doc['WFRequestDocID'];
           $box['WFDocID'] = $row_doc['WFDocID'];
+          $box['WfdocType'] = $row_doc['WfdocType'];
           array_push($doc_arr, $box);
         }
       }

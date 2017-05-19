@@ -1,35 +1,35 @@
 <?php
-// session_start();
-// if(isset($_SESSION['user_id'])){
-// 	echo "<script type='text/javascript'>
-// 					console.log(".$_SESSION['user_id'].");
-// 				</script>";
-// }
-// echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
-// if ($_SESSION['gName'] != "Sys_Admin") {
-// ?>
+session_start();
+if(isset($_SESSION['user_id'])){
+	echo "<script type='text/javascript'>
+					console.log(".$_SESSION['user_id'].");
+				</script>";
+}
+echo "<script>var userid = " . $_SESSION['user_id'] . ";</script>";
+if ($_SESSION['gName'] != "Sys_Admin") {
+?>
 <script type='text/javascript'>
-// 	alert('you dont have permission!');
-// </script>
+	alert('you dont have permission!');
+</script>
 <?php
-// 	if($_SESSION['gName'] == 'Requester'){
-// 		echo "<script type='text/javascript'>
-// 						window.location = '02_request_list.php';
-// 					</script>";
-// 	}else if($_SESSION['gName'] == 'Approver'){
-// 		echo "<script type='text/javascript'>
-// 						window.location = '03_approver.php';
-// 					</script>";
-// 	}else if($_SESSION['gName'] == 'Flow_Admin'){
-// 		echo "<script type='text/javascript'>
-// 						window.location = '04_formmodify.php';
-// 					</script>";
-// 	}else if($_SESSION['gName'] == 'Sys_Admin'){
-// 		echo "<script type='text/javascript'>
-// 						window.location = '01_createformType_multidoc.php';
-// 					</script>";
-// 	}
-// }
+	if($_SESSION['gName'] == 'Requester'){
+		echo "<script type='text/javascript'>
+						window.location = '02_request_list.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Approver'){
+		echo "<script type='text/javascript'>
+						window.location = '03_approver.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Flow_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '04_formmodify.php';
+					</script>";
+	}else if($_SESSION['gName'] == 'Sys_Admin'){
+		echo "<script type='text/javascript'>
+						window.location = '01_createformType_multidoc.php';
+					</script>";
+	}
+}
 
 ?>
 
@@ -49,7 +49,7 @@
 	<meta http-equiv="pragma" content="no-cache" />
 
 	<script type="text/javascript">
-	var userid = 3;
+	// var userid = 3; //for test kw1
 	var localhost = "http://localhost:8080/kw2/";
 var json_return_wfgeninfo;
 var json_return_wfdoc;
@@ -60,9 +60,12 @@ var state_doc_index = 0;
 var all_add_doc_count = 0;
 var doctype_id = 0;
 var docnum_inx = 0;
+var kw1_fn_get_array = new Array();
+var WFGenInfoID;
+var CreateTime;
 		$(document).ready(function() {
 				 $('#div_kw1').hide();
-				  $('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-newFile.html');
+				  $('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-newFile14.html');
 
 
 			//************************************************************
@@ -74,10 +77,10 @@ var docnum_inx = 0;
 					window.location = '01_createformType_multidoc.php';
 			});
 			//************************************************************
-			// $("#CreateFormType_wfdoc").hide();
-			// $("#CreateFormType_wfdetail").hide();
-			// $("#CreateFormType_wfaccess").hide();
-			// $("#form_success").hide();
+			$("#CreateFormType_wfdoc").hide();
+			$("#CreateFormType_wfdetail").hide();
+			$("#CreateFormType_wfaccess").hide();
+			$("#form_success").hide();
 
 			$("#doctypeid").change(function(){
 				$("#upload_doc_table").empty();
@@ -91,17 +94,22 @@ var docnum_inx = 0;
 					var str='<tr> <td><input type="file" name="file_array[]"></td></tr>' ;
 					$(str).appendTo("#upload_doc_table");
 				}else if (doctype_id == 1) {
-					var str='<tr> <td><input type="button" id="kw1form'+cur_index+'" value="Form Editor"></td></tr>' ;
+					var str='<tr> <td><input type="button" id="kw1form'+cur_index+'" value="Form Editor"></td> <td><input type="text" id="kw1formname'+cur_index+'"></td></tr>' ;
 					$(str).appendTo("#upload_doc_table");
 
 					$("#kw1form"+cur_index+"").click(function(){ //-D1-
 						$("#div_kw2").hide();
-
+						kw1passformname = $('#kw1formname'+cur_index+'').val();
 						$( "#div_kw1" ).append( "<input type='image' id='backToFirst' name='backToFirst' src='myPic/previous.png' style='position:fixed;width:80px;height:80px;left:250px;top:90px'/>");
 						setTimeout(function(){
 							$("#div_kw1").show();
 							//  console.log("Asking kw1 - "+nowHaveItemCount);
 						}, 1000);
+						// console.log( "**************************************");
+						// console.log( $("#kw1form"+cur_index+"").attr('id') );
+						// console.log( parseInt($("#kw1form"+cur_index+"").attr('id').split('kw1form')[1]) );
+						kw1_id = parseInt($("#kw1form"+cur_index+"").attr('id').split('kw1form')[1]);
+
 					});
 				}
 				docnum_inx++;
@@ -113,21 +121,26 @@ var docnum_inx = 0;
 					if (doctype_id == 0) {
 						// var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td> <td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7"></td> <td><Text>Document display</Text></td><td><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select></td> <td><text> file: </text></td> <td><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
 
-						var str='<tr><td><form id="form_state_doc_'+cur_index+'"><div class="makeinline"><text> Step: </text><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"><text> Deadline: </text><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7"><Text>Document display</Text><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select><text> file: </text><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"> <table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></div></form></td></tr>' ;
+						// var str='<tr><td><form id="form_state_doc_'+cur_index+'"><div class="makeinline"><text> Step: </text><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"><text> Deadline: </text><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7"><Text>Document display</Text><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select><text> file: </text><img id="01-add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"> <table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></div></form></td></tr>' ;
+						var str='<tr><td><form id="form_state_doc_'+cur_index+'"><div class="makeinline"><text> Step: </text><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"><text> Deadline: </text><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7"><Text>Document display</Text><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select><text> file: </text><img id="01-add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"> <div id="state_doc_table_tr_'+cur_index+'" class="makeinline"></div></div></form></td></tr>' ;
+console.log(str);
 
 						$(str).appendTo("#upload_state_table");
 						let d_chk = 0;
-						$("#add_more_state_doc_btn_"+cur_index+"").click(function(){
+						$("#01-add_more_state_doc_btn_"+cur_index+"").click(function(){
 							if ( d_chk < docnum_inx) {
 								// all_add_doc_count++;
 								// var str_s_doc = '<td><select name="doc_id[]" class="makeinline" id="select_state_doc_'+cur_index+'">';
-			          var str_s_doc = '<td><select name="select_state_doc_'+cur_index+'[]" class="makeinline" >';
+
+			          // var str_s_doc = '<td><select name="select_state_doc_'+cur_index+'[]" class="makeinline" >';
+								 var str_s_doc = '<select name="select_state_doc_'+cur_index+'[]" class="makeinline" >';
 								for(i = 0; i < json_return_wfdoc.length; i++){
 									let docid = json_return_wfdoc[i].WFDocID;
 									let docname = json_return_wfdoc[i].DocName;
 									str_s_doc = str_s_doc+'<option value="'+docid+'">'+docname+'</option>'
 								}
-								str_s_doc = str_s_doc+'</select></td>'
+								// str_s_doc = str_s_doc+'</select></td>'
+								str_s_doc = str_s_doc+'</select>'
 								$(str_s_doc).appendTo("#state_doc_table_tr_"+cur_index+"");
 			          console.log(str_s_doc);
 							}
@@ -138,11 +151,13 @@ var docnum_inx = 0;
 						// var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td>'
 						// +'<td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7"></td> <td><Text>Document display</Text></td><td><select id="docchose_'+cur_index+'"><option value="0">show templates</option><option value="1">show update documents</option></select></td>'
 						// +'<td><text> file: </text></td> <td><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
-						var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td> <td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7">  <input type="hidden" id="docchose_'+cur_index+'" value="0">  </td> <td><text> file: </text></td> <td><img id="add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
+
+						// var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td> <td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7">  <input type="hidden" id="docchose_'+cur_index+'" value="0">  </td> <td><text> file: </text></td> <td><img id="02-add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><table id="state_doc_table"><tr id="state_doc_table_tr_'+cur_index+'"></tr></table></td> </form></td></tr>' ;
+						var str='<tr><td><form id="form_state_doc_'+cur_index+'"> <td><text> Step: </text></td> <td><input type="text" name="state_array[]" id="state_doc_statename_'+cur_index+'"></td> <td><text> Deadline: </text></td> <td><input type="number" name="deadline[]" id="state_doc_deadline_'+cur_index+'" placeholder="day" min="0" max="7">  <input type="hidden" id="docchose_'+cur_index+'" value="0">  </td> <td><text> file: </text></td> <td><img id="02-add_more_state_doc_btn_'+cur_index+'" src="images/Add.ico" width="20" height="20"></td> <td><div id="state_doc_table_tr_'+cur_index+'"></div></td> </form></td></tr>' ;
 
 						$(str).appendTo("#upload_state_table");
 						let d_chk_2 = 0;
-						$("#add_more_state_doc_btn_"+cur_index+"").click(function(){
+						$("#02-add_more_state_doc_btn_"+cur_index+"").click(function(){
 							if (d_chk_2 < docnum_inx) {
 								// all_add_doc_count++;
 								// var str_s_doc = '<td><select name="doc_id[]" class="makeinline" id="select_state_doc_'+cur_index+'">';
@@ -190,8 +205,8 @@ var docnum_inx = 0;
 							$.post("createformtype_handle/createformType_geninfo_handle.php", {data: {form_name: gen_formname, form_description: gen_form_description, form_admin_select: gen_form_admin_select}},function(response){
 								console.log(response);
 								json_return_wfgeninfo = JSON.parse(response);
-								var WFGenInfoID = json_return_wfgeninfo.WFGenInfoID;
-								var CreateTime = json_return_wfgeninfo.CreateTime;
+								WFGenInfoID = json_return_wfgeninfo.WFGenInfoID;
+								CreateTime = json_return_wfgeninfo.CreateTime;
 								var str_wfgeninfo = '<tr> <td><input type="hidden" value="'+WFGenInfoID+'" name="wfgeninfo" /></td>'+
 								'<td><input type="hidden" value="'+CreateTime+'" name="all_date" /></td></tr>';
 								$(str_wfgeninfo).appendTo("#upload_doc_table");
@@ -203,7 +218,7 @@ var docnum_inx = 0;
 			});
 
 			$("#Create_Form_submit_wfdoc").click(function(evt){
-				if ($("[name = 'file_array[]']").val().length != 0) {
+
 					$("#CreateFormType_wfgeninfo").hide();
 					$("#CreateFormType_wfdoc").hide();
 					$("#CreateFormType_wfaccess").hide();
@@ -211,32 +226,45 @@ var docnum_inx = 0;
 					$("#CreateFormType_wfdetail").show();
 					  //evt.preventDefault();
 					  if (doctype_id == 0) {
-							var formData = new FormData($('#CreateFormType_wfdoc')[0]);
-						  $.ajax({
-							   url: 'createformtype_handle/createformType_doc_handle.php',
-							   type: 'POST',
-							   data: formData,
-							   async: false,
-							   cache: false,
-							   contentType: false,
-							   enctype: 'multipart/form-data',
-							   processData: false,
-							   success: function (response) {
-								 console.log(response);
-								 json_return_wfdoc = JSON.parse(response);
+							if ($("[name = 'file_array[]']").val().length != 0) {
+								var formData = new FormData($('#CreateFormType_wfdoc')[0]);
+							  $.ajax({
+								   url: 'createformtype_handle/createformType_doc_handle.php',
+								   type: 'POST',
+								   data: formData,
+								   async: false,
+								   cache: false,
+								   contentType: false,
+								   enctype: 'multipart/form-data',
+								   processData: false,
+								   success: function (response) {
+									 console.log(response);
+									 json_return_wfdoc = JSON.parse(response);
 
-							   }
-						  });
-						  return false;
+								   }
+							  });
+							  return false;
+							}
 
 					  }else if (doctype_id == 1) {
-							//need to pass formname formurl of each   and wfgeninfoID, etc...
-					  	$.post("createformtype_handle/createformType_doc_handle_kw1.php",{},function(response){
-								console.log(response);
-							});
+							if (kw1_fn_get_array.length != 0) {
+								//need to pass formname formurl of each   and wfgeninfoID, etc...
+								console.log(kw1_fn_get_array);
+								// wfgeninfo_f_kw1 = $("#wfgeninfo_f_kw1").val();
+								console.log("WFGenInfoID :");
+								console.log(WFGenInfoID);
+								// all_date_f_kw1 = $("all_date_f_kw1").val();
+								console.log("CreateTime :");
+								console.log(CreateTime);
+
+						  	$.post("createformtype_handle/createformType_doc_handle_kw1.php",{data:{doc: kw1_fn_get_array, wfgeninfo:WFGenInfoID, all_date:CreateTime, adminid:userid}},function(response){
+									console.log(response);
+									json_return_wfdoc = JSON.parse(response);
+								});
+							}
+
 					  }
 
-				}
 
 			});
 
