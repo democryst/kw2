@@ -14,7 +14,7 @@ if(isset($_POST['data'])){
 		$kw1fn_index = $c_doc[0];
 		$kw1form_name = $c_doc[1];
 
-		$q_INSERT_wfdoc="INSERT INTO `wfdoc`(`WFGenInfoID`, `DocName`, `DocURL`, `TimeStamp`) values('$wfgeninfoID', '$kw1form_name', '$kw1fn_index', CURRENT_TIMESTAMP) " ;
+		$q_INSERT_wfdoc="INSERT INTO `wfdoc`(`WFGenInfoID`, `DocName`, `DocURL`, `TimeStamp`, `WfdocType`) values('$wfgeninfoID', '$kw1form_name', '$kw1fn_index', CURRENT_TIMESTAMP, '1') " ;
 		$mysqli->query($q_INSERT_wfdoc);
 	}
 

@@ -58,6 +58,7 @@ if (isset($_POST['wfgeninfo']) ) {
     $box2['WFDocID'] = $row_get_doc['WFDocID'];
     $box2['DocName'] = $row_get_doc['DocName'];
     $box2['DocURL'] = $row_get_doc['DocURL'];
+    $box2['WfdocType'] = $row_get_doc['WfdocType'];
     array_push($doc_arr, $box2);
   }
 

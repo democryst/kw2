@@ -50,6 +50,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
+	var WfdocType = 0; //default will get file pc
 
   // user_id = 0;
 
@@ -286,14 +287,41 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 			let str_fn_formdetail = "<div><b style='color:#D73289;'>Form workflow</b></div>"
 			$(str_fn_formdetail).appendTo("#formdetail");
 
-			var str_doc_state_l = "<tr>";
+			// var str_doc_state_l = "<tr>";
 			for (var j = 0; j < ret_wfdoc.length; j++) {
 				let DocURL = ret_wfdoc[j].DocURL;
 				let DocName = ret_wfdoc[j].DocName;
-				str_doc_state_l = str_doc_state_l +"<td><div><a target='_tab' href='"+localhost+DocURL+"'><img src='images/Document.ico' height='52' width='52'></a></div> <div><Text>"+DocName+"</Text></div> </td> <td></td>";
+				WfdocType = ret_wfdoc[j].WfdocType;
+				if (WfdocType == 0) {
+					str_doc_state_l = "<tr><td><div><a target='_tab' href='"+localhost+DocURL+"'><img src='images/Document.ico' height='52' width='52'></a></div> <div><Text>"+DocName+"</Text></div> </td> <td></td></tr>";
+					$(str_doc_state_l).appendTo("#formdoc_box");
+				}else {
+					str_doc_state_l = "<tr><td><div><img src='images/Document.ico' height='52' width='52' id='doc_btn_kw1_"+j+"'></div> <div><Text>"+DocName+"</Text><input type='hidden' id='doc_fn_kw1_"+j+"' value='"+DocURL+"'></div> </td> <td></td></tr>";
+					$(str_doc_state_l).appendTo("#formdoc_box");
+					$("#doc_btn_kw1_"+j+"").click(function(){
+						let this_btn_id = $(this).attr('id');
+
+						kw1_id = parseInt( this_btn_id.split('doc_btn_kw1_')[1] );
+						kw1_fn = $("#doc_fn_kw1_"+kw1_id+"").val();
+						console.log("kw1_id");
+						console.log(kw1_id);
+						console.log("kw1_fn");
+						console.log(kw1_fn);
+						console.log(j);
+						//show kw1 form
+						$("#div_kw2").hide();
+						$( "#div_kw1" ).append( "<input type='image' id='backToFirst' name='backToFirst' src='myPic/previous.png' style='position:fixed;width:80px;height:80px;left:250px;top:90px'/>");
+						setTimeout(function(){
+							$("#div_kw1").show();
+						}, 1000);
+					});
+
+				}
+
 			}
-			str_doc_state_l = str_doc_state_l + "</tr>";
-			$(str_doc_state_l).appendTo("#formdoc_box");
+			// str_doc_state_l = str_doc_state_l + "</tr>";
+
+			// $(str_doc_state_l).appendTo("#formdoc_box");
 
 			for (var i = 0; i < ret_wfdetail.length; i++) {
 				let c_wfdetail = ret_wfdetail[i];
