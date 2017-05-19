@@ -223,7 +223,7 @@ if ($_SESSION['gName'] != "Approver") {
 console.log(CurrentWorkListID);
 									 var ret_document = json_return_wfrequestdoc.Document;
 									 for (var i = 0; i < ret_document.length; i++) {
-										 
+
 										 var filepath = ret_document[i].DocURL;
    									 var filename = ret_document[i].DocName;
 										 var str_file_download_table = '<tr><td><a target="_tab" href="'+localhost+filepath+'"><img src="images/Document.ico" height="52" width="52"></a><td></tr><tr><td><Text>'+filename+'</Text></td></tr>';
