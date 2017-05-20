@@ -7,7 +7,7 @@ if(isset($_POST['itemTarget'])){
 	$jsonString = file_get_contents('jsonFile.json');
 	$data = json_decode($jsonString, true);
 	
-	$data[$itemTarget]['iArrayInputSave'] = $arrayInputSave;
+	$data[$itemTarget]['fArrayInputSave'] = $arrayInputSave;
 	
 	
 	$data2= json_encode($data);

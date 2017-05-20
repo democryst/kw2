@@ -252,10 +252,10 @@ console.log(CurrentWorkListID);
 											$('#kw1_imgbtn_'+i+'_'+filepath+'').click(function(){
 												let kw1_id = $(this).attr('id');
 												// console.log(kw1_id);
-												let str_f_split = 'kw1_imgbtn_'+kw1_i_f_03approver+'_item';
+												let str_f_split = 'kw1_imgbtn_'+kw1_i_f_03approver+'_';
 												// console.log(str_f_split);
-													// kw1_pass_item = kw1_id.split(str_f_split)[1];
-													kw1_pass_item = 3;
+													kw1_pass_item = kw1_id.split(str_f_split)[1];
+													// kw1_pass_item = "item39";
 													console.log(kw1_pass_item);
 
 													setTimeout(function(){
