@@ -51,9 +51,9 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 	<script type="text/javascript">
 	var localhost = "http://localhost:8080/kw2/";
 	var WfdocType = 0; //default will get file pc
-
+	var kw1_fn_get_array = new Array();
   // user_id = 0;
-
+	var kw1_pass_fn = new Array();
 
 	$(document).ready(function() {
 		$('#div_kw1').hide();
@@ -264,6 +264,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 	function fn_formdetail(wfgeninfo, index) {
 		$.post("request_handle/showformdetail.php", {wfgeninfo: wfgeninfo}, function(res){
+			kw1_pass_fn.length = 0;
 			console.log(res);
 			ret_wfdetail_doc = JSON.parse(res);
 			let ret_wfdetail = ret_wfdetail_doc[0];
@@ -296,26 +297,28 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					str_doc_state_l = "<tr><td><div><a target='_tab' href='"+localhost+DocURL+"'><img src='images/Document.ico' height='52' width='52'></a></div> <div><Text>"+DocName+"</Text></div> </td> <td></td></tr>";
 					$(str_doc_state_l).appendTo("#formdoc_box");
 				}else {
+					kw1_pass_fn.push(DocURL);
 					str_doc_state_l = "<tr><td><div><img src='images/Document.ico' height='52' width='52' id='doc_btn_kw1_"+j+"'></div> <div><Text>"+DocName+"</Text><input type='hidden' id='doc_fn_kw1_"+j+"' value='"+DocURL+"'></div> </td> <td></td></tr>";
 					$(str_doc_state_l).appendTo("#formdoc_box");
-					$("#doc_btn_kw1_"+j+"").click(function(){
-						let this_btn_id = $(this).attr('id');
-
-						kw1_id = parseInt( this_btn_id.split('doc_btn_kw1_')[1] );
-						kw1_fn = $("#doc_fn_kw1_"+kw1_id+"").val();
-						console.log("kw1_id");
-						console.log(kw1_id);
-						console.log("kw1_fn");
-						console.log(kw1_fn);
-						console.log(j);
-						//show kw1 form
-						$("#div_kw2").hide();
-						$( "#div_kw1" ).append( "<input type='image' id='backToFirst' name='backToFirst' src='myPic/previous.png' style='position:fixed;width:80px;height:80px;left:250px;top:90px'/>");
-						setTimeout(function(){
-							$("#div_kw1").show();
-						}, 1000);
-					});
-
+					// **********************close wait for view feature of kw1****************************
+					// $("#doc_btn_kw1_"+j+"").click(function(){
+					// 	let this_btn_id = $(this).attr('id');
+					//
+					// 	kw1_id = parseInt( this_btn_id.split('doc_btn_kw1_')[1] );
+					// 	kw1_fn = $("#doc_fn_kw1_"+kw1_id+"").val();
+					// 	console.log("kw1_id");
+					// 	console.log(kw1_id);
+					// 	console.log("kw1_fn");
+					// 	console.log(kw1_fn);
+					// 	console.log(j);
+					// 	//show kw1 form
+					// 	$("#div_kw2").hide();
+					// 	$( "#div_kw1" ).append( "<input type='image' id='backToFirst' name='backToFirst' src='myPic/previous.png' style='position:fixed;width:80px;height:80px;left:250px;top:90px'/>");
+					// 	setTimeout(function(){
+					// 		$("#div_kw1").show();
+					// 	}, 1000);
+					// });
+					// **********************close wait for view feature of kw1****************************
 				}
 
 			}
@@ -331,16 +334,189 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 			//request form
 			$("#RequestBtn").click(function(){
+				kw1_fn_get_array.length = 0;
 				if (ret_wfdetail.length != 0) {
-					$.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
-						console.log(response);
-						// wfrequestid=JSON.parse(response);
-						// console.log(wfrequestid);
-					});
+					// $.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
+					// 	console.log(response);
+					// });
+					console.log(kw1_pass_fn);
+					//get copy file
+
+					if (WfdocType == 0) {
+						$.post("request_handle/copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id}}, function(response){
+							console.log(response);
+							alert("Request successfully!");
+							window.location = '02_request_list.php';
+						});
+					}else {
+						kw1_request_prepare_copy();
+
+						setTimeout(function(){
+							console.log("kw1_fn_get_array last");
+							console.log(kw1_fn_get_array);
+							kw1_request_copy(wfgeninfo, user_id, kw1_fn_get_array);
+							alert("Request successfully!");
+							window.location = '02_request_list.php';
+						},1500);
+					}
 				}
 			});
 		});
 
+	}
+	function kw1_request_copy(wfgeninfo, user_id, kw1_fn_get_array){
+		$.post("request_handle/kw1_copy_sql_form.php", {data: {wfgeninfo: wfgeninfo, requestor_id: user_id, docurl_arr: kw1_fn_get_array}}, function(response){
+			console.log(response);
+		});
+	}
+
+	function kw1_request_prepare_copy(){
+		// kw1_copy_1();
+		// kw1_copy_2();
+		setTimeout(function(){
+				$.ajax({
+								type : 'GET',
+								dataType: 'json',
+								// url : "/kw1TempServer/Senior%20Project%20KW%20Demo/php/jsonFile.json",
+								url : "/kw2/php/jsonFile.json",
+								success : function(data) {
+
+								nowHaveItemInJSONFile = 0;
+								startAtZeroChecker = 0;
+								$.each(data,function(index,data){
+										if(startAtZeroChecker==0){
+												startAtZeroChecker = 1;
+										}else{
+												nowHaveItemInJSONFile = nowHaveItemInJSONFile+1;
+												console.log("nowHaveItemInJSONFile is - "+nowHaveItemInJSONFile );
+										};
+
+								});
+
+
+								},
+								error:function(data){
+
+										alert("something happen to JSON file");
+								}
+						});
+
+			}, 100);
+		setTimeout(function(){
+			targetC = nowHaveItemInJSONFile;
+			console.log("kw1_pass_fn");
+			console.log(kw1_pass_fn);
+			$.each(kw1_pass_fn, function(index, value) {
+
+				targetingF = kw1_pass_fn[index];
+				targetC++;
+				console.log("targetC is = "+targetC);
+				console.log(targetingF);
+
+				kw1_ajax(targetC, targetingF)
+
+				let box_r = new Array();
+				box_r[0] = targetingF;
+				box_r[1] = "item"+targetC;
+				kw1_fn_get_array.push(box_r);
+				console.log(kw1_fn_get_array);
+
+			});
+		}, 300);
+	}
+
+	// function kw1_copy_1(){
+	// 	$.ajax({
+	// 					type : 'GET',
+	// 					dataType: 'json',
+	// 					// url : "/kw1TempServer/Senior%20Project%20KW%20Demo/php/jsonFile.json",
+	// 					url : "/kw2/php/jsonFile.json",
+	// 					success : function(data) {
+	//
+	// 					nowHaveItemInJSONFile = 0;
+	// 					startAtZeroChecker = 0;
+	// 					$.each(data,function(index,data){
+	// 							if(startAtZeroChecker==0){
+	// 									startAtZeroChecker = 1;
+	// 							}else{
+	// 									nowHaveItemInJSONFile = nowHaveItemInJSONFile+1;
+	// 									console.log("nowHaveItemInJSONFile is - "+nowHaveItemInJSONFile );
+	// 							};
+	//
+	// 					});
+	//
+	//
+	// 					},
+	// 					error:function(data){
+	//
+	// 							alert("something happen to JSON file");
+	// 					}
+	// 			});
+	// }
+	//
+	// function kw1_copy_2(){
+	// 	targetC = nowHaveItemInJSONFile;
+	// 	console.log("kw1_pass_fn");
+	// 	console.log(kw1_pass_fn);
+	// 	$.each(kw1_pass_fn, function(index, value) {
+	//
+	// 		targetingF = kw1_pass_fn[index];
+	// 		targetC++;
+	// 		console.log("targetC is = "+targetC);
+	// 		console.log(targetingF);
+	//
+	// 		kw1_ajax(targetC, targetingF)
+	//
+	// 		let box_r = new Array();
+	// 		box_r[0] = targetingF;
+	// 		box_r[1] = "item"+targetC;
+	// 		kw1_fn_get_array.push(box_r);
+	// 		console.log(kw1_fn_get_array);
+	//
+	// 	});
+	// }
+
+	function kw1_ajax(targetC, targetingF){
+		$.ajax({
+					type : 'GET',
+					dataType: 'json',
+					url : "/kw2/jsonData/c1/content%20index.json",
+					success : function(data) {
+						count = 0;
+
+						$.each(data,function(index,value){
+
+								targetF = "f"+count;
+								console.log(targetingF);
+								console.log(targetC);
+								if(targetingF== targetF){
+										console.log("targetingF is - "+targetingF+" - targetF is - "+targetF);
+										console.log("value.fName");
+										console.log(value.fName);
+										urlToSave = "jsonFile.json";
+										// $.post('php/newForm_saveProcess.php',{itemTarget:targetC,urlToSave:urlToSave,formName:value.fName,approverNum:1,defPassword:"none",arrayName:value.fArrayName,arrayPassword:value.fArrayPassword,numTextBox:value.fNumTextBox,arrayX:value.fArrayX,valuarrayY:value.fArrayY,arrayLenght:value.fArrayLenght,arrayOwner:value.fArrayOwner,arrayComment:value.fArrayComment,arrayType:value.fArrayType,arrayInput:value.fArrayInputSave},function(data){
+										// 		console.log("POST success");
+										// });
+										kw1_post_copy(targetC, urlToSave, value);
+								}
+								count=count+1;
+
+						});
+
+
+					},
+					error:function(data){
+
+							alert("something happen to JSON file");
+					}
+			});
+	}
+
+	function kw1_post_copy(targetC, urlToSave, value){
+		itemcopy = "item" + targetC;
+		$.post('php/newForm_saveProcess.php',{itemTarget:itemcopy,urlToSave:urlToSave,formName:value.fName,approverNum:1,defPassword:"none",arrayName:value.fArrayName,arrayPassword:value.fArrayPassword,numTextBox:value.fNumTextBox,arrayX:value.fArrayX,arrayY:value.fArrayY,arrayLenght:value.fArrayLenght,arrayOwner:value.fArrayOwner,arrayComment:value.fArrayComment,arrayType:value.fArrayType,arrayInput:value.fArrayInputSave},function(data){
+				console.log("POST success");
+		});
 	}
 
 

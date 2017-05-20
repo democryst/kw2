@@ -79,6 +79,12 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 				}
 			?>
 			//************************************************************
+			$("#Requestlist").hide();
+			$("#Requestcompletelist").hide();
+			$("#Requestworklist").hide();
+			$("#comment").hide();
+			$("#requestflow").hide();
+
 			$("#moveto_edit_doc_box").hide();
 			$("#editdoc").hide();
 			//edit doc display
@@ -129,10 +135,17 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					$("#requestworklist_table").empty();
 					for (var i = 0; i < json_ret_formworklist.length; i++) {
 						let retwfrequest = json_ret_formworklist[i];
-						let str_wl_wfrequest = "<div class='cardbox' style='color:black;'> <Text style='margin-left:10;'>FormName : "+retwfrequest.FormName+"</Text> <Text>Description : "+retwfrequest.Description+"</Text> <input type='hidden' value='"+retwfrequest.WFRequestID+"' id='wfrequestid_"+i+"'> <input type='button' value='select' id='select_wfrequest_"+i+"' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;' ></div>";
+						let str_wl_wfrequest = "<div class='cardbox' style='color:black;'> <Text style='margin-left:10;'>FormName : "+retwfrequest.FormName+"</Text> <Text>Description : "+retwfrequest.Description+"</Text> <input type='hidden' value='"+retwfrequest.WFRequestID+"' id='wfrequestid_"+i+"'> <input type='button' value='select' id='select_wfrequest_"+i+"' class='select_wfrequest_f_color' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;' ></div>";
 						$(str_wl_wfrequest).appendTo("#requestworklist_table");
 						let cur_index = i;
 						$("#select_wfrequest_"+i+"").click(function(){
+							let select_wfrequest_f_color_c_obj = document.getElementsByClassName('select_wfrequest_f_color');
+							for (var i = 0; i < select_wfrequest_f_color_c_obj.length; i++) {
+								select_wfrequest_f_color_c_obj[i].style.backgroundColor ='#3c8dbc';
+							}
+							let select_wfrequest_f_color_cbtn_obj = document.getElementById("select_wfrequest_"+cur_index+"");
+							select_wfrequest_f_color_cbtn_obj.style.backgroundColor ="#252726";
+
 							let wfrequestid_s_wl = $("#wfrequestid_"+cur_index+"").val();
 							$("#requestflow").show();
 							console.log(cur_index);
@@ -241,10 +254,18 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 			let CreateTime = create_time.replace("***"," ");
       // var str_formlist = "<tr > <td class='cardbox'><Text>FormName: "+obj.FormName+"</Text></td> <td class='cardbox'><Text>Description: "+obj.Description+"</Text></td> <td class='cardbox'><Text>CreateTime: "+CreateTime+"</Text></td> <td><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
       // var str_formlist = "<tr > <td > <div class='cardbox' style='display:inline-block;'> <div style='display:inline-block;'><Text>FormName: "+obj.FormName+"</Text><Text>Description: "+obj.Description+"</Text><Text>CreateTime: "+CreateTime+"</Text></div> <div style='display:inline-block;'><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></div> </div></td></tr>";
-      var str_formlist = "<tr > <td > <div class='cardbox' style='display:inline-block;'> <table ><tr><td><table style='font-size:small;color:black;'><tr><td><Text>FormName: "+obj.FormName+"</Text></td></tr><tr><td><Text>Description: "+obj.Description+"</Text></td></tr><tr><td><Text>CreateTime: "+CreateTime+"</Text></td></tr></table></td> <td><div style='display:inline-block;'><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td> </tr></table></td></tr>";
+      // var str_formlist = "<tr > <td > <div class='cardbox' style='display:inline-block;'> <table ><tr><td><table style='font-size:small;color:black;'><tr><td><Text>FormName: "+obj.FormName+"</Text></td></tr><tr><td><Text>Description: "+obj.Description+"</Text></td></tr><tr><td><Text>CreateTime: "+CreateTime+"</Text></td></tr></table></td> <td><div style='display:inline-block;'><input type='button' value='select' id='select_form_btn_"+index+"' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td> </tr></table></td></tr>";
+			var str_formlist = "<tr > <td > <div class='cardbox' > <div style='display:inline-block;color:black;'><div><Text>FormName: "+obj.FormName+"</Text></div><div><Text>Description:"+obj.Description+"</Text></div><div><Text>CreateTime: "+CreateTime+"</Text></div> </div><div style='display:inline-block;'><input type='button' value='select' id='select_form_btn_"+index+"' class='select_form_btn_request_f_color' style='margin-left:17%;background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></div> </div></td></tr>";
 
       $(str_formlist).appendTo("#requestlist_table");
       $("#select_form_btn_"+index+"").click(function(){
+				let select_form_btn_request_f_color_c_obj = document.getElementsByClassName('select_form_btn_request_f_color');
+				for (var i = 0; i < select_form_btn_request_f_color_c_obj.length; i++) {
+					select_form_btn_request_f_color_c_obj[i].style.backgroundColor ='#3c8dbc';
+				}
+				let select_form_btn_request_f_color_cbtn_obj = document.getElementById("select_form_btn_"+index+"");
+				select_form_btn_request_f_color_cbtn_obj.style.backgroundColor ="#252726";
+
 				// $("#moveto_edit_doc_box").show();
 				$("#editdoc").hide();
 				$("#requestflow").show();
@@ -481,7 +502,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 						str_show_doc_wl = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' name='file_array[]' id='file_update_"+i+"'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
 					}else { //e_formtype == 1  kw1form
 						console.log("case 1");
-						str_show_doc_wl = "<tr style='margin-left:10;'><td><Text style='font-size:small;'>"+e_DocName+"</Text></td> <td><input type='button' value='document' id='kw1_document_update_"+i+"' class='btn_select'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+						str_show_doc_wl = "<tr style='margin-left:10;'><td><div style='display:grid'><img src='images/Document.ico' height='52' width='52' id='kw1_document_update_"+i+"' class='kw1_doc_img'><Text style='font-size:small;'>"+e_DocName+"</Text></div> <input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
 					}
 					$(str_show_doc_wl).appendTo("#relate_doc_table");
 					let index = i;
@@ -495,36 +516,62 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 
 
 				}
-				str_show_doc_wl2 = "<tr><td><input type='hidden' name='userid' value='"+userid+"' ><input type='button' value='edit' id='editdoc_btn' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
-				$(str_show_doc_wl2).appendTo("#relate_doc_table");
-				$("#editdoc_btn").click(function(){
-					// console.log(index);
-					//e_fileupdate = $("#file_update_"+index+"").val();
-					let chk=0;
-					if (docarrwl[0].WfdocType == 0) {
-						let fileinarr = new Array();
-						$('[name^="file_array[]"]').each(function(){
-								if ($(this).val() != "") {
-									fileinarr.push($(this).val());
-								}else{
-									chk=1;
-								}
+				if (docarrwl[0].WfdocType == 0) {
+					str_show_doc_wl2 = "<tr><td><input type='hidden' name='userid' value='"+userid+"' ><input type='button' value='edit' id='editdoc_btn' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+					$(str_show_doc_wl2).appendTo("#relate_doc_table");
+					$("#editdoc_btn").click(function(){
+						// console.log(index);
+						//e_fileupdate = $("#file_update_"+index+"").val();
+						let chk=0;
+							let fileinarr = new Array();
+							$('[name^="file_array[]"]').each(function(){
+									if ($(this).val() != "") {
+										fileinarr.push($(this).val());
+									}else{
+										chk=1;
+									}
+							});
+							if (chk==0) {
+								console.log("can update");
+								documentinsert();
+							}
+					});
+				}else {
+					str_show_doc_wl2 = "<tr><td><input type='hidden' name='userid' value='"+userid+"' ><input type='button' value='edit' id='editdoc_btn_kw1' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+					$(str_show_doc_wl2).appendTo("#relate_doc_table");
+					$("#editdoc_btn_kw1").click(function(){
+
+						// kw1_WFDocID_arr = new Array();
+						// $('[name^="WFDocID_arr[]"]').each(function(){
+						// 	if ($(this).val() != "") {
+						// 			kw1_WFDocID_arr.push($(this).val());
+						// 		}
+						// });
+
+						kw1_wf_requestid = new Array();
+						$('[name^="wf_requestid[]"]').each(function(){
+							if ($(this).val() != "") {
+			 					kw1_wf_requestid.push($(this).val());
+			 				}
 						});
 
-						if (chk==0) {
-							console.log("can update");
-							documentinsert();
-						}
+						kw1_stateid_arr = new Array();
+						$('[name^="stateid_arr[]"]').each(function(){
+							if ($(this).val() != "") {
+			 					kw1_stateid_arr .push($(this).val());
+			 				}
+						});
 
-					}else{//for kw1 no need to insert file b/c edit in kw1site
-						// $.post("", {data:{}}, function(res){
-						// 	console.log(res);
-						// });
-					}
+						$.post("request_list_handle/kw1_insert_doc.php", {data:{wf_requestid: kw1_wf_requestid, stateid_arr: kw1_stateid_arr, userid: userid}}, function(res){
+							console.log(res);
+							alert("Upload successfully!");
+							window.location = '02_request_list.php';
+						});
+					});
+				}
 
 
 
-				});
 			});
 		}
 
@@ -554,7 +601,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					if (e_formtype == 0) {
 						str_show_doc_wl = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' name='file_array[]' id='file_update_"+i+"' class='file_array_request'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
 					}else { //e_formtype == 1  kw1form
-						str_show_doc_wl = "<tr style='margin-left:10;'><td><Text style='font-size:small;'>"+e_DocName+"</Text></td> <td><input type='button' value='document' id='kw1_document_update_"+i+"' class='btn_select'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+						str_show_doc_wl = "<tr style='margin-left:10;'><td><div style='display:grid'><img src='images/Document.ico' height='52' width='52' id='r_kw1_document_update_"+i+"'><Text style='font-size:small;'>"+e_DocName+"</Text></div> <input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
 					}
 
 
@@ -569,41 +616,85 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					}
 
 				}
-				str_show_doc_wl2 = "<tr><td><input type='hidden' name='userid' value='"+userid+"' ><input type='button' value='edit' id='editdoc_btn' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
-				$(str_show_doc_wl2).appendTo("#relate_doc_table");
-				$("#editdoc_btn").click(function(){
-					// console.log(index);
-					//e_fileupdate = $("#file_update_"+index+"").val();
-					let chk=0;
-					if (docarrwl[0].WfdocType == 0) {
-						let fileinarr = new Array();
-						// $('[name^="file_array[]"]').each(function(){
-						// 		if ($(this).val() != "") {
-						// 			fileinarr.push($(this).val());
-						// 		}else{
-						// 			chk=1;
-						// 		}
-						// });
-						$('.file_array_request').each(function(){
-								if ($(this).val() != "") {
-									fileinarr.push($(this).val());
-								}else{
-									chk=1;
-								}
+				if (docarrwl[0].WfdocType == 0) {
+					str_show_doc_wl2 = "<tr><td><input type='hidden' name='userid' value='"+userid+"' ><input type='button' value='edit' id='editdoc_btn' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+					$(str_show_doc_wl2).appendTo("#relate_doc_table");
+					$("#editdoc_btn").click(function(){
+						// console.log(index);
+						//e_fileupdate = $("#file_update_"+index+"").val();
+						let chk=0;
+							let fileinarr = new Array();
+							$('[name^="file_array[]"]').each(function(){
+									if ($(this).val() != "") {
+										fileinarr.push($(this).val());
+									}else{
+										chk=1;
+									}
+							});
+							if (chk==0) {
+								console.log("can update");
+								documentinsert_Request();
+							}
+					});
+				}else {
+					str_show_doc_wl2 = "<tr><td><input type='hidden' name='userid' value='"+userid+"' ><input type='button' value='edit' id='editdoc_btn_kw1' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+					$(str_show_doc_wl2).appendTo("#relate_doc_table");
+					$("#editdoc_btn_kw1").click(function(){
+
+						kw1_wf_requestid = new Array();
+						$('[name^="wf_requestid[]"]').each(function(){
+							if ($(this).val() != "") {
+			 					kw1_wf_requestid.push($(this).val());
+			 				}
 						});
 
-						if (chk==0) {
-							console.log("can update");
-							documentinsert_Request();
-						}
+						kw1_stateid_arr = new Array();
+						$('[name^="stateid_arr[]"]').each(function(){
+							if ($(this).val() != "") {
+			 					kw1_stateid_arr .push($(this).val());
+			 				}
+						});
 
-					}else{//for kw1 no need to insert file b/c edit in kw1site
-						// $.post("", {data:{}}, function(res){
-						// 	console.log(res);
-						// });
-					}
+						$.post("request_list_handle/kw1_insert_doc_Request.php", {data:{wf_requestid: kw1_wf_requestid, stateid_arr: kw1_stateid_arr, userid: userid}}, function(res){
+							console.log(res);
+							alert("Upload successfully!");
+							window.location = '02_request_list.php';
+						});
+					});
+				}
 
-				});
+
+				// str_show_doc_wl2 = "<tr><td><input type='hidden' name='userid' value='"+userid+"' ><input type='button' value='edit' id='editdoc_btn' style='background-color:#3c8dbc;border-color:#367fa9;border-radius:3px;border:1px solid transparent;width:100px;height:30px;touch-action:manipulation;color:white;cursor: pointer;'></td></tr>";
+				// $(str_show_doc_wl2).appendTo("#relate_doc_table");
+				// $("#editdoc_btn").click(function(){
+				// 	// console.log(index);
+				// 	//e_fileupdate = $("#file_update_"+index+"").val();
+				// 	let chk=0;
+				// 	if (docarrwl[0].WfdocType == 0) {
+				// 		let fileinarr = new Array();
+				// 		// $('[name^="file_array[]"]').each(function(){
+				// 		// 		if ($(this).val() != "") {
+				// 		// 			fileinarr.push($(this).val());
+				// 		// 		}else{
+				// 		// 			chk=1;
+				// 		// 		}
+				// 		// });
+				// 		$('.file_array_request').each(function(){
+				// 				if ($(this).val() != "") {
+				// 					fileinarr.push($(this).val());
+				// 				}else{
+				// 					chk=1;
+				// 				}
+				// 		});
+				//
+				// 		if (chk==0) {
+				// 			console.log("can update");
+				// 			documentinsert_Request();
+				// 		}
+				//
+				// 	}
+				//
+				// });
 
 			});
 		}
