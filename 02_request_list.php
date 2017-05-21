@@ -53,6 +53,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
   var State_id;
   var State_status;
 	var WFreq_ID;
+	var kw1_pass_item;
 		$(document).ready(function() {
 			$('#div_kw1').hide();
 			$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
@@ -496,21 +497,32 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					console.log(e_WFRequestDocID);
 					console.log(e_WFRequestID);
 					console.log(e_DocName);
-
+					let e_DocURL = docarrwl[i].DocURL;
 					if (e_formtype == 0) {//comment for test kw1
 						console.log("case 0");
 						str_show_doc_wl = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' name='file_array[]' id='file_update_"+i+"'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
 					}else { //e_formtype == 1  kw1form
 						console.log("case 1");
-						str_show_doc_wl = "<tr style='margin-left:10;'><td><div style='display:grid'><img src='images/Document.ico' height='52' width='52' id='kw1_document_update_"+i+"' class='kw1_doc_img'><Text style='font-size:small;'>"+e_DocName+"</Text></div> <input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+						str_show_doc_wl = "<tr style='margin-left:10;'><td><div style='display:grid'><img src='images/Document.ico' height='52' width='52' id='kw1_document_update_"+i+"_"+e_DocURL+"' class='kw1_doc_img'><Text style='font-size:small;'>"+e_DocName+"</Text></div> <input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
 					}
 					$(str_show_doc_wl).appendTo("#relate_doc_table");
 					let index = i;
 
 					if (e_formtype != 0) {//comment for test kw1
-						$("#kw1_document_update_"+i+"").click(function(){
-							$('#div_kw1').show();
-							$('#div_kw2').hide();
+						$("#kw1_document_update_"+i+"_"+e_DocURL).click(function(){
+							console.log("*************************************************");
+							let kw1_id = $(this).attr('id');
+							console.log(kw1_id);
+							let str_f_split = 'kw1_document_update_'+index+'_';
+							console.log(str_f_split);
+							kw1_pass_item = kw1_id.split(str_f_split)[1];
+							console.log("kw1_pass_item --" + kw1_pass_item);
+							setTimeout(function(){
+								$('#div_kw2').hide();
+								$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
+								$('#div_kw1').show();
+							}, 100);
+
 						});
 					}
 
@@ -597,11 +609,11 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					console.log(e_WFRequestDocID);
 					console.log(e_WFRequestID);
 					console.log(e_DocName);
-
+					let e_DocURL = docarrwl[i].DocURL;
 					if (e_formtype == 0) {
 						str_show_doc_wl = "<tr style='margin-left:10;'><td> <div style='display:grid'><img src='images/Document.ico' height='52' width='52'><Text style='font-size:small;'>"+e_DocName+"</Text></div>  </td> <td><input type='file' name='file_array[]' id='file_update_"+i+"' class='file_array_request'><input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='userid[]' value='"+userid+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
 					}else { //e_formtype == 1  kw1form
-						str_show_doc_wl = "<tr style='margin-left:10;'><td><div style='display:grid'><img src='images/Document.ico' height='52' width='52' id='r_kw1_document_update_"+i+"'><Text style='font-size:small;'>"+e_DocName+"</Text></div> <input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
+						str_show_doc_wl = "<tr style='margin-left:10;'><td><div style='display:grid'><img src='images/Document.ico' height='52' width='52' id='r_kw1_document_update_"+i+"_"+e_DocURL+"'><Text style='font-size:small;'>"+e_DocName+"</Text></div> <input type='hidden' name='WFDocID_arr[]' value='"+e_WFRequestDocID+"' ><input type='hidden' name='wf_requestid[]' value='"+e_WFRequestID+"' ><input type='hidden' name='stateid_arr[]' value='"+wfrqdetailid_wl+"' ></td> </tr>";
 					}
 
 
@@ -609,9 +621,20 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 					let index = i;
 
 					if (e_formtype != 0) {//comment for test kw1
-						$("#kw1_document_update_"+i+"").click(function(){
-							$('#div_kw1').show();
-							$('#div_kw2').hide();
+						$("#r_kw1_document_update_"+i+"_"+e_DocURL).click(function(){
+							console.log("*************************************************");
+							let kw1_id = $(this).attr('id');
+							console.log(kw1_id);
+							let str_f_split = 'r_kw1_document_update_'+index+'_';
+							console.log(str_f_split);
+							kw1_pass_item = kw1_id.split(str_f_split)[1];
+							console.log("kw1_pass_item --" + kw1_pass_item);
+							setTimeout(function(){
+								$('#div_kw2').hide();
+								$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-fillFile.html');
+								$('#div_kw1').show();
+							}, 100);
+
 						});
 					}
 
