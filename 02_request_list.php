@@ -29,6 +29,10 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 		echo "<script type='text/javascript'>
 						window.location = '01_createformType_multidoc.php';
 					</script>";
+	}else{
+		echo "<script type='text/javascript'>
+						window.location = '05_log_in.php';
+					</script>";
 	}
 }
 
@@ -231,7 +235,7 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 									setTimeout(function(){
 										$('#div_kw2').hide();
 										$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-viewDownload.html');
-										
+
 										$('#div_kw1').show();
 									}, 100);
 								});

@@ -1,14 +1,7 @@
 <?php
 require_once('../connect.php');
 date_default_timezone_set("Asia/Bangkok");
-/*
-if(isset($_POST['form_name'])){
-$form_name = $_POST['form_name'];
-$form_description = "description";
-
-$adminid = 2;
-*/
-//$state_array = $_POST['state_array'];
+ 
 if(isset($_POST['adminid'])){
 	$sys_adminid = $_POST['adminid'];
 }else{

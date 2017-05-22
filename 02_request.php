@@ -29,6 +29,10 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 		echo "<script type='text/javascript'>
 						window.location = '01_createformType_multidoc.php';
 					</script>";
+	}else{
+		echo "<script type='text/javascript'>
+						window.location = '05_log_in.php';
+					</script>";
 	}
 }
 

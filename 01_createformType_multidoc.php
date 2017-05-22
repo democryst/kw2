@@ -10,6 +10,7 @@ if ($_SESSION['gName'] != "Sys_Admin") {
 ?>
 <script type='text/javascript'>
 	alert('you dont have permission!');
+	window.location = '05_log_in.php';
 </script>
 <?php
 	if($_SESSION['gName'] == 'Requester'){
@@ -27,6 +28,10 @@ if ($_SESSION['gName'] != "Sys_Admin") {
 	}else if($_SESSION['gName'] == 'Sys_Admin'){
 		echo "<script type='text/javascript'>
 						window.location = '01_createformType_multidoc.php';
+					</script>";
+	}else{
+		echo "<script type='text/javascript'>
+						window.location = '05_log_in.php';
 					</script>";
 	}
 }

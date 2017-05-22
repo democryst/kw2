@@ -23,6 +23,10 @@ if ($_SESSION['gName'] != "Flow_Admin") {
 		echo "<script type='text/javascript'>
 						window.location = '01_createformType_multidoc.php';
 					</script>";
+	}else{
+		echo "<script type='text/javascript'>
+						window.location = '05_log_in.php';
+					</script>";
 	}
 }
 
