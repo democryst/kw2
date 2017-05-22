@@ -200,26 +200,46 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 						let CreateTime_comp = jres_completelist[i].CreateTime;
 						let CreateTime_comp_s = CreateTime_comp.replace("***", " ");
 						let Document_comp = jres_completelist[i].Document;
-						var str_completelist = "<tr><td><div class='makeinline'><Text>FormName : "+FormName_comp+"</Text> <Text>CreateTime: "+CreateTime_comp_s+"</Text></div></td> ";
+						var str_completelist = "<tr><td><div class='makeinline'><Text>FormName : "+FormName_comp+"</Text> <Text>CreateTime: "+CreateTime_comp_s+"</Text></div></td> <td><div id='doccomptable_"+i+"' class='makeinline'></div></td></tr> <tr><td><text>____________________________________________</text></td></tr>";
+						$(str_completelist).appendTo("#requestcompletelist_table");
 						let wfdoctype_complete_check = jres_completelist[i].WfdocType;
 						if (wfdoctype_complete_check == 0) {
 							for (var j = 0; j < Document_comp.length; j++) {
 								let DocName_comp = Document_comp[j].DocName;
 								let DocURL_comp = Document_comp[j].DocURL;
 								// console.log(DocName_comp);
-								str_completelist = str_completelist + "<td><div style='margin-left:10px;'> <div><a target='_tab' href='"+localhost+DocURL_comp+"'><img src='images/Document.ico' height='52' width='52'></a></div> <div><Text>"+DocName_comp+"</Text></div>  </div></td>";
+								str_completelist_1 = "<div style='margin-left:10px;'> <div><a target='_tab' href='"+localhost+DocURL_comp+"'><img src='images/Document.ico' height='52' width='52'></a></div> <div><Text>"+DocName_comp+"</Text></div>  </div>";
+								$(str_completelist_1).appendTo("#doccomptable_"+i);
 							}
 						}else {
 							for (var j = 0; j < Document_comp.length; j++) {
 								let DocName_comp = Document_comp[j].DocName;
 								let DocURL_comp = Document_comp[j].DocURL;
 								// console.log(DocName_comp);
-								str_completelist = str_completelist + "<td><div style='margin-left:10px;'> <div><img src='images/Document.ico' height='52' width='52' id='kw1_doc_comp_"+j+"_"+DocURL_comp+"'></div> <div><Text>"+DocName_comp+"</Text></div>  </div></td>";
+								str_completelist_1 = "<div style='margin-left:10px;' class='makeinline'> <div><img src='images/Document.ico' height='52' width='52' id='kw1_doc_comp_"+i+j+"_"+DocURL_comp+"'></div> <div><Text>"+DocName_comp+"</Text></div>  </div>";
+								$(str_completelist_1).appendTo("#doccomptable_"+i);
+								let i_index = i;
+								let j_index = j;
+								$("#kw1_doc_comp_"+i+j+"_"+DocURL_comp).click(function(){
+									console.log("*************************************************");
+									let kw1_id = $(this).attr('id');
+									console.log(kw1_id);
+									let str_f_split = 'kw1_doc_comp_'+i_index+j_index+'_item';
+									console.log(str_f_split);
+									kw1_pass_item = kw1_id.split(str_f_split)[1];
+									console.log("kw1_pass_item --" + kw1_pass_item);
+									setTimeout(function(){
+										$('#div_kw2').hide();
+										$('#div_kw1').load('../kw1TempServer/Senior%20Project%20KW%20Demo/kwDemo4-viewDownload.html');
+										
+										$('#div_kw1').show();
+									}, 100);
+								});
 							}
 						}
 
-						str_completelist = str_completelist+"</tr>";console.log(str_completelist);
-						$(str_completelist).appendTo("#requestcompletelist_table");
+						// str_completelist = str_completelist+"</tr>";console.log(str_completelist);
+						// $(str_completelist).appendTo("#requestcompletelist_table");
 					}
 	      });
 
