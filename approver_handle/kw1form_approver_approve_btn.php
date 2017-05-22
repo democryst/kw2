@@ -125,11 +125,11 @@ if ($result_SELECT_wfrequestdetail_n && $result_SELECT_wfrequestdetail_n->num_ro
 		$mysqli->query($q_INSERT_currentworklist);
 
 		//insert into history
-		$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '0', '$curtime_for_old', '$old_WFRequestDocID') " ;
+		$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`, `WfdocType`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '0', '$curtime_for_old', '$old_WFRequestDocID', '1') " ;
 		$mysqli->query($q_INSERT_history);
 	}else {
 		//insert into history
-		$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '9', '$curtime_for_old', '$old_WFRequestDocID') " ;
+		$q_INSERT_history="INSERT INTO `history`(`UserID`, `WFRequestID`, `WFRequestDetailID`, `Comment`, `Priority`, `Late`, `WhatDone`, `TimeDone`, `WFRequestDocID`, `WfdocType`) values('$userid', '$old_WFRequestID', '$old_WFRequestDetailID', '0', '0', '0', '9', '$curtime_for_old', '$old_WFRequestDocID', '1') " ;
 		$mysqli->query($q_INSERT_history);
 	}
 

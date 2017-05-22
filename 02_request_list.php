@@ -201,11 +201,21 @@ if ( ($_SESSION['gName'] != "Requester") && ($_SESSION['gName'] != "Approver") )
 						let CreateTime_comp_s = CreateTime_comp.replace("***", " ");
 						let Document_comp = jres_completelist[i].Document;
 						var str_completelist = "<tr><td><div class='makeinline'><Text>FormName : "+FormName_comp+"</Text> <Text>CreateTime: "+CreateTime_comp_s+"</Text></div></td> ";
-						for (var j = 0; j < Document_comp.length; j++) {
-							let DocName_comp = Document_comp[j].DocName;
-							let DocURL_comp = Document_comp[j].DocURL;
-							// console.log(DocName_comp);
-							str_completelist = str_completelist + "<td><div style='margin-left:10px;'> <div><a target='_tab' href='"+localhost+DocURL_comp+"'><img src='images/Document.ico' height='52' width='52'></a></div> <div><Text>"+DocName_comp+"</Text></div>  </div></td>";
+						let wfdoctype_complete_check = jres_completelist[i].WfdocType;
+						if (wfdoctype_complete_check == 0) {
+							for (var j = 0; j < Document_comp.length; j++) {
+								let DocName_comp = Document_comp[j].DocName;
+								let DocURL_comp = Document_comp[j].DocURL;
+								// console.log(DocName_comp);
+								str_completelist = str_completelist + "<td><div style='margin-left:10px;'> <div><a target='_tab' href='"+localhost+DocURL_comp+"'><img src='images/Document.ico' height='52' width='52'></a></div> <div><Text>"+DocName_comp+"</Text></div>  </div></td>";
+							}
+						}else {
+							for (var j = 0; j < Document_comp.length; j++) {
+								let DocName_comp = Document_comp[j].DocName;
+								let DocURL_comp = Document_comp[j].DocURL;
+								// console.log(DocName_comp);
+								str_completelist = str_completelist + "<td><div style='margin-left:10px;'> <div><img src='images/Document.ico' height='52' width='52' id='kw1_doc_comp_"+j+"_"+DocURL_comp+"'></div> <div><Text>"+DocName_comp+"</Text></div>  </div></td>";
+							}
 						}
 
 						str_completelist = str_completelist+"</tr>";console.log(str_completelist);
